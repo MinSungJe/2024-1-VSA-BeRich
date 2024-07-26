@@ -20,5 +20,10 @@ export const TextStyles = StyleSheet.create({
     Detail: {
         fontSize: 16,
         color: Color.MainColor
+    },
+
+    Marker : {
+        fontSize: 14,
+        color: 'black',
     }
 })

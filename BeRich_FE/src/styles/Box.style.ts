@@ -36,6 +36,9 @@ export const BoxStyles = StyleSheet.create({
     Mb20: {
         marginBottom: 20
     },
+    Mb30: {
+        marginBottom: 30
+    },
     
     BgBlack: {
         backgroundColor: Color.MainColor,
@@ -69,5 +72,14 @@ export const BoxStyles = StyleSheet.create({
 
     MainBoxContent: {
         padding: 10,
+    },
+
+    MarkerBox: {
+        opacity: 0.8,
+        backgroundColor: 'white',
+        borderRadius: 4,
+        padding: 10,
+        borderColor: Color.MainColor,
+        borderWidth: 1,
     }
 })

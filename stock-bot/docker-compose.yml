@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-berich-test.c5iomeu2chqf.ap-northeast-2.rds.amazonaws.com:3306/berichDB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: beRich
+      SPRING_DATASOURCE_PASSWORD: Berich0823!
+    networks:
+      - my-network
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: Berich0823!
+      MYSQL_DATABASE: berichDB
+    networks:
+      - my-network
+
+networks:
+  my-network:

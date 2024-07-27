@@ -108,22 +108,28 @@ public class AccountService {
     }
 
     //엑세스토큰 재발급(자동)
-    @Scheduled(fixedRate = 20000) // 1시간마다 실행 3600000
+    @Scheduled(fixedRate = 7200000) // 2시간마다 실행 3600000=1시간
     public void updateAccountToken() {
-        System.out.println("제대로 호출되고 있다!");
+        //System.out.println("제대로 호출되고 있다!");
+        //Long a = Long.valueOf(2);
+        
+        //System.out.println("이건 원래 값"+ accountRepository.findById(a).orElse(null).getExpiredAt());
+        //System.out.println("dddd"+ userRepository.findById(a).orElse(null).getBirthDate());
         LocalDateTime now = LocalDateTime.now();
-        System.out.println("현재시간!!!"+now);
-        LocalDateTime thresholdTime = now.plusHours(7).withNano(0); // 현재시간보다 2시간 후에 만료되는 토큰에 대한 재요청
-        //LocalDateTime thresholdTimeFormat = thresholdTime.format(formatter);
-
-        System.out.println("만료시간!!!"+ thresholdTime);
+        //System.out.println("현재시간!!!"+now);
+        LocalDateTime thresholdTime = now.plusHours(2); // 현재시간보다 2시간 후에 만료되는 토큰에 대한 재요청
+        //System.out.println("만료시간!!!"+ thresholdTime);
         // 만료 시간이 임박한 계좌들을 조회
+        
         List<Account> accountList = accountRepository.findByExpiredAtBefore(thresholdTime);
+        // System.out.println("만료시간222!!!"+ st);
         if (accountList.isEmpty()){
             System.out.println("리스트가 비었다요요요요");
         }
-        System.out.println("만료된 목록들"+accountList);
-        // 조회된 계좌 리스트를 Flux로 변환하여 비동기적으로 처리
+    
+        //System.out.println("만료된 목록들"+accountList.size()+accountList.get(0).getExpiredAt()+accountList.get(0).getAccountNum());
+        
+        //조회된 계좌 리스트를 Flux로 변환하여 비동기적으로 처리
         Flux.fromIterable(accountList)
             .flatMap(account -> {
                 // 액세스 토큰 요청을 비동기적으로 수행
@@ -132,7 +138,7 @@ public class AccountService {
                     .doOnNext(response -> {
                         // 응답을 처리하여 계좌 정보를 갱신
                         account.setAccountAccessToken(response.getAccessToken());
-                        System.out.println("만료된 토큰 재발급"+response.getAccessTokenTokenExpired());
+                        //System.out.println("만료된 토큰 재발급"+response.getAccessTokenTokenExpired());
                         account.setExpiredAt(response.getAccessTokenTokenExpired());
                     })
                     .then(Mono.fromCallable(() -> accountRepository.save(account))); // 갱신된 계좌를 저장

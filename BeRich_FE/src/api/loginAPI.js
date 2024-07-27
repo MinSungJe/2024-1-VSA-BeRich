@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import { LOGIN_API_URL, REGISTER_API_URL } from '@env'
+import { API_URL } from '@env'
 
 export const handleLogin = async (id, password) => {
     try {
-        // console.log(id, password, LOGIN_API_URL)
-        const response = await axios.post(LOGIN_API_URL, {
+        // console.log(id, password)
+        const response = await axios.post(`${API_URL}/login`, {
             id: id,
             password: password
         });
@@ -24,8 +24,8 @@ export const handleLogin = async (id, password) => {
 
 export const handleRegister = async (id, password, email, fName, sName, date) => {
     try {
-        console.log(id, password, email, fName, sName, date, REGISTER_API_URL)
-        const response = await axios.post(REGISTER_API_URL, {
+        console.log(id, password, email, fName, sName, date)
+        const response = await axios.post(`${API_URL}/register`, {
             id: id,
             password: password
         });

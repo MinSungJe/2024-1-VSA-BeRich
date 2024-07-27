@@ -3,8 +3,8 @@ import { Alert } from 'react-native';
 import { API_URL } from '@env'
 
 export const handleLogin = async (id, password) => {
+    // console.log(id, password, `${API_URL}/login 주소요청`)
     try {
-        // console.log(id, password)
         const response = await axios.post(`${API_URL}/login`, {
             loginId: id,
             password: password
@@ -13,8 +13,9 @@ export const handleLogin = async (id, password) => {
                 'Content-Type': 'application/json'
             }
         });
-        if (response.data.success) {
+        if (response.data) {
             // 로그인 성공 시 처리
+            console.log(response.data)
             Alert.alert('로그인 성공', '로그인이 정상적으로 완료되었습니다.');
             // navigation.navigate('NextScreen');
         } else {
@@ -32,7 +33,7 @@ export const handleLogin = async (id, password) => {
 };
 
 export const handleRegister = async (id, password, email, fName, sName, date) => {
-    // console.log(typeof(id), typeof(password), typeof(email), typeof(fName), typeof(sName), typeof(date))
+    // console.log(typeof(id), typeof(password), typeof(email), typeof(fName), typeof(sName), typeof(date), `${API_URL}/signup 주소요청`)
     try {
         const response = await axios.post(`${API_URL}/signup`, {
             loginId: id,
@@ -46,7 +47,7 @@ export const handleRegister = async (id, password, email, fName, sName, date) =>
                 'Content-Type': 'application/json'
             }
         });
-        if (response.data.success) {
+        if (response.data) {
             // 회원가입 성공 시 처리
             Alert.alert('회원가입 완료', '회원가입이 정상적으로 완료되었습니다.');
             // navigation.navigate('NextScreen');

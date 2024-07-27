@@ -26,32 +26,21 @@ export function CandleGraph({ stock }) {
                 data={{
                     dataSets: [{
                         values: candleChartData,
-                        label: 'Candle Data',
+                        label: '그래프',
                         config: {
                             color: processColor('teal'),
                             shadowColor: processColor('black'),
-                            shadowWidth: 1,
+                            shadowWidth: 2,
                             shadowColorSameAsCandle: true,
                             increasingColor: processColor('green'),
                             decreasingColor: processColor('red'),
                             increasingPaintStyle: 'FILL',
                             decreasingPaintStyle: 'FILL',
+                            drawValues: false,
                         }
                     }]
                 }}
                 chartDescription={{ text: '' }}
-                legend={{
-                    enabled: true,
-                    textColor: processColor('black'),
-                    textSize: 12,
-                    form: 'SQUARE',
-                    formSize: 12,
-                    xEntrySpace: 10,
-                    yEntrySpace: 5,
-                    formToTextSpace: 5,
-                    wordWrapEnabled: true,
-                    maxSizePercent: 0.5
-                }}
                 xAxis={{
                     drawLabels: true,
                     position: 'BOTTOM',
@@ -76,7 +65,7 @@ export function CandleGraph({ stock }) {
                 autoScaleMinMaxEnabled={true}
                 doubleTapToZoomEnabled={false}
                 scaleXEnabled={true}
-                scaleYEnabled={true}
+                scaleYEnabled={false}
                 zoom={{
                     scaleX: 1, // 확대 비율 설정
                     scaleY: 1,

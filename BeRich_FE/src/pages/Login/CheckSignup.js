@@ -42,4 +42,6 @@ export const CheckLogin = (id, password) => {
         Alert.alert('로그인 실패', '6자 이상 길이의 비밀번호를 입력해주세요.')
         return false
     }
+
+    return true
 }

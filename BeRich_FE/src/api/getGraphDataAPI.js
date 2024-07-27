@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '@env';  // 환경 변수를 사용하는 경우
+import { API_URL } from '@env';
 
 const getGraphData = async () => {
     try {

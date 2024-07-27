@@ -5,7 +5,7 @@ const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
   const [ state, setState ] = useState({
-    isLogin: true,
+    isLogin: false,
     userID: null,
     userEmail: null,
     selectedStock: '삼성전자',

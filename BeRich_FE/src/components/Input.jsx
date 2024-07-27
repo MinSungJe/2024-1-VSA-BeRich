@@ -7,20 +7,25 @@ import { useEffect, useState } from 'react';
 import DatePicker from 'react-native-date-picker'
 import { ButtonStyles } from '../styles/Button.style';
 
-export function LabelInput({ label, placeholder }) {
+export function LabelInput({ label, placeholder, state, setState }) {
     return (
         <View style={BoxStyles.P10}>
             <Text style={TextStyles.Main}>{label}</Text>
-            <Input placeholder={placeholder} />
+            <Input placeholder={placeholder}
+                value={state}
+                onChangeText={setState} />
         </View>
     )
 }
 
-export function LabelSecretInput({ label, placeholder }) {
+export function LabelSecretInput({ label, placeholder, state, setState }) {
     return (
         <View style={BoxStyles.P10}>
             <Text style={TextStyles.Main}>{label}</Text>
-            <Input placeholder={placeholder} secureTextEntry={true} />
+            <Input placeholder={placeholder}
+                secureTextEntry={true}
+                value={state}
+                onChangeText={setState} />
         </View>
     )
 }

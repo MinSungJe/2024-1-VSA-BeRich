@@ -4,21 +4,23 @@ import { stockData } from "../resource/StockData";
 import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
 import { dateFormatter, processCandleData } from '../resource/ParseData';
+import { CandleRenderMarker } from './RenderMarker';
 
 export function CandleGraph({ stock }) {
-    let [candleChartData, setCandleChartData] = useState([])
+    const [candleChartData, setCandleChartData] = useState([]);
+    const [timeData, setTimeData] = useState([]);
+    const [selectedEntry, setSelectedEntry] = useState(null);
 
     useEffect(() => {
-        // api에서 필요한 data 불러오기
-        const temp = processCandleData(stockData);
-        setCandleChartData(temp)
+        // API에서 필요한 데이터 불러오기
+        let data = processCandleData(stockData);
+        let timeData = (data.map(item => item.timestamp)).map(item => dateFormatter(item));
+        setCandleChartData(data)
+        setTimeData(timeData);
     }, [])
 
-    // x축 레이블에 사용할 timestamp 배열 생성
-    const timestamps = (candleChartData.map(item => item.timestamp)).map(item => dateFormatter(item));
-
     return (
-        <View style={[{ height: 500 }, BoxStyles.ContainerBox]}>
+        <View style={[{ height: 250 }, BoxStyles.ContainerBox]}>
             <CandleStickChart
                 style={{ flex: 1 }}
                 data={{
@@ -53,7 +55,7 @@ export function CandleGraph({ stock }) {
                 xAxis={{
                     drawLabels: true,
                     position: 'BOTTOM',
-                    valueFormatter: timestamps, // timestamps로 x축 결정
+                    valueFormatter: timeData, // x축 레이블 설정
                     labelCount: 6,
                     granularityEnabled: true,
                     granularity: 1,
@@ -65,13 +67,7 @@ export function CandleGraph({ stock }) {
                 }}
                 yAxis={{
                     left: {
-                        drawLabels: true,
-                        drawAxisLine: true,
-                        drawGridLines: true,
-                        axisLineColor: processColor('grey'),
-                        axisLineWidth: 1,
-                        textColor: processColor('black'),
-                        textSize: 12,
+                        enabled: false
                     },
                     right: {
                         enabled: false
@@ -82,7 +78,7 @@ export function CandleGraph({ stock }) {
                 scaleXEnabled={true}
                 scaleYEnabled={true}
                 zoom={{
-                    scaleX: 2, // 확대 비율 설정
+                    scaleX: 1, // 확대 비율 설정
                     scaleY: 1,
                     xValue: 0,
                     yValue: 0,
@@ -90,7 +86,13 @@ export function CandleGraph({ stock }) {
                 }}
                 pinchZoom={true}
                 keepPositionOnRotation={false}
+                onSelect={(event) => {
+                    if (event.nativeEvent) {
+                        setSelectedEntry(event.nativeEvent);
+                    }
+                }}
             />
+            <CandleRenderMarker selectedEntry={selectedEntry}/>
         </View>
     );
 }

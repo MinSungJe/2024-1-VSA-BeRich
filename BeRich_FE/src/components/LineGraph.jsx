@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { processColor, Text, View } from 'react-native';
+import { processColor, View } from 'react-native';
 import { LineChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
 import { stockData } from "../resource/StockData";
 import { dateFormatter, processLineData } from '../resource/ParseData';
 import { Color } from '../resource/Color';
-import { RenderMarker } from './RenderMarker';
+import { LineRenderMarker } from './RenderMarker';
 
 export function LineGraph({ stock }) {
     const [lineChartData, setLineChartData] = useState([]);
-    const [dateTime, setDateTime] = useState([]);
+    const [timeData, setTimeData] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(null);
 
     useEffect(() => {
@@ -17,11 +17,11 @@ export function LineGraph({ stock }) {
         let data = processLineData(stockData);
         let timeData = (data.map(item => item.timestamp)).map(item => dateFormatter(item));
         setLineChartData(data);
-        setDateTime(timeData);
+        setTimeData(timeData);
     }, []);
 
     return (
-        <View style={[{ height: 300 }, BoxStyles.ContainerBox]}>
+        <View style={[{ height: 200 }, BoxStyles.ContainerBox]}>
             <LineChart
                 style={{ flex: 1 }}
                 data={{
@@ -40,7 +40,7 @@ export function LineGraph({ stock }) {
                 xAxis={{
                     drawLabels: true,
                     position: 'BOTTOM',
-                    valueFormatter: dateTime, // timestamps로 x축 결정
+                    valueFormatter: timeData, // timestamps로 x축 결정
                     granularityEnabled: true,
                     granularity: 1,
                     drawGridLines: false,
@@ -76,7 +76,7 @@ export function LineGraph({ stock }) {
                     }
                 }}
             />
-            <RenderMarker selectedEntry={selectedEntry} dateTime={dateTime} />
+            <LineRenderMarker selectedEntry={selectedEntry} />
         </View>
     );
 }

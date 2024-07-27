@@ -30,21 +30,24 @@ export function LabelSecretInput({ label, placeholder, state, setState }) {
     )
 }
 
-export function EmailInput({ label, placeholder }) {
-    const [selectedDomain, setSelectedDomain] = useState();
+export function EmailInput({ label, placeholder, emailId, setEmailId, selectedDomain, setSelectedDomain }) {
 
     return (
         <View style={BoxStyles.P10}>
             <Text style={TextStyles.Main}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.W100, BoxStyles.JCCenter, BoxStyles.AICenter]}>
-                <Input containerStyle={{ flex: 1 }} placeholder={placeholder} />
+                <Input containerStyle={{ flex: 1 }} placeholder={placeholder} value={emailId} onChangeText={text => {
+                    setEmailId(text)
+                }} />
                 <Text style={{ flexShrink: 0, textAlignVertical: 'center' }}>@</Text>
                 <Picker
                     style={{ flex: 1 }}
                     selectedValue={selectedDomain}
-                    onValueChange={(itemValue, itemIndex) =>
+                    onValueChange={(itemValue, itemIndex) => {
                         setSelectedDomain(itemValue)
+                    }
                     }>
+                    <Picker.Item label="선택해주세요" value="plz" />
                     <Picker.Item label="naver.com" value="naver.com" />
                     <Picker.Item label="gmail.com" value="gmail.com" />
                     <Picker.Item label="daum.net" value="daum.net" />
@@ -54,20 +57,19 @@ export function EmailInput({ label, placeholder }) {
     )
 }
 
-export function NameInput({ label, placeholder1, placeholder2 }) {
+export function NameInput({ label, placeholder1, placeholder2, state1, state2, setState1, setState2 }) {
     return (
         <View style={BoxStyles.P10}>
             <Text style={TextStyles.Main}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.W100, BoxStyles.JCCenter, BoxStyles.AICenter]}>
-                <Input containerStyle={{ flex: 1 }} placeholder={placeholder1} />
-                <Input containerStyle={{ flex: 1 }} placeholder={placeholder2} />
+                <Input containerStyle={{ flex: 1 }} placeholder={placeholder1} value={state1} onChangeText={setState1} />
+                <Input containerStyle={{ flex: 1 }} placeholder={placeholder2} value={state2} onChangeText={setState2} />
             </View>
         </View>
     )
 }
 
-export function DateInput({ label }) {
-    const [date, setDate] = useState(new Date())
+export function DateInput({ label, date, setDate }) {
     const [dateLabel, setDateLabel] = useState('')
     const [open, setOpen] = useState(false)
 

@@ -47,7 +47,7 @@ export function EmailInput({ label, placeholder, emailId, setEmailId, selectedDo
                         setSelectedDomain(itemValue)
                     }
                     }>
-                    <Picker.Item label="선택해주세요" value="plz" />
+                    <Picker.Item label="선택해주세요" value="" />
                     <Picker.Item label="naver.com" value="naver.com" />
                     <Picker.Item label="gmail.com" value="gmail.com" />
                     <Picker.Item label="daum.net" value="daum.net" />

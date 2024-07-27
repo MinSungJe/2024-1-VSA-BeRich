@@ -6,6 +6,7 @@ import { ButtonStyles } from '../../styles/Button.style';
 import { BoxStyles } from '../../styles/Box.style';
 import { TextStyles } from '../../styles/Text.style';
 import { handleLogin } from '../../api/loginAPI';
+import { CheckLogin } from './CheckSignup';
 
 export default function LoginScreen({ navigation }) {
     const [id, setId] = useState('');
@@ -29,6 +30,7 @@ export default function LoginScreen({ navigation }) {
                 buttonStyle={ButtonStyles.MainButton} 
                 title={'로그인'}
                 onPress={() => {
+                    if (!CheckLogin(id, password)) return // 입력했는지 체크
                     handleLogin(id, password)
                 }}
             />

@@ -39,7 +39,7 @@ export default function StockScreen({ navigation }) {
                         </Text>
                     </View>
                     <View style={BoxStyles.MainBoxContent}>
-                        <LineGraph stock={stock} />
+                        <CandleGraph stock={stock} />
                     </View>
                 </View>
                 <View style={[BoxStyles.MainBox]}>

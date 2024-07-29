@@ -21,7 +21,7 @@ export const handleLogin = async (id, password, navigation) => {
             // 토큰 저장
             let access_token = response.data.accessToken
             let refresh_token = response.data.refreshToken
-            console.log(access_token, refresh_token)
+            // console.log(access_token, refresh_token)
             await AsyncStorage.setItem('user_access_token', access_token);
             await AsyncStorage.setItem('user_refresh_token', refresh_token);
 

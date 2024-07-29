@@ -41,7 +41,7 @@ export const handleLogin = async (id, password, navigation) => {
     }
 };
 
-export const handleRegister = async (id, password, email, fName, sName, date) => {
+export const handleRegister = async (id, password, email, fName, sName, date, navigation) => {
     // console.log(typeof(id), typeof(password), typeof(email), typeof(fName), typeof(sName), typeof(date), `${API_URL}/signup 주소요청`)
     try {
         const response = await axios.post(`${API_URL}/signup`, {
@@ -59,7 +59,7 @@ export const handleRegister = async (id, password, email, fName, sName, date) =>
         if (response.data) {
             // 회원가입 성공 시 처리
             Alert.alert('회원가입 완료', '회원가입이 정상적으로 완료되었습니다.');
-            // navigation.navigate('NextScreen');
+            navigation.navigate('Login');
         } else {
             Alert.alert('회원가입 실패', response.data.message || 'Invalid credentials');
         }
@@ -76,7 +76,7 @@ export const handleRegister = async (id, password, email, fName, sName, date) =>
 
 export const handleLogout = async (navigation) => {
     try {
-        // 로그인 성공 시 처리
+        // 로그아웃 성공 시 처리
         Alert.alert('로그아웃 성공', '로그아웃이 정상적으로 완료되었습니다.');
 
         // 토큰 삭제
@@ -96,3 +96,33 @@ export const handleLogout = async (navigation) => {
         }
     }
 };
+
+export const handleWithdraw = async (navigation) => {
+    try {
+        const accessToken = await AsyncStorage.getItem('user_access_token');
+        const response = await axios.get(`${API_URL}/api/withdraw`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        if (response.data) {
+            // 토큰 삭제
+            await AsyncStorage.removeItem('user_access_token');
+            await AsyncStorage.removeItem('user_refresh_token');
+
+            // 회원탈퇴 성공 시 처리
+            Alert.alert('회원탈퇴 완료', response.data);
+
+            // 이동
+            navigation.replace('SplashScreen')
+        }
+    } catch (error) {
+        if (error.response) {
+            console.error("Error Response Data:", error.response.data);
+            Alert.alert('Error', `서버 오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+        } else {
+            console.error("Error Message:", error.message);
+            Alert.alert('Error', '회원탈퇴 과정 중 에러가 발생했습니다.');
+        }
+    }
+}

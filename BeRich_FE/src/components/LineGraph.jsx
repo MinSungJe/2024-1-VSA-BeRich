@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { processColor, View } from 'react-native';
 import { LineChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
@@ -8,17 +8,18 @@ import { Color } from '../resource/Color';
 import { LineRenderMarker } from './RenderMarker';
 
 export function LineGraph({ stock }) {
-    const [lineChartData, setLineChartData] = useState([]);
-    const [timeData, setTimeData] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(null);
 
-    useEffect(() => {
-        // API에서 필요한 데이터 불러오기
-        let data = processLineData(stockData);
-        let timeData = (data.map(item => item.timestamp)).map(item => dateFormatter(item));
-        setLineChartData(data);
-        setTimeData(timeData);
-    }, []);
+    // useMemo를 이용해 시간 오래걸리는 요소 감싸기
+    const { lineChartData, timeData } = useMemo(() => {
+        console.log('Processing data...');
+        const data = processLineData(stockData);
+        const dateData = data.map(item => dateFormatter(item.timestamp));
+        return {
+            lineChartData: data,
+            timeData: dateData
+        };
+    }, [stock]);
 
     return (
         <View style={[{ height: 200 }, BoxStyles.ContainerBox]}>

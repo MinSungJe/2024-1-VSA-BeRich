@@ -1,22 +1,33 @@
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Color } from '../resource/Color';
 import { BoxStyles } from '../styles/Box.style';
-import { useEffect, useState } from 'react';
 
 export default function SplashScreen({ navigation }) {
-    //State for ActivityIndicator animation
     const [animating, setAnimating] = useState(true);
 
-    // 로그인 확인
     useEffect(() => {
-        setTimeout(() => {
-            setAnimating(false);
-            AsyncStorage.getItem('user_token').then((value) => 
-                navigation.replace(value === null ? 'AuthScreen' : 'TabScreen'),
-            );
+        const checkLogin = async () => {
+            try {
+                const value = await AsyncStorage.getItem('user_access_token');
+                setAnimating(false); // 애니메이션 정지
+                // await AsyncStorage.removeItem('user_access_token')
+                console.log('AsyncStorage value:', value);
+                navigation.replace(value === null ? 'AuthScreen' : 'TabScreen');
+            } catch (error) {
+                console.error('Error fetching the access token: ', error);
+            }
+        };
+
+        const timer = setTimeout(() => {
+            checkLogin();
         }, 3000);
-    }, []);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [navigation]);
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -24,7 +35,7 @@ export default function SplashScreen({ navigation }) {
                 animating={animating}
                 color={Color.MainColor}
                 size="large"
-                style={[BoxStyles.JCCenter ,BoxStyles.AICenter]}
+                style={[BoxStyles.JCCenter, BoxStyles.AICenter]}
             />
         </View>
     );

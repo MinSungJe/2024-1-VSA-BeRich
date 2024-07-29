@@ -30,7 +30,7 @@ export default function RegisterScreen({ navigation }) {
             <Button buttonStyle={ButtonStyles.MainButton} title={'회원가입'}
                 onPress={() => {
                     if (!CheckSignUp(id, password, emailId, selectedDomain, fName, sName, date)) return // 입력했는지 체크
-                    handleRegister(id, password, `${emailId}@${selectedDomain}`, fName, sName, dateFormat(date))
+                    handleRegister(id, password, `${emailId}@${selectedDomain}`, fName, sName, dateFormat(date), navigation)
                 }}></Button>
             <Button buttonStyle={ButtonStyles.InputButton} titleStyle={TextStyles.Detail} title={'이미 계정이 있으면 여기를 눌러주세요'}
                 onPress={() => {

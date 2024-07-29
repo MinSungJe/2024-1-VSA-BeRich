@@ -6,6 +6,10 @@ export const TextStyles = StyleSheet.create({
         color: Color.White
     },
 
+    FcRed: {
+        color: Color.Red
+    },
+
 	Title: {
         fontSize: 40,
         color: Color.MainColor,

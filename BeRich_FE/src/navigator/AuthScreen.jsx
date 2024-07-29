@@ -5,7 +5,7 @@ import RegisterScreen from "../pages/Login/RegisterScreen";
 
 const Stack = createNativeStackNavigator()
 
-export default function StackScreen() {
+export default function AuthScreen() {
     return(
         <Stack.Navigator initialRouteName="WelcomeInfo">
             <Stack.Screen name="WelcomeInfo" component={SwipeScreen} options={{headerShown: false}}/>

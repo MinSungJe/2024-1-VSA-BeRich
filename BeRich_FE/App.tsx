@@ -1,16 +1,21 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import SplashScreen from './src/pages/SplashScreen';
 import TabScreen from './src/navigator/TabScreen';
-import StackScreen from './src/navigator/StackScreen';
+import AuthScreen from './src/navigator/AuthScreen';
 import { AppProvider } from './src/contexts/AppContext';
-import { AppContext } from './src/contexts/AppContext';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 function AppContent() {
-  const { state, setState } = React.useContext(AppContext);
+  const Stack = createNativeStackNavigator()
 
   return (
       <NavigationContainer>
-        {state.isLogin ? <TabScreen /> : <StackScreen />}
+        <Stack.Navigator initialRouteName="SplashScreen">
+            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="AuthScreen" component={AuthScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="TabScreen" component={TabScreen} options={{headerShown: false}}/>
+        </Stack.Navigator>
       </NavigationContainer>
   )
 }

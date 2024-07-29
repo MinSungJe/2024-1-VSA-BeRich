@@ -12,6 +12,7 @@ import com.berich.stock_bot.dto.AccountAccessTokenRequest;
 import com.berich.stock_bot.dto.AccountAccessTokenResponse;
 import com.berich.stock_bot.dto.AccountBalanceResponse;
 import com.berich.stock_bot.dto.AccountRequest;
+import com.berich.stock_bot.dto.BalanceResponse;
 import com.berich.stock_bot.entity.Account;
 import com.berich.stock_bot.entity.User;
 import com.berich.stock_bot.repository.AccountRepository;
@@ -33,6 +34,8 @@ public class AccountService {
     @Autowired
     private WebClient webClient_stock;
 
+
+    //계좌 등록
     public void enrollAccount(String loginId, AccountRequest accountInfo) {
         User user = userRepository.findByLoginId(loginId).orElse(null);
         if(user==null){
@@ -47,7 +50,7 @@ public class AccountService {
         AccountAccessTokenRequest body = new AccountAccessTokenRequest("client_credentials", appKey, appSecret);
         //System.out.println("진짜개앵애졸려"+body.getGrant_type()+body.getAppkey()+body.getAppsecret());
         // 액세스 토큰을 비동기적으로 발급받고, 발급 후 계좌 잔액 조회
-        getAccessToken(body)
+        requestAccessToken(body)
             .flatMap(response -> {
                 // 액세스 토큰을 추출하고 계좌 잔액을 조회
                 String accessToken = response.getAccessToken();
@@ -67,9 +70,9 @@ public class AccountService {
                     // 계좌 잔액 조회 성공
                     if ("0".equals(balanceResponse.getRtCd())) {
                         // Account 객체 생성 및 데이터베이스 저장
-                        Long accountN = Long.parseLong(accountNum);
+                        //Long accountN = Long.parseLong(accountNum);
                         Long userId = user.getId();
-                        Account account = new Account(accountN, appKey, appSecret, accessToken, expiredAt, userId);
+                        Account account = new Account(accountNum, appKey, appSecret, accessToken, expiredAt, userId);
                         accountRepository.save(account);
                     } else {
                         System.err.println("Error: " + balanceResponse.getMsg1());
@@ -83,7 +86,7 @@ public class AccountService {
             );
     }
     
-    //잔액조회(순자산)
+    //잔액조회(전체목록)
     public AccountBalanceResponse accountBalance(String loginId) {
         User user = userRepository.findByLoginId(loginId).orElse(null);
         if(user==null){
@@ -95,16 +98,33 @@ public class AccountService {
         if(account ==null) {
             //예외처리:계좌 없음
         }
-        //System.out.println("이거맞지?????"+account.getAccountAccessToken());
-        String accountN = account.getAccountNum().toString();
-        //System.out.println("진짜로제발!"+accountN);
-        return getAccountBalance(account.getAccountAccessToken(),accountN, account.getAppKey(), account.getAppSecret())
+        
+        return getAccountBalance(account.getAccountAccessToken(),account.getAccountNum(), account.getAppKey(), account.getAppSecret())
                 .doOnError(error -> {
-                    // 오류 발생 시 로그를 남기거나 추가적인 처리를 할 수 있습니다.
+                    // 오류 발생
                     System.err.println("Error occurred while fetching account balance: " + error.getMessage());
                 })
-                .block(); // 동기적으로 결과를 기다립니다.
+                .block(); // 동기적으로 
 
+    }
+
+    //잔액조회(전체 목록 중 특정 값)
+    public BalanceResponse returnBalance(AccountBalanceResponse accountBalance) {
+        if (accountBalance.getOutput2() != null && !accountBalance.getOutput2().isEmpty()) {
+            // output2 첫번째리스트에서 반환
+            AccountBalanceResponse.Output2Dto account = accountBalance.getOutput2().get(0);
+            //예수금 총액
+            String dncaTotAmt = account.getDncaTotAmt();
+            //유가평가금액
+            String sctsEvluAmt = account.getSctsEvluAmt();
+            //총평가금액
+            String totEvluAmt = account.getTotEvluAmt();
+            //평가금액 합계금액
+            String evluAmtSmtlAmt = account.getEvluAmtSmtlAmt();
+
+            return new BalanceResponse(dncaTotAmt, sctsEvluAmt, totEvluAmt, evluAmtSmtlAmt);
+        }
+        return null;
     }
 
     //엑세스토큰 재발급(자동)
@@ -134,7 +154,7 @@ public class AccountService {
             .flatMap(account -> {
                 // 액세스 토큰 요청을 비동기적으로 수행
                 AccountAccessTokenRequest body = new AccountAccessTokenRequest("client_credentials", account.getAppKey(), account.getAppSecret());
-                return getAccessToken(body)
+                return requestAccessToken(body)
                     .doOnNext(response -> {
                         // 응답을 처리하여 계좌 정보를 갱신
                         account.setAccountAccessToken(response.getAccessToken());
@@ -152,7 +172,7 @@ public class AccountService {
     }
 
     //엑세스토큰 post요청
-    private Mono<AccountAccessTokenResponse> getAccessToken(AccountAccessTokenRequest body) {
+    private Mono<AccountAccessTokenResponse> requestAccessToken(AccountAccessTokenRequest body) {
         return webClient_stock.post()
                 .uri("/oauth2/tokenP")
                 .bodyValue(body)

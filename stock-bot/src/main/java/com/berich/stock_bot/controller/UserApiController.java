@@ -1,5 +1,6 @@
 package com.berich.stock_bot.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.berich.stock_bot.config.jwt.TokenProvider;
 import com.berich.stock_bot.dto.AddUserRequest;
 import com.berich.stock_bot.dto.LoginRequest;
 import com.berich.stock_bot.dto.LoginTokenResponse;
@@ -23,9 +23,31 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class UserApiController {
 
-    private final UserService userService;
-    private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+
+
+    //아이디 중복확인
+    @PostMapping("/signup/check-loginId")
+    public ResponseEntity<String> checkLoginId(@RequestBody String inputLoginId) {
+        if(!userRepository.existsByLoginId(inputLoginId)){
+            return ResponseEntity.ok("사용가능한 아이디입니다.");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 아이디입니다.");
+    }
+
+    //이메일 중복확인
+    @PostMapping("/signup/check-email")
+    public ResponseEntity<String> checkEmail(@RequestBody String inputEmail) {
+        if(!userRepository.existsByEmail(inputEmail)){
+            return ResponseEntity.ok("사용가능한 이메일입니다.");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 등록된 이메일입니다.");
+    
+    }
+
 
     //회원가입
     @PostMapping("/signup")

@@ -25,7 +25,7 @@ public class Account {
 
     //계좌번호
     @Column(name = "accountNum", nullable =false, unique = true)
-    private Long accountNum;
+    private String accountNum;
     //appkey
     @Column(nullable =false, unique = true)
     private String appKey;
@@ -43,7 +43,7 @@ public class Account {
     private Long userId;
 
     @Builder
-    public Account(Long accountNum, String appKey, String appSecret, String accountAccessToken, LocalDateTime expiredAt,Long userId){
+    public Account(String accountNum, String appKey, String appSecret, String accountAccessToken, LocalDateTime expiredAt,Long userId){
         this.accountNum = accountNum;
         this.appKey = appKey;
         this.appSecret = appSecret;

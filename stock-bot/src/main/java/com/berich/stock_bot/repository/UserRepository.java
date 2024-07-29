@@ -9,4 +9,7 @@ import com.berich.stock_bot.entity.User;
 public interface UserRepository extends JpaRepository<User, Long>{
     Optional<User> findByLoginId(String longinId);
     //Optional<User> findByEmail(String email);
+    boolean existsByLoginId(String loginId);
+    boolean existsByEmail(String email);
+
 }

@@ -73,7 +73,7 @@ public class AccountBalanceResponse {
         @JsonProperty("thdt_sll_qty")
         private String thdtSllQty;
 
-        // 보유 수량
+        // 보유 수량--------------------------------------
         @JsonProperty("hldg_qty")
         private String hldgQty;
 
@@ -217,7 +217,7 @@ public class AccountBalanceResponse {
         @JsonProperty("tot_evlu_amt")
         private String totEvluAmt;
 
-        // 순 자산 금액--------------------------------------------
+        // 순 자산 금액----
         @JsonProperty("nass_amt")
         private String nassAmt;
 

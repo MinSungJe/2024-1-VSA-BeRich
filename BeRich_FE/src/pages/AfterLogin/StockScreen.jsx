@@ -53,9 +53,9 @@ export default function StockScreen({ navigation }) {
                     </View>
                 </View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.JCCenter]}>
-                    <Button 
-                        buttonStyle={ButtonStyles.InputButton} 
-                        titleStyle={TextStyles.Detail} 
+                    <Button
+                        buttonStyle={ButtonStyles.InputButton}
+                        titleStyle={TextStyles.Detail}
                         title={`${stock} 주식을 거래하시겠어요? >`}
                         onPress={() => {
                             setState((prevContext) => ({
@@ -63,7 +63,7 @@ export default function StockScreen({ navigation }) {
                                 selectedStock: stock,
                             }));
                             navigation.navigate('AutoTrade');
-                        }} 
+                        }}
                     />
                 </View>
             </ScrollView>

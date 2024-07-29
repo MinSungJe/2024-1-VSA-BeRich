@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { processColor, View } from 'react-native';
 import { stockData } from "../resource/StockData";
 import { CandleStickChart } from 'react-native-charts-wrapper';
@@ -7,17 +7,17 @@ import { dateFormatter, processCandleData } from '../resource/ParseData';
 import { CandleRenderMarker } from './RenderMarker';
 
 export function CandleGraph({ stock }) {
-    const [candleChartData, setCandleChartData] = useState([]);
-    const [timeData, setTimeData] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(null);
 
-    useEffect(() => {
-        // API에서 필요한 데이터 불러오기
-        let data = processCandleData(stockData);
-        let timeData = (data.map(item => item.timestamp)).map(item => dateFormatter(item));
-        setCandleChartData(data)
-        setTimeData(timeData);
-    }, [])
+    // useMemo를 이용해 시간 오래걸리는 요소 감싸기
+    const { candleChartData, timeData } = useMemo(() => {
+        const data = processCandleData(stockData);
+        const dateData = data.map(item => dateFormatter(item.timestamp));
+        return {
+            candleChartData: data,
+            timeData: dateData
+        };
+    }, [stock]);
 
     return (
         <View style={[{ height: 250 }, BoxStyles.ContainerBox]}>

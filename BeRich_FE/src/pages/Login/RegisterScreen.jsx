@@ -5,7 +5,7 @@ import { ButtonStyles } from '../../styles/Button.style';
 import { TextStyles } from '../../styles/Text.style';
 import { DateInput, EmailInput, LabelInput, LabelSecretInput, NameInput } from '../../components/Input';
 import { useState } from 'react';
-import { handleRegister } from '../../api/loginAPI';
+import { handleRegister } from '../../api/authAPI';
 import { CheckSignUp } from './CheckSignup';
 
 export default function RegisterScreen({ navigation }) {

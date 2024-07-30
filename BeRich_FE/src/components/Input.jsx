@@ -10,7 +10,7 @@ import { ButtonStyles } from '../styles/Button.style';
 export function LabelInput({ label, placeholder, state, setState }) {
     return (
         <View style={BoxStyles.P10}>
-            <Text style={TextStyles.Main}>{label}</Text>
+            <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{label}</Text>
             <Input placeholder={placeholder}
                 value={state}
                 onChangeText={setState} />
@@ -21,7 +21,7 @@ export function LabelInput({ label, placeholder, state, setState }) {
 export function LabelSecretInput({ label, placeholder, state, setState }) {
     return (
         <View style={BoxStyles.P10}>
-            <Text style={TextStyles.Main}>{label}</Text>
+            <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{label}</Text>
             <Input placeholder={placeholder}
                 secureTextEntry={true}
                 value={state}
@@ -34,7 +34,7 @@ export function EmailInput({ label, placeholder, emailId, setEmailId, selectedDo
 
     return (
         <View style={BoxStyles.P10}>
-            <Text style={TextStyles.Main}>{label}</Text>
+            <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.W100, BoxStyles.JCCenter, BoxStyles.AICenter]}>
                 <Input containerStyle={{ flex: 1 }} placeholder={placeholder} value={emailId} onChangeText={text => {
                     setEmailId(text)
@@ -47,7 +47,7 @@ export function EmailInput({ label, placeholder, emailId, setEmailId, selectedDo
                         setSelectedDomain(itemValue)
                     }
                     }>
-                    <Picker.Item label="선택해주세요" value="" />
+                    <Picker.Item label="선택" value="" />
                     <Picker.Item label="naver.com" value="naver.com" />
                     <Picker.Item label="gmail.com" value="gmail.com" />
                     <Picker.Item label="daum.net" value="daum.net" />
@@ -60,7 +60,7 @@ export function EmailInput({ label, placeholder, emailId, setEmailId, selectedDo
 export function NameInput({ label, placeholder1, placeholder2, state1, state2, setState1, setState2 }) {
     return (
         <View style={BoxStyles.P10}>
-            <Text style={TextStyles.Main}>{label}</Text>
+            <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.W100, BoxStyles.JCCenter, BoxStyles.AICenter]}>
                 <Input containerStyle={{ flex: 1 }} placeholder={placeholder1} value={state1} onChangeText={setState1} />
                 <Input containerStyle={{ flex: 1 }} placeholder={placeholder2} value={state2} onChangeText={setState2} />
@@ -87,7 +87,7 @@ export function DateInput({ label, date, setDate }) {
 
     return (
         <View style={[BoxStyles.P10]}>
-            <Text style={[TextStyles.Main, BoxStyles.Mb10]}>{label}</Text>
+            <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.Mb10]}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.P10]}>
                 <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateLabel}</Text>
                 <Button title={'변경'} onPress={() => setOpen(true)} buttonStyle={ButtonStyles.MainButton} />

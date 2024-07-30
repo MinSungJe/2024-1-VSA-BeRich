@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import StockScreen from '../pages/AfterLogin/StockScreen';
 import AutoTradeScreen from '../pages/AfterLogin/AutoTradeScreen';
-import UserScreen from '../pages/AfterLogin/UserScreen';
 import { Color } from '../resource/Color';
+import UserScreen from './UserScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,6 +39,7 @@ export default function TabScreen() {
         component={UserScreen}
         options={{
           title: '회원정보',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),

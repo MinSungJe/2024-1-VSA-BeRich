@@ -9,6 +9,15 @@ export const TextStyles = StyleSheet.create({
     FcRed: {
         color: Color.Red
     },
+    FcBlack: {
+        color: Color.MainColor
+    },
+    FcGray: {
+        color: Color.Gray
+    },
+    FwBold: {
+        fontWeight: 'bold'
+    },
 
 	Title: {
         fontSize: 40,
@@ -18,6 +27,11 @@ export const TextStyles = StyleSheet.create({
 
     Main: {
         fontSize: 28,
+        color: Color.MainColor
+    },
+
+    Medium: {
+        fontSize: 22,
         color: Color.MainColor
     },
 

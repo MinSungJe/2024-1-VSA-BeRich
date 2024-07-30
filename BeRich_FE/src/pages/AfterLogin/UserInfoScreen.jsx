@@ -29,7 +29,9 @@ export default function UserInfoScreen({ navigation }) {
             </View>
             <View style={[BoxStyles.MainBox, BoxStyles.PH10, BoxStyles.Mb20]}>
                 <View style={[BoxStyles.BottomGrayLine, BoxStyles.PV10]}>
-                    <Button buttonStyle={[ButtonStyles.InputButton, { justifyContent: 'flex-start' }]} titleStyle={[TextStyles.Detail]}>
+                    <Button buttonStyle={[ButtonStyles.InputButton, { justifyContent: 'flex-start' }]} titleStyle={[TextStyles.Detail]} onPress={()=>{
+                        navigation.navigate('AddAccount')
+                    }}>
                         계좌 정보 관리</Button>
                 </View>
                 <View style={[BoxStyles.BottomGrayLine, BoxStyles.PV10]}>

@@ -7,7 +7,7 @@ import { BoxStyles } from "../../styles/Box.style";
 import { Color } from "../../resource/Color";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function UserScreen({ navigation }) {
+export default function UserInfoScreen({ navigation }) {
     return (
         <View style={[BoxStyles.P10]}>
             <View style={[BoxStyles.MainBox, BoxStyles.PH10, BoxStyles.Mb20]}>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LabelInput, LabelSecretInput } from "../../components/Input";
 import { Button } from "@rneui/base";
 import { ButtonStyles } from "../../styles/Button.style";
+import { addAccountAPI, CheckAddAccount } from "../../api/addAccountAPI";
 
 export default function AddAccountScreen({ navigation }) {
     const [accountNum, setAccountNum] = useState('');
@@ -35,8 +36,8 @@ export default function AddAccountScreen({ navigation }) {
                     buttonStyle={ButtonStyles.MainButton}
                     title={'저장'}
                     onPress={() => {
-                        // if (!CheckLogin(id, password)) return // 입력했는지 체크
-                        // handleLogin(id, password, navigation)
+                        if (!CheckAddAccount(accountNum, appKey, appSecret)) return // 입력여부 체크
+                        addAccountAPI(accountNum, appKey, appSecret, navigation)
                     }}
                 />
             </View>

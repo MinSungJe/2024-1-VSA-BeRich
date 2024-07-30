@@ -10,6 +10,5 @@ export const ButtonStyles = StyleSheet.create({
 
     InputButton: {
         backgroundColor: 'rgba(0, 0, 0, 0)',
-        color: Color.MainColor,
     }
 })

@@ -36,6 +36,9 @@ export const BoxStyles = StyleSheet.create({
         marginRight: 10
     },
 
+    Mb5: {
+        marginBottom: 5
+    },
     Mb10: {
         marginBottom: 10
     },
@@ -57,7 +60,7 @@ export const BoxStyles = StyleSheet.create({
 
     MainBox: {
         width: '100%',
-        borderRadius: 10,
+        borderRadius: 15,
         backgroundColor: Color.White,
 
         // 테두리
@@ -72,8 +75,8 @@ export const BoxStyles = StyleSheet.create({
         borderStyle: 'solid',
         borderColor: Color.MainColor,
         padding: 10,
-        borderTopLeftRadius: 7,
-        borderTopRightRadius: 7
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
     },
 
     MainBoxContent: {

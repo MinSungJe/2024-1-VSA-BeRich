@@ -22,8 +22,8 @@ export default function UserScreen({ navigation }) {
                         <Text style={[TextStyles.Title, TextStyles.FcBlack]}>홍 길동 <Text style={[TextStyles.Medium]}>님</Text></Text>
                     </View>
                 </View>
-                <View style={[BoxStyles.P10]}>
-                    <Text style={[TextStyles.Detail]}>현재 연결된 계좌</Text>
+                <View style={[BoxStyles.P20]}>
+                    <Text style={[TextStyles.Detail, BoxStyles.Mb5]}>현재 연결된 계좌</Text>
                     <Text style={[TextStyles.Main]}>₩ 200,000</Text>
                 </View>
             </View>

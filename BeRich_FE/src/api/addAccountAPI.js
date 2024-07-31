@@ -4,8 +4,8 @@ import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const CheckAddAccount = (accountNum, appKey, appSecret) => {
-    if (!accountNum || accountNum.length != 6) {
-        Alert.alert('계좌 정보 변경 실패', '6자 길이의 계좌 번호를 입력해주세요.')
+    if (!accountNum || accountNum.length < 6) {
+        Alert.alert('계좌 정보 변경 실패', '6자 이상 길이의 계좌 번호를 입력해주세요.')
         return false
     }
     if (!appKey) {

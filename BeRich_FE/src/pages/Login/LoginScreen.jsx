@@ -30,7 +30,7 @@ export default function LoginScreen({ navigation }) {
                 <Button
                     buttonStyle={ButtonStyles.MainButton}
                     title={'로그인'}
-                    onPress={() => {
+                    onPress={async () => {
                         if (!CheckLogin(id, password)) return // 입력했는지 체크
                         handleLogin(id, password, navigation)
                     }}
@@ -39,7 +39,7 @@ export default function LoginScreen({ navigation }) {
                     buttonStyle={ButtonStyles.InputButton}
                     titleStyle={TextStyles.Detail}
                     title={'계정이 없나요?'}
-                    onPress={() => navigation.navigate('Register')}
+                    onPress={() => navigation.replace('Register')}
                 />
             </View>
         </View>

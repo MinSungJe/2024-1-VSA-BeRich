@@ -28,7 +28,7 @@ export const handleLogin = async (id, password, navigation) => {
             // 이동
             navigation.replace('SplashScreen')
         } else {
-            Alert.alert('로그인 실패', response.data.message || '잘못된 정보입니다.');
+            Alert.alert('로그인 실패', response.data.message || 'ID, 비밀번호를 다시 확인해주세요.');
         }
     } catch (error) {
         if (error.response) {
@@ -56,10 +56,10 @@ export const handleRegister = async (id, password, email, fName, sName, date, na
                 'Content-Type': 'application/json'
             }
         });
-        if (response.data) {
+        if (response.status == 200) {
             // 회원가입 성공 시 처리
-            Alert.alert('회원가입 완료', '회원가입이 정상적으로 완료되었습니다.');
-            navigation.navigate('Login');
+            Alert.alert('회원가입 완료', response.data.message);
+            navigation.replace('Login');
         } else {
             Alert.alert('회원가입 실패', response.data.message || 'Invalid credentials');
         }
@@ -73,6 +73,41 @@ export const handleRegister = async (id, password, email, fName, sName, date, na
         }
     }
 };
+
+export const CheckDuplicate = async (id, email) => {
+    try {
+        // ID 중복 확인
+        const idResponse = await axios.post(`${API_URL}/signup/check-loginid`, {
+            loginId: id
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        // if (idResponse.status == 200) console.log(idResponse.data.message)
+
+        // 이메일 중복 확인
+        const emailResponse = await axios.post(`${API_URL}/signup/check-email`, {
+            email: email
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        // if (emailResponse.status == 200) console.log(emailResponse.data.message)
+        
+        return true // 중복 체크 통과
+    } catch (error) {
+        if (error.response) {
+            console.error("Error Response Data:", error.response.data);
+            Alert.alert('회원가입 중복체크', `${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+        } else {
+            console.error("Error Message:", error.message);
+            Alert.alert('Error', '회원가입 중복체크 과정 중 에러가 발생했습니다.');
+        }
+        return false
+    }
+}
 
 export const handleLogout = async (navigation) => {
     try {
@@ -100,7 +135,7 @@ export const handleLogout = async (navigation) => {
 export const handleWithdraw = async (navigation) => {
     try {
         const accessToken = await AsyncStorage.getItem('user_access_token');
-        const response = await axios.get(`${API_URL}/api/withdraw`, {
+        const response = await axios.delete(`${API_URL}/api/withdraw`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -111,7 +146,7 @@ export const handleWithdraw = async (navigation) => {
             await AsyncStorage.removeItem('user_refresh_token');
 
             // 회원탈퇴 성공 시 처리
-            Alert.alert('회원탈퇴 완료', response.data);
+            Alert.alert('회원탈퇴 완료', response.data.message);
 
             // 이동
             navigation.replace('SplashScreen')

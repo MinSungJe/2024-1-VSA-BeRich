@@ -59,7 +59,7 @@ export const handleRegister = async (id, password, email, fName, sName, date, na
         if (response.status == 200) {
             // 회원가입 성공 시 처리
             Alert.alert('회원가입 완료', response.data.message);
-            navigation.navigate('Login');
+            navigation.replace('Login');
         } else {
             Alert.alert('회원가입 실패', response.data.message || 'Invalid credentials');
         }

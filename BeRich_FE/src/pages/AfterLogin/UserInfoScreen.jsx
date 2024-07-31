@@ -1,11 +1,10 @@
 import { Button, Text } from "@rneui/base";
 import { View } from "react-native";
 import { ButtonStyles } from "../../styles/Button.style";
-import { handleLogout, handleWithdraw } from "../../api/authAPI";
 import { TextStyles } from "../../styles/Text.style";
 import { BoxStyles } from "../../styles/Box.style";
-import { Color } from "../../resource/Color";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LogoutSelectBox, WithdrawSelectBox } from "../../components/SelectBox";
 
 export default function UserInfoScreen({ navigation }) {
     return (
@@ -36,12 +35,12 @@ export default function UserInfoScreen({ navigation }) {
                 </View>
                 <View style={[BoxStyles.BottomGrayLine, BoxStyles.PV10]}>
                     <Button buttonStyle={[ButtonStyles.InputButton, { justifyContent: 'flex-start' }]} titleStyle={[TextStyles.Detail]} onPress={() => {
-                        handleLogout(navigation)
+                        LogoutSelectBox(navigation)
                     }}>로그아웃</Button>
                 </View>
                 <View style={[BoxStyles.PV10]}>
                     <Button buttonStyle={[ButtonStyles.InputButton, { justifyContent: 'flex-start' }]} titleStyle={[TextStyles.Detail, TextStyles.FcRed]} onPress={() => {
-                        handleWithdraw(navigation)
+                        WithdrawSelectBox(navigation)
                     }}>회원탈퇴</Button>
                 </View>
             </View>

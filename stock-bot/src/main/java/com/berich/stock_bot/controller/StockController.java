@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.berich.stock_bot.dto.AutoInvestRequest;
+import com.berich.stock_bot.dto.MessageResponse;
 import com.berich.stock_bot.service.AutoInvestService;
 
 @RestController
@@ -18,9 +19,9 @@ public class StockController {
     private AutoInvestService autoInvestService;
 
     @PostMapping("/api/{company}/auto-stock")
-    public ResponseEntity<String> startAutoInvest(@RequestBody AutoInvestRequest request, @AuthenticationPrincipal UserDetails userDetail) {
+    public ResponseEntity<MessageResponse> startAutoInvest(@RequestBody AutoInvestRequest request, @AuthenticationPrincipal UserDetails userDetail) {
         autoInvestService.startStockBot(request);
-        return ResponseEntity.ok("자동매매가 시작되었습니다.");
+        return ResponseEntity.ok(new MessageResponse("자동매매가 시작되었습니다."));
     }
 
     

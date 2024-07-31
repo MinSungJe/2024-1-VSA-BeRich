@@ -5,7 +5,7 @@ import { ButtonStyles } from '../../styles/Button.style';
 import { TextStyles } from '../../styles/Text.style';
 import { DateInput, EmailInput, LabelInput, LabelSecretInput, NameInput } from '../../components/Input';
 import { useState } from 'react';
-import { handleRegister } from '../../api/authAPI';
+import { CheckDuplicate, handleRegister } from '../../api/authAPI';
 import { CheckSignUp } from './CheckSignup';
 
 export default function RegisterScreen({ navigation }) {
@@ -29,13 +29,17 @@ export default function RegisterScreen({ navigation }) {
                     state1={fName} setState1={setFName} state2={sName} setState2={setSName}></NameInput>
                 <DateInput label={'생년월일'} date={date} setDate={setDate}></DateInput>
                 <Button buttonStyle={ButtonStyles.MainButton} title={'회원가입'}
-                    onPress={() => {
+                    onPress={async () => {
                         if (!CheckSignUp(id, password, emailId, selectedDomain, fName, sName, date)) return // 입력했는지 체크
+                        // id, email 중복체크
+                        const checkDuplicate = await CheckDuplicate(id, `${emailId}@${selectedDomain}`)
+                        if (!checkDuplicate) return
+                        // 회원가입
                         handleRegister(id, password, `${emailId}@${selectedDomain}`, fName, sName, dateFormat(date), navigation)
                     }}></Button>
                 <Button buttonStyle={ButtonStyles.InputButton} titleStyle={TextStyles.Detail} title={'이미 계정이 있으면 여기를 눌러주세요'}
                     onPress={() => {
-                        navigation.navigate('Login')
+                        navigation.replace('Login')
                     }} />
             </View>
         </View>

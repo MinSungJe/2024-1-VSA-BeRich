@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.berich.stock_bot.dto.AccountBalanceResponse;
 import com.berich.stock_bot.dto.AccountRequest;
 import com.berich.stock_bot.dto.BalanceResponse;
+import com.berich.stock_bot.dto.MessageResponse;
 import com.berich.stock_bot.service.AccountService;
 
 @RestController
@@ -21,19 +22,19 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/api/account")
-    public ResponseEntity<String> enrollAccount(@RequestBody AccountRequest accountRequest, @AuthenticationPrincipal UserDetails userDetail) {
+    public ResponseEntity<MessageResponse> enrollAccount(@RequestBody AccountRequest accountRequest, @AuthenticationPrincipal UserDetails userDetail) {
         //String a = accountRequest.getAppKey();
         
         accountService.enrollAccount(userDetail.getUsername(), accountRequest);
 
-        return ResponseEntity.ok("계좌가 등록되었습니다.");
+        return ResponseEntity.ok(new MessageResponse("계좌가 등록되었습니다."));
     }
 
 
     
     //잔액조회
     @GetMapping("/api/balance")
-    public ResponseEntity<?> getBalance(@AuthenticationPrincipal UserDetails userDetail) {
+    public ResponseEntity<BalanceResponse> getBalance(@AuthenticationPrincipal UserDetails userDetail) {
         AccountBalanceResponse response = accountService.accountBalance(userDetail.getUsername());//잔액 전체 값 반환
         BalanceResponse balance = accountService.returnBalance(response);//필요한 값들만 반환
         if (balance == null) {

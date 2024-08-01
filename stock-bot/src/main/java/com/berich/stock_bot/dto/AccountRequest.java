@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
+//@NoArgsConstructor
 public class AccountRequest {
 
     private String accountNum;

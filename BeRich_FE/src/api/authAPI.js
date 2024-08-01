@@ -100,7 +100,7 @@ export const CheckDuplicate = async (id, email) => {
     } catch (error) {
         if (error.response) {
             console.error("Error Response Data:", error.response.data);
-            Alert.alert('회원가입 중복체크', `${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+            Alert.alert('회원가입 실패', `${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
         } else {
             console.error("Error Message:", error.message);
             Alert.alert('Error', '회원가입 중복체크 과정 중 에러가 발생했습니다.');

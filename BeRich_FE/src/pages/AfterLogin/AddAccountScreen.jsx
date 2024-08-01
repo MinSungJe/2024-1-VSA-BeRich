@@ -16,7 +16,7 @@ export default function AddAccountScreen({ navigation }) {
             <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
                 <LabelInput
                     label={'계좌번호 (한국투자증권)'}
-                    placeholder={'계좌번호를 입력해주세요(앞 6자리)'}
+                    placeholder={'계좌번호를 입력해주세요'}
                     state={accountNum}
                     setState={setAccountNum}
                 />

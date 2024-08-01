@@ -23,7 +23,6 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuples;
 
 @Service
-//@EnableScheduling
 public class AccountService {
 
     @Autowired

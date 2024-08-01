@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 import com.berich.stock_bot.entity.Account;
 
-//@Repository
+
 public interface AccountRepository extends JpaRepository<Account, Long>{
 
     Optional<Account> findByUserId(Long userId);

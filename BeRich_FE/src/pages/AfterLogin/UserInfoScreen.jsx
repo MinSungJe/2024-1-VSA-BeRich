@@ -5,8 +5,20 @@ import { TextStyles } from "../../styles/Text.style";
 import { BoxStyles } from "../../styles/Box.style";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LogoutSelectBox, WithdrawSelectBox } from "../../components/SelectBox";
+import { useEffect, useState } from "react";
+import { getBalanceAPI } from "../../api/getBalanceAPI";
 
 export default function UserInfoScreen({ navigation }) {
+    const [balance, setBalance] = useState('-')
+
+    useEffect(()=>{
+        async function getBalanceData() {
+            const data = await getBalanceAPI()
+            setBalance(`₩ ${data.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`) // 정규식 이용 콤마 넣음
+        }
+        getBalanceData()
+    }, [])
+
     return (
         <View style={[BoxStyles.P10]}>
             <View style={[BoxStyles.MainBox, BoxStyles.PH10, BoxStyles.Mb20]}>
@@ -23,7 +35,7 @@ export default function UserInfoScreen({ navigation }) {
                 </View>
                 <View style={[BoxStyles.P20]}>
                     <Text style={[TextStyles.Detail, BoxStyles.Mb5]}>현재 연결된 계좌</Text>
-                    <Text style={[TextStyles.Main]}>₩ 200,000</Text>
+                    <Text style={[TextStyles.Main]}>{balance}</Text>
                 </View>
             </View>
             <View style={[BoxStyles.MainBox, BoxStyles.PH10, BoxStyles.Mb20]}>

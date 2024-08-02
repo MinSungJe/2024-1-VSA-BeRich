@@ -30,12 +30,6 @@ public class StockInformationService {
     @Autowired
     private StockInformationHRepository stockInformationHRepository;
 
-    // @PostConstruct
-    // public void init() {
-    //     // webClient_py 초기화 확인 로그
-    //    // System.out.println("초기화 된거라곡고고고: " + webClient_py.toString());
-    // }
-    //해당주식의 1M 데이터 데베에서 가져오기
     public List<StockInformationH> getStock1MInfo(String stockCode) {
         
         CompanyInformation company = companyInformationRepository.findByStockCode(stockCode).orElse(null);
@@ -54,30 +48,39 @@ public class StockInformationService {
     // 모든 주식에 대해 시세 받아오고 저장
     public void fetchAndSaveStockData(List<String> stockCodes, String period, String interval) {
         if (period.equals("5d")){
-                stockInformationHRepository.deleteAll(); //30일데이터를 한번에 불러오는 경우 리셋
+                stockInformationHRepository.deleteAll(); //30일데이터를 한번에 불러오는 경우 데이터베이스 리셋
         }
+        // 모든 주식에 대해
         for (String stockCode : stockCodes) {
             // 주식 코드로 회사 정보 조회
             CompanyInformation company = companyInformationRepository.findByStockCode(stockCode).orElse(null);
             if(company != null) {
                 Mono<String> dataMono = getFinanceData(stockCode, period, interval);
                 String data = dataMono.block();
-        
-                //System.out.println("출력겨겨겨겨겨"+data);
                 
-                if(interval.equals("1h")) {
+                if(interval.equals("1h")) {//간격이 한시간
+                    
                     List<StockInformationH> stockData = parseStockData(data, company);//entity로 변환
-                    stockInformationHRepository.saveAll(stockData);
+                    if(period.equals("1d")) {
+                        StockInformationH newStock = stockData.get(stockData.size() - 1);//하루 데이터중 마지막 인덱스만 저장
+                        if(!stockInformationHRepository.existsByTimestamp(newStock.getTimestamp()))//시간이 다른것확인
+                            stockInformationHRepository.save(newStock);//저장
+                        
+                    }else {//5d일때=>처음 서버 실행시에만
+                        stockInformationHRepository.saveAll(stockData);
+                    }
+                    
                 } else if (interval.equals("1d")){
                     //List<StockInformationD> stockData = parseStockData(data);//entity로 변환
-                    //stockInformationDRepository.saveAll(stockData);
+                    //stockInformationDRepository.saveAll(stockData)인인
                 }
             }
             
         }
     }
 
-    //주식데이터 가져오기
+
+    //파이썬에서 주식데이터 가져오기
     private Mono<String> getFinanceData(String stockCode, String period, String interval) {
         // Flask API에 GET 요청을 보내고 응답을 Mono<String>으로 반환
         String tickerSymbol = stockCode+".KS";//주식코드+.KS

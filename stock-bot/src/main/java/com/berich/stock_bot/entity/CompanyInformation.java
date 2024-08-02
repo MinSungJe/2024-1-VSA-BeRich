@@ -26,6 +26,7 @@ import lombok.ToString;
 @Entity
 public class CompanyInformation {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

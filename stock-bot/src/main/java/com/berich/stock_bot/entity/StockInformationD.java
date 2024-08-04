@@ -21,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-public class StockInformationH {
+public class StockInformationD {//세달 주식시세
 
     @JsonIgnore
     @Id
@@ -52,3 +52,4 @@ public class StockInformationH {
     @JoinColumn(name = "company_information_id", nullable = false)
     private CompanyInformation companyInformation;
 }
+

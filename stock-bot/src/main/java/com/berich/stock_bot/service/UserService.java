@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.berich.stock_bot.config.jwt.TokenProvider;
 import com.berich.stock_bot.dto.AddUserRequest;
 import com.berich.stock_bot.dto.LoginTokenResponse;
+import com.berich.stock_bot.dto.UserInformationResponse;
+import com.berich.stock_bot.entity.Account;
 import com.berich.stock_bot.entity.User;
 import com.berich.stock_bot.repository.AccountRepository;
 import com.berich.stock_bot.repository.RefreshTokenRepository;
@@ -114,6 +116,23 @@ public class UserService {
         userRepository.deleteById(userId);//계정삭제
         refreshTokenRepository.deleteByUserId(userId);//리프레시 토큰도 삭제
         accountRepository.deleteByUserId(userId);//계좌 삭제
+    }
+
+    //유저정보 조회
+    public UserInformationResponse getUserInfo(String loginId){
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        Account account = accountRepository.findByUserId(user.getId()).orElse(null);
+        String accountNum;
+        if (user==null){
+            //예외처리
+        }
+        if(account==null) {
+            accountNum= "등록된 계좌 없음";
+        } else {
+            accountNum = account.getAccountNum();
+        }
+        return new UserInformationResponse(loginId, user.getFirstName(), user.getLastName(), accountNum);
+
     }
 
 }

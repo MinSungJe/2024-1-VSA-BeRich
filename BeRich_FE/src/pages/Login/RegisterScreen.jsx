@@ -37,7 +37,7 @@ export default function RegisterScreen({ navigation }) {
                         // 회원가입
                         handleRegister(id, password, `${emailId}@${selectedDomain}`, fName, sName, dateFormat(date), navigation)
                     }}></Button>
-                <Button buttonStyle={ButtonStyles.InputButton} titleStyle={TextStyles.Detail} title={'이미 계정이 있으면 여기를 눌러주세요'}
+                <Button buttonStyle={ButtonStyles.InputButton} titleStyle={TextStyles.Detail} title={'서비스를 이용해 본 적 있는거 같아요!'}
                     onPress={() => {
                         navigation.replace('Login')
                     }} />

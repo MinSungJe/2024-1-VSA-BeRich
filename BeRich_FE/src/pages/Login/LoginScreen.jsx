@@ -39,7 +39,7 @@ export default function LoginScreen({ navigation }) {
                 <Button
                     buttonStyle={ButtonStyles.InputButton}
                     titleStyle={TextStyles.Detail}
-                    title={'계정이 없나요?'}
+                    title={'저희 서비스는 처음인가요?'}
                     onPress={() => navigation.replace('Register')}
                 />
             </View>

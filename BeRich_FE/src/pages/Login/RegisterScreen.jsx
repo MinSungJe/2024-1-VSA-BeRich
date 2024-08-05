@@ -28,7 +28,7 @@ export default function RegisterScreen({ navigation }) {
                 <NameInput label={'이름'} placeholder1={'성'} placeholder2={'이름'}
                     state1={fName} setState1={setFName} state2={sName} setState2={setSName}></NameInput>
                 <DateInput label={'생년월일'} date={date} setDate={setDate}></DateInput>
-                <Button buttonStyle={ButtonStyles.MainButton} title={'회원가입'}
+                <Button buttonStyle={ButtonStyles.MainButton} title={'회원가입'} titleStyle={[TextStyles.FwBold]}
                     onPress={async () => {
                         if (!CheckSignUp(id, password, emailId, selectedDomain, fName, sName, date)) return // 입력했는지 체크
                         // id, email 중복체크

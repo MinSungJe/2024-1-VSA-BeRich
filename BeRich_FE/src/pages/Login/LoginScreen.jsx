@@ -30,6 +30,7 @@ export default function LoginScreen({ navigation }) {
                 <Button
                     buttonStyle={ButtonStyles.MainButton}
                     title={'로그인'}
+                    titleStyle={[TextStyles.FwBold]}
                     onPress={async () => {
                         if (!CheckLogin(id, password)) return // 입력했는지 체크
                         handleLogin(id, password, navigation)

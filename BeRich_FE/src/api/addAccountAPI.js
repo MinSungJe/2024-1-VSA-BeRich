@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchAPI } from './tokenAPI';
+import { tokenAPI } from './tokenAPI';
 
 export const CheckAddAccount = (accountNum, appKey, appSecret) => {
     if (!accountNum || accountNum.length < 6) {
@@ -23,7 +23,7 @@ export const CheckAddAccount = (accountNum, appKey, appSecret) => {
 
 export const addAccountAPI = async (accountNum, appKey, appSecret, navigation) => {
     try {
-        const response = await fetchAPI.post(`${API_URL}/api/account`, {
+        const response = await tokenAPI.post(`${API_URL}/api/account`, {
             accountNum: accountNum,
             appKey: appKey,
             appSecret: appSecret

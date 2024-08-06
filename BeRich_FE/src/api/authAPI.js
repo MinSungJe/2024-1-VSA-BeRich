@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchAPI } from './tokenAPI';
+import { tokenAPI } from './tokenAPI';
 
 export const handleLogin = async (id, password, navigation) => {
     // console.log(id, password, `${API_URL}/login 주소요청`)
@@ -124,7 +124,7 @@ export const handleLogout = async (navigation) => {
 
 export const handleWithdraw = async (navigation) => {
     try {
-        const response = await fetchAPI.delete(`${API_URL}/api/withdraw`)
+        const response = await tokenAPI.delete(`${API_URL}/api/withdraw`)
         if (response.data) {
             // 토큰 삭제
             await AsyncStorage.removeItem('user_access_token');

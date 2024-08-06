@@ -29,12 +29,12 @@ export default function UserInfoScreen({ navigation }) {
                         </Text>
                     </View>
                     <View style={[{ flex: 2 }, BoxStyles.PH10]}>
-                        <Text style={[TextStyles.Medium, TextStyles.FcBlack]}>환영합니다.</Text>
+                        <Text style={[TextStyles.Medium, TextStyles.FcBlack, BoxStyles.Mb10]}>환영합니다.</Text>
                         <Text style={[TextStyles.Title, TextStyles.FcBlack]}>홍 길동 <Text style={[TextStyles.Medium]}>님</Text></Text>
                     </View>
                 </View>
                 <View style={[BoxStyles.P20]}>
-                    <Text style={[TextStyles.Detail, BoxStyles.Mb5]}>현재 연결된 계좌</Text>
+                    <Text style={[TextStyles.Detail, BoxStyles.Mb10]}>현재 연결된 계좌</Text>
                     <Text style={[TextStyles.Main]}>{balance}</Text>
                 </View>
             </View>

@@ -80,7 +80,7 @@ export const BoxStyles = StyleSheet.create({
     },
 
     MainBoxContent: {
-        padding: 10,
+        padding: 15,
     },
 
     MarkerBox: {

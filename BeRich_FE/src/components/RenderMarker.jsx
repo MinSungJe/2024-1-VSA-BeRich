@@ -23,6 +23,7 @@ export function CandleRenderMarker({ selectedEntry }) {
     if (!selectedEntry) return null;
 
     const { open, close, high, low, data } = selectedEntry;
+    console.log(selectedEntry)
     return (
         data ?
             <View style={[BoxStyles.MarkerBox, { position: 'absolute', left: (selectedEntry.x * 2), top: -30 }]}>

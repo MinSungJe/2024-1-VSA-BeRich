@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import com.berich.stock_bot.repository.CompanyNewsRepository;
 import com.berich.stock_bot.repository.StockInformationDRepository;
 import com.berich.stock_bot.repository.StockInformationHRepository;
 
@@ -29,6 +30,9 @@ public class DataLoadService implements CommandLineRunner {
     @Autowired
     private StockInformationDRepository stockInformationDRepository;
 
+    @Autowired
+    private CompanyNewsRepository companyNewsRepository;
+
     private List<String> stockCodes;
 
     @Override
@@ -46,7 +50,11 @@ public class DataLoadService implements CommandLineRunner {
         // 주식 시세 데이터 요청 및 저장
         stockInformationService.fetchAndSaveStockData(stockCodes, "5d", "1h");//오일-한시간 간격
         stockInformationService.fetchAndSaveStockData(stockCodes, "3mo","1d");//세달-하루 간격
-        companyNewsService.getNewsScheduled();
+        
+        if (companyNewsRepository.count()<=0){
+            companyNewsService.getNewsScheduled();
+        }
+        
     }
 
     // //한시간마다(20분기준) 주식시세 업데이트(주말제외,9~2시까지)

@@ -21,6 +21,9 @@ public class DataLoadService implements CommandLineRunner {
     private StockInformationService stockInformationService;
 
     @Autowired
+    private CompanyNewsService companyNewsService;
+    
+    @Autowired
     private StockInformationHRepository stockInformationHRepository;
 
     @Autowired
@@ -43,6 +46,7 @@ public class DataLoadService implements CommandLineRunner {
         // 주식 시세 데이터 요청 및 저장
         stockInformationService.fetchAndSaveStockData(stockCodes, "5d", "1h");//오일-한시간 간격
         stockInformationService.fetchAndSaveStockData(stockCodes, "3mo","1d");//세달-하루 간격
+        companyNewsService.getNewsScheduled();
     }
 
     // //한시간마다(20분기준) 주식시세 업데이트(주말제외,9~2시까지)

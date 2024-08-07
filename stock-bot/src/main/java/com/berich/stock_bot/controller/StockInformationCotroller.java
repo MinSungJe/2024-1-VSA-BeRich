@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.berich.stock_bot.entity.CompanyNews;
 import com.berich.stock_bot.entity.StockInformationD;
 import com.berich.stock_bot.entity.StockInformationH;
+import com.berich.stock_bot.service.CompanyNewsService;
 import com.berich.stock_bot.service.StockInformationService;
 
 @RestController
@@ -18,6 +20,8 @@ public class StockInformationCotroller {
 
     @Autowired
     private StockInformationService stockInformationService;
+    @Autowired
+    private CompanyNewsService companyNewsService;
 
     @GetMapping("/api/{stockCode}/graph-5d")
     public ResponseEntity<List<StockInformationH>> return5DInfo(@PathVariable("stockCode") String stockCode){
@@ -46,4 +50,11 @@ public class StockInformationCotroller {
         }
         
     }
+
+    @GetMapping("/api/{stockCode}/news")
+    public ResponseEntity<CompanyNews> returnNews(@PathVariable("stockCode") String stockCode) {
+        CompanyNews news = companyNewsService.returnCompanyNews(stockCode);
+        return ResponseEntity.ok(news);
+    }
+
 }

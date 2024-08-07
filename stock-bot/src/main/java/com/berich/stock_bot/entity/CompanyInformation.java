@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,4 +51,9 @@ public class CompanyInformation {
     @JsonIgnore
     @OneToMany(mappedBy = "companyInformation", cascade = CascadeType.REMOVE) //같이 삭제
     private List<StockInformationD> stockInformationD = new ArrayList<>();
+
+    // 회사에 대한 뉴스요약
+    @JsonIgnore
+    @OneToOne(mappedBy = "companyInformation")
+    private CompanyNews companyNews;
 }

@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, jsonify
-import json
+from flask import Flask, jsonify,request
+import yfinance as yf
+import pandas as pd
 from openai import OpenAI
 from bs4 import BeautifulSoup
 import time
@@ -14,11 +15,7 @@ app = Flask(__name__)
 
 # 종목 코드와 키워드 매핑
 keyword_to_code = {
-    '삼성전자': '005930',
-    '카카오': '035720',
-    '하이브': '352820',
-    '두산': '000150',
-    '한일시멘트': '300720'
+    '삼성전자': '005930'
 }
 
 def news_crawling(keyword):
@@ -58,6 +55,7 @@ def summarize_article(article_body):
             ]
         )
         summary = response.choices[0].message.content
+        #print("요약성공")
         return summary
     except Exception as e:
         print(f"Error in summarizing article with GPT-4: {e}")
@@ -125,17 +123,47 @@ def get_news_data_for_keywords(keyword_to_code):
             })
     return results
 
-@app.route('/news_summary', methods=['GET'])
+@app.route('/api/news-summary', methods=['GET'])
 def news_summary():
-    summaries = get_news_data_for_keywords(keyword_to_code)
-    response = {
-        "data": summaries
-    }
+    try:
+        summaries = get_news_data_for_keywords(keyword_to_code)
+        response = {
+            "data": summaries
+        }
+        #print("반환")
+        #json 응답
+        return jsonify(response)
 
-    with open('summary.json', 'w', encoding='utf-8') as json_file:
-        json.dump(response, json_file, ensure_ascii=False, indent=4)
+    except Exception as e:
+        #오류 발생시
+        return jsonify({"error": "에러발생"}), 500
+    
 
-    return jsonify(response)
+@app.route('/api/finance', methods=['GET'])
+def get_finance_data():
+    ticker_symbol = request.args.get('ticker', type=str)
+    period = request.args.get('period', type=str)
+    interval = request.args.get('interval', type=str)
+    
+    try:
+        data = fetch_finance_data(ticker_symbol, period, interval)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+def fetch_finance_data(ticker_symbol, period, interval):
+    ticker = yf.Ticker(ticker_symbol)
+    data = ticker.history(period=period, interval=interval)
+    data['timestamp'] = data.index.astype('int64')//10**6
+    # Print data structure for debugging
+    #print(data.head())
+    
+    # Select necessary columns
+    data = data[['timestamp', 'Open', 'High', 'Low', 'Close', 'Volume']]
+    
+    # Convert DataFrame to list of dictionaries
+    return data.to_dict(orient='records')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

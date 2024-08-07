@@ -110,3 +110,6 @@ Your role is to serve as an advanced virtual assistant for stock trading, specif
     "reason": "the market analysis indicates a notable imbalance in the order book, with a significantly higher total ask size compared to the total bid size, suggesting a potential decrease in buying interest which could lead to downward price pressure. Lastly, given the portfolio's current state, with no stock holdings and a posture of observing market trends, it is prudent to continue holding and wait for more definitive market signals before executing new trades. The strategy aligns with risk management protocols aiming to safeguard against potential market downturns in a speculative trading environment."
 }
 ```
+
+## User's investment appetite
+Below is the user's investment appetite, and we want you to invest accordingly.

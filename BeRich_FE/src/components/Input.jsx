@@ -90,7 +90,7 @@ export function DateInput({ label, date, setDate }) {
             <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.Mb10]}>{label}</Text>
             <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.P10]}>
                 <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateLabel}</Text>
-                <Button title={'변경'} onPress={() => setOpen(true)} buttonStyle={ButtonStyles.MainButton} />
+                <Button title={'변경'} onPress={() => setOpen(true)} buttonStyle={ButtonStyles.MainButton} titleStyle={[TextStyles.FwBold]} />
                 <DatePicker
                     modal
                     open={open}

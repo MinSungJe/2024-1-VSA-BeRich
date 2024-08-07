@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import lombok.ToString;
 @Entity
 public class CompanyInformation {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,8 +42,18 @@ public class CompanyInformation {
 
     //기업에 대한 간단한 설명 넣을까 말까...
 
-    // 주식 시세와의 관계 설정 (일대다 관계)
+    // 오일 주식 시세와의 관계 설정 (일대다 관계)
     @JsonIgnore
     @OneToMany(mappedBy = "companyInformation", cascade = CascadeType.REMOVE) //같이 삭제
     private List<StockInformationH> stockInformationH = new ArrayList<>();
+
+    // 세달 주식 시세와의 관계 설정 (일대다 관계)
+    @JsonIgnore
+    @OneToMany(mappedBy = "companyInformation", cascade = CascadeType.REMOVE) //같이 삭제
+    private List<StockInformationD> stockInformationD = new ArrayList<>();
+
+    // 회사에 대한 뉴스요약
+    @JsonIgnore
+    @OneToOne(mappedBy = "companyInformation")
+    private CompanyNews companyNews;
 }

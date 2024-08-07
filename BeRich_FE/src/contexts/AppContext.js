@@ -8,7 +8,10 @@ const AppProvider = ({ children }) => {
     isLogin: false,
     userID: null,
     userEmail: null,
-    selectedStock: '삼성전자',
+    selectedStock: JSON.stringify({
+      "stockCode": "000120",
+      "companyName": "CJ대한통운"
+    }),
   });
 
   return (

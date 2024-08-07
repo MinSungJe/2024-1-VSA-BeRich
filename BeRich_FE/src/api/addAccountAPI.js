@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { tokenAPI } from './tokenAPI';
 
 export const CheckAddAccount = (accountNum, appKey, appSecret) => {
     if (!accountNum || accountNum.length < 6) {
@@ -22,16 +23,10 @@ export const CheckAddAccount = (accountNum, appKey, appSecret) => {
 
 export const addAccountAPI = async (accountNum, appKey, appSecret, navigation) => {
     try {
-        const accessToken = await AsyncStorage.getItem('user_access_token');
-        const response = await axios.post(`${API_URL}/api/account`, {
+        const response = await tokenAPI.post(`${API_URL}/api/account`, {
             accountNum: accountNum,
             appKey: appKey,
             appSecret: appSecret
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
         });
         if (response.data) {
             // 변경 성공 시 처리

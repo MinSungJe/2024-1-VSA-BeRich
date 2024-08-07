@@ -10,10 +10,14 @@ import { useContext, useEffect, useState } from 'react';
 import News from '../../components/News';
 import { ButtonStyles } from '../../styles/Button.style';
 import { AppContext } from '../../contexts/AppContext';
+import { parseStockData } from '../../resource/ParseData';
 
 export default function StockScreen({ navigation }) {
     const [stock, setStock] = useState('');
     const { state, setState } = useContext(AppContext);
+    const stockData = parseStockData(stock) // stock Data 사용가능하도록 변환
+
+    const [selectedGraph, setSelectedGraph] = useState('5d') // 그래프 선택
 
     useEffect(() => {
         setStock(state.selectedStock);
@@ -39,7 +43,7 @@ export default function StockScreen({ navigation }) {
                         </Text>
                     </View>
                     <View style={BoxStyles.MainBoxContent}>
-                        <CandleGraph stock={stock} />
+                        <CandleGraph stock={stock} graphType={selectedGraph} />
                     </View>
                 </View>
                 <View style={[BoxStyles.MainBox]}>
@@ -56,7 +60,7 @@ export default function StockScreen({ navigation }) {
                     <Button
                         buttonStyle={ButtonStyles.InputButton}
                         titleStyle={TextStyles.Detail}
-                        title={`${stock} 주식을 거래하시겠어요? >`}
+                        title={`${stockData.companyName} 주식을 거래하시겠어요? >`}
                         onPress={() => {
                             setState((prevContext) => ({
                                 ...prevContext,

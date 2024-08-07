@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { tokenAPI } from './tokenAPI';
 
 export const handleLogin = async (id, password, navigation) => {
     // console.log(id, password, `${API_URL}/login 주소요청`)
@@ -32,10 +33,10 @@ export const handleLogin = async (id, password, navigation) => {
         }
     } catch (error) {
         if (error.response) {
-            console.error("Error Response Data:", error.response.data);
+            console.error("login Error Response Data:", error.response.data);
             Alert.alert('Error', `서버 오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
         } else {
-            console.error("Error Message:", error.message);
+            console.error("login Error Message:", error.message);
             Alert.alert('Error', '로그인 과정 중 에러가 발생했습니다.');
         }
     }
@@ -65,10 +66,10 @@ export const handleRegister = async (id, password, email, fName, sName, date, na
         }
     } catch (error) {
         if (error.response) {
-            console.error("Error Response Data:", error.response.data);
+            console.error("register Error Response Data:", error.response.data);
             Alert.alert('Error', `서버 오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
         } else {
-            console.error("Error Message:", error.message);
+            console.error("register Error Message:", error.message);
             Alert.alert('Error', '회원가입 과정 중 에러가 발생했습니다.');
         }
     }
@@ -95,14 +96,14 @@ export const CheckDuplicate = async (id, email) => {
             }
         })
         // if (emailResponse.status == 200) console.log(emailResponse.data.message)
-        
+
         return true // 중복 체크 통과
     } catch (error) {
         if (error.response) {
-            console.error("Error Response Data:", error.response.data);
-            Alert.alert('회원가입 중복체크', `${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+            console.error("check Error Response Data:", error.response.data);
+            Alert.alert('회원가입 실패', `${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
         } else {
-            console.error("Error Message:", error.message);
+            console.error("check Error Message:", error.message);
             Alert.alert('Error', '회원가입 중복체크 과정 중 에러가 발생했습니다.');
         }
         return false
@@ -110,36 +111,20 @@ export const CheckDuplicate = async (id, email) => {
 }
 
 export const handleLogout = async (navigation) => {
-    try {
-        // 로그아웃 성공 시 처리
-        Alert.alert('로그아웃 성공', '로그아웃이 정상적으로 완료되었습니다.');
+    // 토큰 삭제
+    await AsyncStorage.removeItem('user_access_token');
+    await AsyncStorage.removeItem('user_refresh_token');
 
-        // 토큰 삭제
-        await AsyncStorage.removeItem('user_access_token');
-        await AsyncStorage.removeItem('user_refresh_token');
+    // 로그아웃 성공 시 처리
+    Alert.alert('로그아웃 성공', '로그아웃이 정상적으로 완료되었습니다.');
 
-        // 이동
-        navigation.replace('SplashScreen')
-
-    } catch (error) {
-        if (error.response) {
-            console.error("Error Response Data:", error.response.data);
-            Alert.alert('Error', `서버 오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
-        } else {
-            console.error("Error Message:", error.message);
-            Alert.alert('Error', '로그아웃 과정 중 에러가 발생했습니다.');
-        }
-    }
+    // 이동
+    navigation.replace('SplashScreen')
 };
 
 export const handleWithdraw = async (navigation) => {
     try {
-        const accessToken = await AsyncStorage.getItem('user_access_token');
-        const response = await axios.delete(`${API_URL}/api/withdraw`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        const response = await tokenAPI.delete(`${API_URL}/api/withdraw`)
         if (response.data) {
             // 토큰 삭제
             await AsyncStorage.removeItem('user_access_token');
@@ -153,11 +138,35 @@ export const handleWithdraw = async (navigation) => {
         }
     } catch (error) {
         if (error.response) {
-            console.error("Error Response Data:", error.response.data);
-            Alert.alert('Error', `서버 오류: ${error.response.data.message || '알 수 없는 오류가 발생했습니다.'}`);
+            console.error("withdraw Error Response Data:", error.response.data);
+            navigation.replace('SplashScreen')
         } else {
-            console.error("Error Message:", error.message);
+            console.error("withdraw Error Message:", error.message);
             Alert.alert('Error', '회원탈퇴 과정 중 에러가 발생했습니다.');
         }
     }
 }
+
+export const getAccessToken = async () => {
+    try {
+        const refreshToken = await AsyncStorage.getItem('user_refresh_token');
+        const response = await axios.post(`${API_URL}/api/token`, {
+            refreshToken: refreshToken
+        });
+
+        if (response.data) {
+            // 토큰 저장
+            let access_token = response.data.accessToken;
+            await AsyncStorage.setItem('user_access_token', access_token);
+        }
+    } catch (error) {
+        // Refresh 토큰 만료
+        console.log('Refresh Token 만료', error)
+        Alert.alert('로그인 만료', '로그인이 만료되었습니다. 다시 로그인해주세요.')
+        // 토큰 삭제
+        await AsyncStorage.removeItem('user_access_token');
+        await AsyncStorage.removeItem('user_refresh_token');
+
+        return Promise.reject(error)
+    }
+};

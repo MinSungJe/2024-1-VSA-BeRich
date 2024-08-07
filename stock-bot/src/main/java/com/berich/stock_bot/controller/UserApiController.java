@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +21,7 @@ import com.berich.stock_bot.dto.CreateAccessTokenResponse;
 import com.berich.stock_bot.dto.LoginRequest;
 import com.berich.stock_bot.dto.LoginTokenResponse;
 import com.berich.stock_bot.dto.MessageResponse;
+import com.berich.stock_bot.dto.UserInformationResponse;
 import com.berich.stock_bot.entity.User;
 import com.berich.stock_bot.repository.UserRepository;
 import com.berich.stock_bot.service.TokenService;
@@ -120,4 +124,12 @@ public class UserApiController {
     //     tokenService.blacklistToken(token);
     //     return ResponseEntity.ok("로그아웃 되었습니다.");
     // }
+
+    //유저 정보 조회
+    @GetMapping("/api/user")
+    public ResponseEntity<UserInformationResponse> getUserInfo(@AuthenticationPrincipal UserDetails userDetail) {
+        
+        String loginId = userDetail.getUsername();
+        return ResponseEntity.ok(userService.getUserInfo(loginId));
+    }
 }

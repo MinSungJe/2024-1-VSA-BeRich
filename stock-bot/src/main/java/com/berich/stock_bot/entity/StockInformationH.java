@@ -23,6 +23,7 @@ import lombok.ToString;
 @Entity
 public class StockInformationH {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;//자동 아이디

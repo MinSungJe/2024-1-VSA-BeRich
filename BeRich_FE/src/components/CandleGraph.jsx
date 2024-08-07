@@ -1,18 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { processColor, View } from 'react-native';
-import { stockData } from "../resource/StockData";
+import { stock3moData, stock5dData } from "../resource/StockData";
 import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
-import { dateFormatter, processCandleData } from '../resource/ParseData';
+import { dateFormatter, parseStockData, processCandleData } from '../resource/ParseData';
 import { CandleRenderMarker } from './RenderMarker';
 import { Color } from '../resource/Color';
+import { getGraphDataAPI } from '../api/getGraphDataAPI';
 
-export function CandleGraph({ stock }) {
+export function CandleGraph({ stock, graphType }) {
+    // stock Data 사용가능하도록 변환
+    const stockData = parseStockData(stock)
     const [selectedEntry, setSelectedEntry] = useState(null);
+    const [graphWidth, setGraphWidth] = useState(0);
 
     // useMemo를 이용해 시간 오래걸리는 요소 감싸기
     const { candleChartData, timeData } = useMemo(() => {
-        const data = processCandleData(stockData);
+        // const graphData = await getGraphDataAPI(stockData.stockCode, graphType)
+        // if (!graphData) return {
+        //     candleChartData: null,
+        //     timeData: null
+        // }
+        const data = processCandleData(stock5dData);
         const dateData = data.map(item => dateFormatter(item.timestamp));
         return {
             candleChartData: data,
@@ -20,8 +29,14 @@ export function CandleGraph({ stock }) {
         };
     }, [stock]);
 
+    // 그래프가 그려졌을 때 width 계산
+    const onLayout = useCallback(event => {
+        const { width } = event.nativeEvent.layout;
+        setGraphWidth(width);
+    }, []);
+
     return (
-        <View style={[{ height: 250 }, BoxStyles.ContainerBox]}>
+        <View style={[{ height: 250 }, BoxStyles.ContainerBox]} onLayout={onLayout}>
             <CandleStickChart
                 style={{ flex: 1 }}
                 data={{
@@ -82,7 +97,7 @@ export function CandleGraph({ stock }) {
                     }
                 }}
             />
-            <CandleRenderMarker selectedEntry={selectedEntry}/>
+            <CandleRenderMarker selectedEntry={selectedEntry} graphWidth={graphWidth} dataLength={candleChartData.length}/>
         </View>
     );
 }

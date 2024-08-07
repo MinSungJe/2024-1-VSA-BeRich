@@ -17,6 +17,8 @@ export default function StockScreen({ navigation }) {
     const { state, setState } = useContext(AppContext);
     const stockData = parseStockData(stock) // stock Data 사용가능하도록 변환
 
+    const [selectedGraph, setSelectedGraph] = useState('5d') // 그래프 선택
+
     useEffect(() => {
         setStock(state.selectedStock);
     }, [state.selectedStock]);
@@ -41,7 +43,7 @@ export default function StockScreen({ navigation }) {
                         </Text>
                     </View>
                     <View style={BoxStyles.MainBoxContent}>
-                        <CandleGraph stock={stock} />
+                        <CandleGraph stock={stock} graphType={selectedGraph} />
                     </View>
                 </View>
                 <View style={[BoxStyles.MainBox]}>

@@ -1,3 +1,4 @@
+"""
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -146,11 +147,11 @@ def get_news_data():
     else:
         print("Failed to retrieve news data.")
 
+"""
 
-
-
+"""
 def get_access_token():
-    """토큰 발급"""
+    #토큰 발급
     headers = {"content-type":"application/json"}
     body = {"grant_type":"client_credentials",
     "appkey":APP_KEY, 
@@ -162,7 +163,7 @@ def get_access_token():
     return ACCESS_TOKEN
 
 def hashkey(datas):
-    """암호화"""
+    #암호화
     PATH = "uapi/hashkey"
     URL = f"{URL_BASE}/{PATH}"
     headers = {
@@ -175,7 +176,7 @@ def hashkey(datas):
     return hashkey
 
 def get_current_price(code="005930"):
-    """현재가 조회"""
+    #현재가 조회
     global ACCESS_TOKEN
     PATH = "uapi/domestic-stock/v1/quotations/inquire-price"
     URL = f"{URL_BASE}/{PATH}"
@@ -193,7 +194,7 @@ def get_current_price(code="005930"):
     return int(res.json()['output']['stck_prpr'])
 
 def get_stock_balance():
-    """주식 잔고조회"""
+    #주식 잔고조회
     global ACCESS_TOKEN
     PATH = "uapi/domestic-stock/v1/trading/inquire-balance"
     URL = f"{URL_BASE}/{PATH}"
@@ -242,7 +243,7 @@ def get_stock_balance():
         return None
 
 def get_balance():
-    """현금 잔고조회"""
+    #현금 잔고조회
     global ACCESS_TOKEN
     PATH = "uapi/domestic-stock/v1/trading/inquire-psbl-order"
     URL = f"{URL_BASE}/{PATH}"
@@ -268,7 +269,7 @@ def get_balance():
     return int(cash)
 
 def buy(code="005930", qty_buy = "1"):
-    """주식 시장가 매수"""  
+    #주식 시장가 매수  
     global ACCESS_TOKEN
     PATH = "uapi/domestic-stock/v1/trading/order-cash"
     URL = f"{URL_BASE}/{PATH}"
@@ -299,7 +300,7 @@ def buy(code="005930", qty_buy = "1"):
     
     
 def sell(code="005930", qty_sell = "1"):
-    """주식 시장가 매도"""
+    #주식 시장가 매도
     global ACCESS_TOKEN
     PATH = "uapi/domestic-stock/v1/trading/order-cash"
     URL = f"{URL_BASE}/{PATH}"
@@ -570,3 +571,4 @@ if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
+"""

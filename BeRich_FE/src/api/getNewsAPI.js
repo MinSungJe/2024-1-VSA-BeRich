@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { API_URL } from '@env';
+import { tokenAPI } from './tokenAPI';
 
 export const getNewsAPI = async ({stockCode}) => {
     try {
-        const response = await axios.get(`${API_URL}/api/${stockCode}/news`);
+        const response = await tokenAPI.get(`${API_URL}/api/${stockCode}/news`);
         const data = response.data
         console.log(data)
         return data

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { API_URL } from '@env';
+import { tokenAPI } from './tokenAPI';
 
 export const getGraphDataAPI = async ({stockCode, graphType}) => {
     try {
-        const response = await axios.get(`${API_URL}/api/${stockCode}/graph-${graphType}`);
+        const response = await tokenAPI.get(`${API_URL}/api/${stockCode}/graph-${graphType}`);
         const data = response.data
         console.log(data)
         return data

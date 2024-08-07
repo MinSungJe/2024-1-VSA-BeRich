@@ -5,7 +5,7 @@ import { BoxStyles } from "../styles/Box.style";
 import { parseStockData } from "../resource/ParseData";
 import { getNewsAPI } from "../api/getNewsAPI";
 
-export default async function News({stock}) {
+export default function News({stock}) {
     // stock Data 사용가능하도록 변환
     const stockData = parseStockData(stock)
 

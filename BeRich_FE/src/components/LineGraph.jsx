@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { processColor, View } from 'react-native';
 import { LineChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
-import { stockData } from "../resource/StockData";
+import { stock5dData } from "../resource/StockData";
 import { dateFormatter, processLineData } from '../resource/ParseData';
 import { Color } from '../resource/Color';
 import { LineRenderMarker } from './RenderMarker';
@@ -13,7 +13,7 @@ export function LineGraph({ stock }) {
     // useMemo를 이용해 시간 오래걸리는 요소 감싸기
     const { lineChartData, timeData } = useMemo(() => {
         console.log('Processing data...');
-        const data = processLineData(stockData);
+        const data = processLineData(stock5dData);
         const dateData = data.map(item => dateFormatter(item.timestamp));
         return {
             lineChartData: data,

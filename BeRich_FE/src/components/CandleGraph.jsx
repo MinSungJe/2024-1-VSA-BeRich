@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { processColor, View } from 'react-native';
-import { stock3moData, stockData } from "../resource/StockData";
+import { stock3moData, stock5dData } from "../resource/StockData";
 import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
-import { dateFormatter, processCandleData } from '../resource/ParseData';
+import { dateFormatter, parseStockData, processCandleData } from '../resource/ParseData';
 import { CandleRenderMarker } from './RenderMarker';
 import { Color } from '../resource/Color';
 import { getGraphDataAPI } from '../api/getGraphDataAPI';
@@ -15,13 +15,13 @@ export function CandleGraph({ stock, graphType }) {
     const [graphWidth, setGraphWidth] = useState(0);
 
     // useMemo를 이용해 시간 오래걸리는 요소 감싸기
-    const { candleChartData, timeData } = useMemo(async () => {
+    const { candleChartData, timeData } = useMemo(() => {
         // const graphData = await getGraphDataAPI(stockData.stockCode, graphType)
-        if (!graphData) return {
-            candleChartData: null,
-            timeData: null
-        }
-        const data = processCandleData(stockData);
+        // if (!graphData) return {
+        //     candleChartData: null,
+        //     timeData: null
+        // }
+        const data = processCandleData(stock5dData);
         const dateData = data.map(item => dateFormatter(item.timestamp));
         return {
             candleChartData: data,

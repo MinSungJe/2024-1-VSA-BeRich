@@ -6,12 +6,20 @@ import { BoxStyles } from '../styles/Box.style';
 import { dateFormatter, processCandleData } from '../resource/ParseData';
 import { CandleRenderMarker } from './RenderMarker';
 import { Color } from '../resource/Color';
+import { getGraphDataAPI } from '../api/getGraphDataAPI';
 
-export function CandleGraph({ stock }) {
+export function CandleGraph({ stock, graphType }) {
+    // stock Data 사용가능하도록 변환
+    const stockData = parseStockData(stock)
     const [selectedEntry, setSelectedEntry] = useState(null);
 
     // useMemo를 이용해 시간 오래걸리는 요소 감싸기
-    const { candleChartData, timeData } = useMemo(() => {
+    const { candleChartData, timeData } = useMemo(async () => {
+        // const graphData = await getGraphDataAPI(stockData.stockCode, graphType)
+        if (!graphData) return {
+            candleChartData: null,
+            timeData: null
+        }
         const data = processCandleData(stockData);
         const dateData = data.map(item => dateFormatter(item.timestamp));
         return {

@@ -29,3 +29,9 @@ export const dateTimeFormatter = (timestamp) => {
     const date = new Date(timestamp);
     return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")}-${(date.getHours()).toString().padStart(2, "0")}`; // MM-DD-hh 포맷
 };
+
+// Stock data의 값을 변환
+export const parseStockData = (stock) => {
+    if (!stock) return ''
+    else return JSON.parse(stock)
+}

@@ -1,11 +1,10 @@
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchAPI } from './tokenAPI';
+import { tokenAPI } from './tokenAPI';
 
 export const getBalanceAPI = async () => {
     try {
-        const response = await fetchAPI.get(`${API_URL}/api/balance`)
+        const response = await tokenAPI.get(`${API_URL}/api/balance`)
         if (response.data) {
             console.log(response.data)
             return response.data.dncaTotAmt

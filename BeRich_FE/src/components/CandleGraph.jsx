@@ -5,6 +5,7 @@ import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
 import { dateFormatter, processCandleData } from '../resource/ParseData';
 import { CandleRenderMarker } from './RenderMarker';
+import { Color } from '../resource/Color';
 
 export function CandleGraph({ stock }) {
     const [selectedEntry, setSelectedEntry] = useState(null);
@@ -32,8 +33,8 @@ export function CandleGraph({ stock }) {
                             shadowColor: processColor('black'),
                             shadowWidth: 2,
                             shadowColorSameAsCandle: true,
-                            increasingColor: processColor('green'),
-                            decreasingColor: processColor('red'),
+                            increasingColor: processColor(Color.Red),
+                            decreasingColor: processColor(Color.Blue),
                             increasingPaintStyle: 'FILL',
                             decreasingPaintStyle: 'FILL',
                             drawValues: false,

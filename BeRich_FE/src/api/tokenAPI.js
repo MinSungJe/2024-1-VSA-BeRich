@@ -3,9 +3,9 @@ import axios from "axios";
 import { getAccessToken } from "./authAPI";
 
 // Axios 인스턴스 생성
-export const fetchAPI = axios.create()
+export const tokenAPI = axios.create()
 
-fetchAPI.interceptors.request.use(
+tokenAPI.interceptors.request.use(
     async (config) => {
         const accessTokenforAPI = await AsyncStorage.getItem('user_access_token');
 
@@ -21,7 +21,7 @@ fetchAPI.interceptors.request.use(
     }
 )
 
-fetchAPI.interceptors.response.use(
+tokenAPI.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config
@@ -39,7 +39,7 @@ fetchAPI.interceptors.response.use(
 
                     // header 설정 후 재실행
                     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
-                    return fetchAPI(originalRequest)
+                    return tokenAPI(originalRequest)
             }
         }
         return Promise.reject(error);

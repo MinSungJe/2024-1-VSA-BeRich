@@ -7,10 +7,9 @@ export function StockPicker({stock, setStock}) {
         <View>
             <Picker
                 selectedValue={stock}
-                onValueChange={(itemValue, itemIndex) =>
-                    setStock(itemValue)
-                }>
-                {StockList.map((element, id) => <Picker.Item key={id} label={element} value={element} />)}
+                onValueChange={(itemValue) =>
+                    setStock(itemValue)}>
+                {StockList.map((element, id) => <Picker.Item key={id} label={`${element.companyName} (${element.stockCode})`} value={JSON.stringify(element)} />)}
             </Picker>
         </View>
     )

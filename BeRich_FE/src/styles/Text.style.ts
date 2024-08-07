@@ -16,31 +16,35 @@ export const TextStyles = StyleSheet.create({
         color: Color.Gray
     },
     FwBold: {
-        fontWeight: 'bold'
+        fontFamily: 'NanumGothicBold',
     },
 
 	Title: {
+        fontFamily: 'NanumGothicBold',
         fontSize: 40,
         color: Color.MainColor,
-        fontWeight: 'bold'
     },
 
     Main: {
+        fontFamily: 'NanumGothic',
         fontSize: 28,
         color: Color.MainColor
     },
 
     Medium: {
+        fontFamily: 'NanumGothic',
         fontSize: 22,
         color: Color.MainColor
     },
 
     Detail: {
+        fontFamily: 'NanumGothic',
         fontSize: 16,
         color: Color.MainColor
     },
 
     Marker : {
+        fontFamily: 'NanumGothic',
         fontSize: 14,
         color: 'black',
     }

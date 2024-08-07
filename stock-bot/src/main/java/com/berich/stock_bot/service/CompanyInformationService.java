@@ -28,13 +28,16 @@ public class CompanyInformationService implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {//바로 시작 한번
         // 데이터베이스 비우기
-        companyInformationRepository.deleteAll();
-        // CSV 파일 경로
-        String csvFile = "classpath:data/data_KOSPI200.csv";
-        List<CompanyInformation> companies = readCompanyDataFromCsv(csvFile);
+        if (companyInformationRepository.count() <= 0){
+            companyInformationRepository.deleteAll();
+            // CSV 파일 경로
+            String csvFile = "classpath:data/data_KOSPI200.csv";
+            List<CompanyInformation> companies = readCompanyDataFromCsv(csvFile);
 
-        // 데이터베이스에 저장
-        companyInformationRepository.saveAll(companies);
+            // 데이터베이스에 저장
+            companyInformationRepository.saveAll(companies);
+        }
+        
     }
 
     //정보읽어오기

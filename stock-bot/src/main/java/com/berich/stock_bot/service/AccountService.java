@@ -53,8 +53,13 @@ public class AccountService {
             .flatMap(response -> {
                 // 액세스 토큰을 추출하고 계좌 잔액을 조회
                 String accessToken = response.getAccessToken();
+                String expiredAtst = response.getAccessTokenTokenExpired();
+                //System.out.println("여기까지는 됐는데");
+                String isoDateTimeStr = expiredAtst.replace(" ", "T");
+                //System.out.println("여기는데");
+                LocalDateTime expiredAt = LocalDateTime.parse(isoDateTimeStr);
+                //System.out.println("뭐랄까");
                 
-                LocalDateTime expiredAt = response.getAccessTokenTokenExpired();
 
                 return getAccountBalance(accessToken, accountNum, appKey, appSecret)
                     .map(balanceResponse -> Tuples.of(accessToken, expiredAt, balanceResponse));
@@ -70,6 +75,7 @@ public class AccountService {
                     if ("0".equals(balanceResponse.getRtCd())) {
                         // Account 객체 생성 및 데이터베이스 저장
                         //Long accountN = Long.parseLong(accountNum);
+                        //System.out.println("정말되는걸까"+expiredAt);
                         Long userId = user.getId();
                         Account account = new Account(accountNum, appKey, appSecret, accessToken, expiredAt, userId);
                         accountRepository.save(account);
@@ -130,7 +136,7 @@ public class AccountService {
     @Scheduled(fixedRate = 7200000) // 2시간마다 실행 3600000=1시간
     public void updateAccountToken() {
         //System.out.println("제대로 호출되고 있다!");
-        //Long a = Long.valueOf(2);
+        //Long a = Long.valueOf(1);
         
         //System.out.println("이건 원래 값"+ accountRepository.findById(a).orElse(null).getExpiredAt());
         //System.out.println("dddd"+ userRepository.findById(a).orElse(null).getBirthDate());
@@ -141,7 +147,7 @@ public class AccountService {
         // 만료 시간이 임박한 계좌들을 조회
         
         List<Account> accountList = accountRepository.findByExpiredAtBefore(thresholdTime);
-        // System.out.println("만료시간222!!!"+ st);
+        //System.out.println("만료시간222!!!"+accountList);
         if (accountList.isEmpty()){
             System.out.println("리스트가 비었다요요요요");
         }
@@ -158,7 +164,14 @@ public class AccountService {
                         // 응답을 처리하여 계좌 정보를 갱신
                         account.setAccountAccessToken(response.getAccessToken());
                         //System.out.println("만료된 토큰 재발급"+response.getAccessTokenTokenExpired());
-                        account.setExpiredAt(response.getAccessTokenTokenExpired());
+                        String expiredAtst = response.getAccessTokenTokenExpired();
+                        //System.out.println("여기까지는 됐는데2");
+                        String isoDateTimeStr = expiredAtst.replace(" ", "T");
+                        //System.out.println("여기는데2");
+                        LocalDateTime expiredAt = LocalDateTime.parse(isoDateTimeStr);
+                        //System.out.println("뭐랄까2");
+                
+                        account.setExpiredAt(expiredAt);
                     })
                     .then(Mono.fromCallable(() -> accountRepository.save(account))); // 갱신된 계좌를 저장
             })

@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { processColor, View } from 'react-native';
-import { stockData } from "../resource/StockData";
+import { stock3moData, stockData } from "../resource/StockData";
 import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
 import { dateFormatter, processCandleData } from '../resource/ParseData';
@@ -9,6 +9,7 @@ import { Color } from '../resource/Color';
 
 export function CandleGraph({ stock }) {
     const [selectedEntry, setSelectedEntry] = useState(null);
+    const [graphWidth, setGraphWidth] = useState(0);
 
     // useMemo를 이용해 시간 오래걸리는 요소 감싸기
     const { candleChartData, timeData } = useMemo(() => {
@@ -20,8 +21,14 @@ export function CandleGraph({ stock }) {
         };
     }, [stock]);
 
+    // 그래프가 그려졌을 때 width 계산
+    const onLayout = useCallback(event => {
+        const { width } = event.nativeEvent.layout;
+        setGraphWidth(width);
+    }, []);
+
     return (
-        <View style={[{ height: 250 }, BoxStyles.ContainerBox]}>
+        <View style={[{ height: 250 }, BoxStyles.ContainerBox]} onLayout={onLayout}>
             <CandleStickChart
                 style={{ flex: 1 }}
                 data={{
@@ -82,7 +89,7 @@ export function CandleGraph({ stock }) {
                     }
                 }}
             />
-            <CandleRenderMarker selectedEntry={selectedEntry}/>
+            <CandleRenderMarker selectedEntry={selectedEntry} graphWidth={graphWidth} dataLength={candleChartData.length}/>
         </View>
     );
 }

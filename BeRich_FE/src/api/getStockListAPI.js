@@ -1,10 +1,13 @@
 import { API_URL } from '@env';
 import { tokenAPI } from './tokenAPI';
+import { Alert } from 'react-native';
 
-const getStockListAPI = async () => {
+export const getStockListAPI = async () => {
     try {
         const response = await tokenAPI.get(`${API_URL}/api/stock-list`);
-        return JSON.stringify(response.data) // 데이터 반환
+        if (response.data) {
+            return response.data // 데이터 반환
+        }
     } catch (error) {
         // 요청 실패
         console.error(error);
@@ -12,6 +15,3 @@ const getStockListAPI = async () => {
         return null
     }
 };
-
-// 주식 데이터
-export const stockData = await getStockListAPI()

@@ -34,7 +34,7 @@ public class CompanyNews {
     @Column(nullable = false) //뉴스 요약본 날짜
     private LocalDate date;
 
-    @Column(nullable = false, length = 65535)//뉴스 요약본
+    @Column(nullable = false, columnDefinition = "TEXT")//뉴스 요약본
     private String summary;
 
     // 회사 정보와의 관계 설정

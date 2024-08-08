@@ -2,8 +2,10 @@ package com.berich.stock_bot.service;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +46,8 @@ public class CompanyInformationService implements CommandLineRunner {
     private List<CompanyInformation> readCompanyDataFromCsv(String csvFile) throws IOException {
         List<CompanyInformation> companies = new ArrayList<>();//회사목록
         File file = ResourceUtils.getFile(csvFile);
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             br.readLine(); // 헤더 없이
             while ((line = br.readLine()) != null) {

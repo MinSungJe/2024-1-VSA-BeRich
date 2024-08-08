@@ -5,19 +5,26 @@ import { TextStyles } from "../../styles/Text.style";
 import { BoxStyles } from "../../styles/Box.style";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LogoutSelectBox, WithdrawSelectBox } from "../../components/SelectBox";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { getBalanceAPI } from "../../api/getBalanceAPI";
+import { useFocusEffect } from '@react-navigation/native';
+import { getUserInfoAPI } from "../../api/getUserInfoAPI";
 
 export default function UserInfoScreen({ navigation }) {
-    const [balance, setBalance] = useState('-')
+    const [userInfo, setUserInfo] = useState({"accountNum": "등록된 계좌 없음", "firstName": "홍", "lastName": "길동", "loginId": "test01"});
+    const [balance, setBalance] = useState('-');
 
-    useEffect(()=>{
-        async function getBalanceData() {
-            const data = await getBalanceAPI()
-            setBalance(`₩ ${data.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`) // 정규식 이용 콤마 넣음
-        }
-        getBalanceData()
-    }, [])
+    useFocusEffect(
+        React.useCallback(() => {
+            async function getBalanceData() {
+                const userInfoData = await getUserInfoAPI()
+                const balanceData = await getBalanceAPI();
+                setUserInfo(userInfoData)
+                setBalance(`₩ ${balanceData.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`); // 정규식 이용 콤마 넣음
+            }
+            getBalanceData();
+        }, [])
+    );
 
     return (
         <View style={[BoxStyles.P10]}>
@@ -30,11 +37,12 @@ export default function UserInfoScreen({ navigation }) {
                     </View>
                     <View style={[{ flex: 2 }, BoxStyles.PH10]}>
                         <Text style={[TextStyles.Medium, TextStyles.FcBlack, BoxStyles.Mb10]}>환영합니다.</Text>
-                        <Text style={[TextStyles.Title, TextStyles.FcBlack]}>홍 길동 <Text style={[TextStyles.Medium]}>님</Text></Text>
+                        <Text style={[TextStyles.Title, TextStyles.FcBlack]}>{userInfo.firstName} {userInfo.lastName}<Text style={[TextStyles.Medium]}>님</Text></Text>
                     </View>
                 </View>
                 <View style={[BoxStyles.P20]}>
                     <Text style={[TextStyles.Detail, BoxStyles.Mb10]}>현재 연결된 계좌</Text>
+                    <Text style={[TextStyles.Detail, TextStyles.FcDarkGray, BoxStyles.Mb5]}>{`(${userInfo.accountNum})`}</Text>
                     <Text style={[TextStyles.Main]}>{balance}</Text>
                 </View>
             </View>

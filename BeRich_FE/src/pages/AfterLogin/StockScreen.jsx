@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button, Text } from "@rneui/base";
+import { Button, Text, ButtonGroup, color } from "@rneui/base";
 import { ScrollView, View } from "react-native";
 import { StockPicker } from "../../components/StockPicker";
 import { BoxStyles } from "../../styles/Box.style";
@@ -11,17 +11,23 @@ import News from '../../components/News';
 import { ButtonStyles } from '../../styles/Button.style';
 import { AppContext } from '../../contexts/AppContext';
 import { parseStockData } from '../../resource/ParseData';
+import { Color } from '../../resource/Color';
 
 export default function StockScreen({ navigation }) {
     const [stock, setStock] = useState('');
     const { state, setState } = useContext(AppContext);
-    const stockData = parseStockData(stock) // stock Data 사용가능하도록 변환
+    const stockData = parseStockData(stock); // stock Data 사용가능하도록 변환
 
-    const [selectedGraph, setSelectedGraph] = useState('5d') // 그래프 선택
+    const [selectedGraph, setSelectedGraph] = useState('5d'); // 그래프 선택
 
     useEffect(() => {
         setStock(state.selectedStock);
     }, [state.selectedStock]);
+
+    // 그래프 선택 옵션
+    const graphLabels = ['5일', '3달'];
+    const graphOptions = ['5d', '3mo'];
+    const selectedIndex = graphOptions.indexOf(selectedGraph);
 
     return (
         <View style={BoxStyles.P10}>
@@ -37,12 +43,21 @@ export default function StockScreen({ navigation }) {
                     </View>
                 </View>
                 <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
-                    <View style={[BoxStyles.MainBoxTitle, BoxStyles.Mb30]}>
+                    <View style={[BoxStyles.MainBoxTitle]}>
                         <Text style={[TextStyles.Detail, TextStyles.FcWhite]}>
                             <MaterialCommunityIcons name="chart-line" size={16} /> 주식 그래프
                         </Text>
                     </View>
-                    <View style={BoxStyles.MainBoxContent}>
+                    <View style={[BoxStyles.MainBoxContent, BoxStyles.Mb20]}>
+                        <ButtonGroup
+                            buttons={graphLabels}
+                            selectedIndex={selectedIndex}
+                            onPress={(index) => setSelectedGraph(graphOptions[index])}
+                            containerStyle={[BoxStyles.Mb30, {borderRadius: 10}]}
+                            selectedButtonStyle={{ backgroundColor: Color.MainColor }}
+                            buttonStyle={{backgroundColor: Color.White}}
+                            textStyle={{ color: 'black' }}
+                        />
                         <CandleGraph stock={stock} graphType={selectedGraph} />
                     </View>
                 </View>

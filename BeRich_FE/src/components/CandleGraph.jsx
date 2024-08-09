@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { processColor, View } from 'react-native';
 import { CandleStickChart } from 'react-native-charts-wrapper';
 import { BoxStyles } from '../styles/Box.style';
@@ -8,20 +8,13 @@ import { Color } from '../resource/Color';
 import { getGraphDataAPI } from '../api/getGraphDataAPI';
 import { stock5dData } from '../resource/StockData';
 
-export function CandleGraph({ stock, graphType }) {    
+export function CandleGraph({ stock, graphType }) {
     const [selectedEntry, setSelectedEntry] = useState(null);
     const [graphWidth, setGraphWidth] = useState(0);
-    const [stockGraphData, setStockGraphData] = useState([
-        {
-            "timestamp": 0,
-            "open": 0,
-            "high": 0,
-            "low": 0,
-            "close": 0,
-            "volume": 0
-        }
-    ])
+    const [stockGraphData, setStockGraphData] = useState([]);
     const [stockData, setStockData] = useState(null);
+    const [candleChartData, setCandleChartData] = useState([{ 'shadowH': 0, 'shadowL': 0, 'open': 0, 'close': 0 }]);
+    const [timeData, setTimeData] = useState([]);
 
     // stock Data 사용가능하도록 변환
     useEffect(() => {
@@ -29,30 +22,36 @@ export function CandleGraph({ stock, graphType }) {
         setStockData(parsedData);
     }, [stock]);
 
-    // useMemo를 이용해 시간 오래걸리는 요소 감싸기
-    const { candleChartData, timeData } = useMemo(() => {
+    // stockData가지고 그래프 데이터 API 호출
+    useEffect(() => {
         if (stockData && stockData.stockCode) {
             // API 불러오기
             async function getGraphData(stockCode, graphType) {
-                const graphData = await getGraphDataAPI(stockCode, graphType)
+                const graphData = await getGraphDataAPI(stockCode, graphType);
                 setStockGraphData(graphData)
             }
-            getGraphData(stockData.stockCode, graphType)
+            getGraphData(stockData.stockCode, graphType);
         }
+    }, [stockData, graphType]);
 
-        const data = processCandleData(stock5dData);
+    // 데이터 조정
+    useEffect(() => {
+        const data = processCandleData(stockGraphData);
         const dateData = data.map(item => dateFormatter(item.timestamp));
-        return {
-            candleChartData: data,
-            timeData: dateData
-        };
-    }, [stockData]);
+        setCandleChartData(data);
+        setTimeData(dateData);
+    }, [stockGraphData])
+
 
     // 그래프가 그려졌을 때 width 계산
     const onLayout = useCallback(event => {
         const { width } = event.nativeEvent.layout;
         setGraphWidth(width);
     }, []);
+
+    if (!stockData || candleChartData.length === 0 || timeData.length === 0) {
+        return null; // 로딩중
+    }
 
     return (
         <View style={[{ height: 250 }, BoxStyles.ContainerBox]} onLayout={onLayout}>

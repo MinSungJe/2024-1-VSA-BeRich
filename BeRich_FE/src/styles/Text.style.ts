@@ -15,6 +15,9 @@ export const TextStyles = StyleSheet.create({
     FcGray: {
         color: Color.Gray
     },
+    FcDarkGray: {
+        color: Color.DarkGray
+    },
     FwBold: {
         fontFamily: 'NanumGothicBold',
     },

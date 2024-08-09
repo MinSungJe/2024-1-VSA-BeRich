@@ -9,11 +9,11 @@ export const processLineData = (data) => {
 // 캔들그래프용 데이터 정제
 export const processCandleData = (data) => {
     return data.map(item => ({
-        shadowH: item.High,
-        shadowL: item.Low,
-        open: item.Open,
-        close: item.Close,
-        volume: item.Volume,
+        shadowH: item.high,
+        shadowL: item.low,
+        open: item.open,
+        close: item.close,
+        volume: item.volume,
         timestamp: item.timestamp
     }));
 };

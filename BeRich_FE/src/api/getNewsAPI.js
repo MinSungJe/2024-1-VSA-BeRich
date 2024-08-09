@@ -1,5 +1,6 @@
 import { API_URL } from '@env';
 import { tokenAPI } from './tokenAPI';
+import { Alert } from 'react-native';
 
 export const getNewsAPI = async (stockCode) => {
     try {
@@ -12,7 +13,6 @@ export const getNewsAPI = async (stockCode) => {
     } catch (error) {
         // 요청 실패
         console.error("getNewsAPI "+error);
-        Alert.alert('Error', '뉴스정보 불러올 때 에러났음');
-        return null
+        return {"date": "2000-00-00", "summary": "뉴스 정보를 불러올 수 없습니다."}
     }
 };

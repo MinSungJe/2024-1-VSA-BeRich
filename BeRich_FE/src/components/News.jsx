@@ -8,17 +8,27 @@ import { useEffect, useState } from "react";
 
 export default function News({ stock }) {
     const [news, setNews] = useState({"date": "", "summary": ""})
+    const [stockData, setStockData] = useState(null);
 
     // stock Data 사용가능하도록 변환
-    const stockData = parseStockData(stock)
+    useEffect(() => {
+        const parsedData = parseStockData(stock);
+        setStockData(parsedData);
+    }, [stock]);
 
     useEffect(() => {
-        async function getNewsData(stockCode) {
-            const newsData = await getNewsAPI(stockCode)
-            setNews(newsData)
+        if (stockData && stockData.stockCode) {
+            async function getNewsData(stockCode) {
+                const newsData = await getNewsAPI(stockCode);
+                setNews(newsData);
+            }
+            getNewsData(stockData.stockCode);
         }
-        getNewsData(stockData.stockCode)
-    }, [stock])
+    }, [stockData]);
+
+    if (!stockData) {
+        return null; // 로딩중
+    }
 
     return (
         <View>

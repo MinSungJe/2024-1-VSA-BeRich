@@ -8,6 +8,6 @@ import lombok.Setter;
 public class AutoInvestRequest {
 
     private String userType; //투자 성향
-    private String LimitCach; //제한금액
+    
     private String stockCode; //종목 코드
 }

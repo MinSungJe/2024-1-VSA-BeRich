@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.berich.stock_bot.dto.AutoInvestRequest;
-import com.berich.stock_bot.dto.AutoInvestResponse;
-import com.berich.stock_bot.dto.InvestRequest;
+import com.berich.stock_bot.dto_python.AutoInvestRequest;
+import com.berich.stock_bot.dto_stock.AutoInvestResponse;
+import com.berich.stock_bot.dto_stock.InvestRequest;
 import com.berich.stock_bot.entity.Account;
 import com.berich.stock_bot.repository.AccountRepository;
 import com.berich.stock_bot.repository.UserRepository;

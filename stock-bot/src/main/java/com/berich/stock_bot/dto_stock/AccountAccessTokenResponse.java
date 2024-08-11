@@ -1,4 +1,4 @@
-package com.berich.stock_bot.dto;
+package com.berich.stock_bot.dto_stock;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

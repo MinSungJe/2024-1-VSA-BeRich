@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.berich.stock_bot.dto.AccountBalanceResponse;
-import com.berich.stock_bot.dto.AccountRequest;
 import com.berich.stock_bot.dto.BalanceResponse;
 import com.berich.stock_bot.dto.MessageResponse;
+import com.berich.stock_bot.dto_stock.AccountBalanceResponse;
+import com.berich.stock_bot.dto_stock.AccountRequest;
 import com.berich.stock_bot.service.AccountService;
 
 @RestController

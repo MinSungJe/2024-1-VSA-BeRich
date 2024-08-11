@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.berich.stock_bot.dto.AutoInvestRequest;
 import com.berich.stock_bot.dto.MessageResponse;
+import com.berich.stock_bot.dto_python.AutoInvestRequest;
 import com.berich.stock_bot.entity.CompanyInformation;
 import com.berich.stock_bot.repository.CompanyInformationRepository;
 import com.berich.stock_bot.service.AutoInvestService;

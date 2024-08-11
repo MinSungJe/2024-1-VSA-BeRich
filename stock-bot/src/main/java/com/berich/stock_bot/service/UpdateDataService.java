@@ -28,7 +28,7 @@ public class UpdateDataService {
     private List<String> stockCodes;
 
     //한시간마다(20분기준) 주식시세 업데이트(주말제외,9~2시까지)
-    @Scheduled(cron = "0 20 9-14 ? * MON-FRI") //
+    @Scheduled(cron = "0 20 9-15 ? * MON-FRI") //
     //@Async
     public void updateInformationH() {
         // 주식 코드 목록 조회

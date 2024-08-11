@@ -8,11 +8,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.berich.stock_bot.dto.AccountAccessTokenRequest;
-import com.berich.stock_bot.dto.AccountAccessTokenResponse;
-import com.berich.stock_bot.dto.AccountBalanceResponse;
-import com.berich.stock_bot.dto.AccountRequest;
 import com.berich.stock_bot.dto.BalanceResponse;
+import com.berich.stock_bot.dto_stock.AccountAccessTokenRequest;
+import com.berich.stock_bot.dto_stock.AccountAccessTokenResponse;
+import com.berich.stock_bot.dto_stock.AccountBalanceResponse;
+import com.berich.stock_bot.dto_stock.AccountRequest;
 import com.berich.stock_bot.entity.Account;
 import com.berich.stock_bot.entity.User;
 import com.berich.stock_bot.repository.AccountRepository;

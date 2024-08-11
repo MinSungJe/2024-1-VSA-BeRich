@@ -1,4 +1,4 @@
-package com.berich.stock_bot.dto;
+package com.berich.stock_bot.dto_python;
 
 import lombok.Getter;
 import lombok.Setter;

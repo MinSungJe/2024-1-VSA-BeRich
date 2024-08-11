@@ -1,7 +1,6 @@
-package com.berich.stock_bot.dto;
+package com.berich.stock_bot.dto_stock;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter

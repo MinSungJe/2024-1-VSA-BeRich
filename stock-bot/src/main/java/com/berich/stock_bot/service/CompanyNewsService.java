@@ -43,7 +43,7 @@ public class CompanyNewsService {
         return news;
     }
 
-    @Scheduled(cron = "0 0 0 ? * MON-FRI")//자정에?
+    @Scheduled(cron = "0 0 8 ? * MON-FRI")//오전 8시
     public void getNewsScheduled(){
         companyNewsRepository.deleteAll();//기존 뉴스 삭제
         

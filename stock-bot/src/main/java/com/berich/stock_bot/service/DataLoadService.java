@@ -51,7 +51,7 @@ public class DataLoadService implements CommandLineRunner {
         stockInformationService.fetchAndSaveStockData(stockCodes, "5d", "1h");//오일-한시간 간격
         stockInformationService.fetchAndSaveStockData(stockCodes, "3mo","1d");//세달-하루 간격
         
-        if (companyNewsRepository.count()<=0){
+        if (companyNewsRepository.count()<=0){//아무 뉴스도 없을때만 불러오기, 테스트용
             companyNewsService.getNewsScheduled();
         }
         

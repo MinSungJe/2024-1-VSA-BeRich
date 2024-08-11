@@ -87,14 +87,31 @@ public class StockInformationService {
         Mono<String> dataMono = getFinanceData(stockCode, period, interval);
         try {
             String data = dataMono.block(); // 데이터를 가져올 때까지 블록킹 방식으로 대기
-
+            
             if ("1h".equals(interval)) { //한시간 간격의 데이터일 경우(하루 or 5일)
                 List<StockInformationH> stockData = parseStockData(data, company);//엔티티로 변환하여
                 if ("1d".equals(period)) {//하루 데이터 받아오는 경우
-                    StockInformationH newStock = stockData.get(stockData.size() - 1);//하루데이터 중 마지막 정보(최신정보)만을 저장
-                    if (!stockInformationHRepository.existsByTimestamp(newStock.getTimestamp())) {//같은 시간 정보가 없는 경우에만
-                        stockInformationHRepository.save(newStock);//저장
+                    StockInformationH newStock = stockData.get(stockData.size() - 1);//하루데이터 중 마지막 정보(최신정보)
+                    //해당 타임의 회사 주식 시세 정보가 있는지 확인
+                    StockInformationH checkRecord = stockInformationHRepository.findByCompanyInformationAndTimestamp(company, newStock.getTimestamp()).orElse(null);
+                    if(checkRecord ==null){//해당 주식 시세 정보 없음.->최신 데이터(20분전 데이터)임
+                        //9시 데이터면 이전 정보 없음
+                        if (stockData.size()!=1){//9시 이후 데이터면->이전 데이터 확정
+                            //변동된 이전 데이터
+                            StockInformationH lastRecord = stockInformationHRepository.findByCompanyInformationAndTimestamp(company, stockData.get(stockData.size()-2).getTimestamp()).orElse(null);
+                            if(lastRecord==null){
+                                //예외
+                            }
+                            lastRecord.patch(stockData.get(stockData.size()-2));//확정된 데이터로 변경
+
+                        }
+                        stockInformationHRepository.save(newStock);//최신 데이터 저장;
+
                     }
+                    else {//이미 해당 주식 시세 있음->마지막 시세를 최신정보로 업데이트
+                        checkRecord.patch(newStock);
+                    }
+                    
                 } else if ("5d".equals(period)) {//5일 데이터를 받아오는경우(최초)
                     stockInformationHRepository.saveAll(stockData);//전부 저장
                 }
@@ -102,7 +119,9 @@ public class StockInformationService {
                 List<StockInformationD> stockData = parseStockDataD(data, company);//엔티티로 변환하여
                 if ("1d".equals(period)) {//하루 데이터 받아오는 경우
                     StockInformationD newStock = stockData.get(stockData.size() - 1);//하루데이터 중 마지막 정보(최신정보)만을 저장
-                    if (!stockInformationDRepository.existsByTimestamp(newStock.getTimestamp())) {//같은 시간 정보가 없는 경우에만
+                    //타임스탬프가 같은 회사의 주식시세 확인
+                    StockInformationD checkRecord = stockInformationDRepository.findByCompanyInformationAndTimestamp(company, newStock.getTimestamp()).orElse(null);
+                    if (checkRecord==null) {//같은 시간 정보가 없는 경우에만
                         stockInformationDRepository.save(newStock);//저장
                     }
                 } else if ("3mo".equals(period)) {//세달 데이터를 받아오는경우(최초)

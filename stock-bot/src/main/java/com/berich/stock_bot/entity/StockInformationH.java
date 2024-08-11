@@ -51,4 +51,13 @@ public class StockInformationH {
     @ManyToOne
     @JoinColumn(name = "company_information_id", nullable = false)
     private CompanyInformation companyInformation;
+
+    public void patch(StockInformationH stockInformationH) {
+        this.open = stockInformationH.getOpen();
+        this.high = stockInformationH.getHigh();
+        this.low = stockInformationH.getLow();
+        this.close = stockInformationH.getClose();
+        this.volume = stockInformationH.getVolume();
+        
+    }
 }

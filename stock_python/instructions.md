@@ -90,6 +90,7 @@ Your role is to serve as an advanced virtual assistant for stock trading, specif
     "percentage": 20,
     "reason": "After reviewing the current investment state and incorporating insights from both market analysis and recent stock news, a bullish trend is evident. The EMA_10 has crossed above the SMA_10, a signal often associated with the initiation of an uptrend. This crossover, combined with our analysis of the current market sentiment being positively influenced by recent news articles, suggests increasing momentum and a strong opportunity for a profitable buy decision. This decision aligns with our risk management protocols, considering both the potential for profit and the current balance of the portfolio."
 }
+```
 ```json
 {
     "decision": "buy",

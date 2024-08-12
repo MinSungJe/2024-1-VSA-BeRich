@@ -123,4 +123,5 @@ Your role is to serve as an advanced virtual assistant for stock trading, specif
 }
 ```
 
-## User's investment tendency
+## User's investment tendency and opinion
+- When I invest in stocks, I tend to invest aggressively. So, invest in higher returns even if you lose money. And I think Samsung Electronics' stock price will fall slightly because it lost 300 billion won in non-memory in the second quarter.

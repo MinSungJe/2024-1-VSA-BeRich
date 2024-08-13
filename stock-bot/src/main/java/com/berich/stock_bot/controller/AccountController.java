@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,8 @@ import com.berich.stock_bot.dto.BalanceResponse;
 import com.berich.stock_bot.dto.MessageResponse;
 import com.berich.stock_bot.dto_stock.AccountBalanceResponse;
 import com.berich.stock_bot.dto_stock.AccountRequest;
+import com.berich.stock_bot.entity.User;
+import com.berich.stock_bot.repository.UserRepository;
 import com.berich.stock_bot.service.AccountService;
 
 @RestController
@@ -20,6 +23,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    
+    @Autowired
+    private UserRepository userRepository;
 
 
     //계좌 등록
@@ -44,6 +50,15 @@ public class AccountController {
             // output2 리스트가 비어있거나 null인 경우
         }
         return ResponseEntity.ok(balance);
+    }
+
+    //계좌 삭제
+    @DeleteMapping("api/accout-delete")
+    public ResponseEntity<MessageResponse> deleteAccount(@AuthenticationPrincipal UserDetails userDetail) {
+        
+        User user = userRepository.findByLoginId(userDetail.getUsername()).orElse(null);
+        accountService.deleteAccount(user);//유저 전달
+        return ResponseEntity.ok(new MessageResponse("계좌가 삭제 되었습니다."));
     }
 
 }

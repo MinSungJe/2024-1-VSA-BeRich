@@ -112,7 +112,7 @@ public class UserService {
 
     //계정삭제
     @Transactional
-    public void deleteAccount(Long userId) {
+    public void deleteUser(Long userId) {
         userRepository.deleteById(userId);//계정삭제
         //리프레시 토큰도 자동 삭제
         //계좌삭제 자동

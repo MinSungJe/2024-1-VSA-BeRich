@@ -21,6 +21,8 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+
+    //계좌 등록
     @PostMapping("/api/account")
     public ResponseEntity<MessageResponse> enrollAccount(@RequestBody AccountRequest accountRequest, @AuthenticationPrincipal UserDetails userDetail) {
         //String a = accountRequest.getAppKey();
@@ -43,4 +45,5 @@ public class AccountController {
         }
         return ResponseEntity.ok(balance);
     }
+
 }

@@ -69,11 +69,11 @@ public class UserApiController {
 
     //회원탈퇴
     @DeleteMapping("/api/withdraw")
-    public ResponseEntity<MessageResponse> deleteAccount() {
+    public ResponseEntity<MessageResponse> deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByLoginId(authentication.getName()).orElse(null);
         Long userId = user.getId();
-        userService.deleteAccount(userId);
+        userService.deleteUser(userId);
         return ResponseEntity.ok(new MessageResponse("탈퇴처리 되었습니다."));
     }
 

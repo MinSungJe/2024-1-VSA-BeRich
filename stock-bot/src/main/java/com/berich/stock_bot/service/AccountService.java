@@ -76,8 +76,7 @@ public class AccountService {
                         // Account 객체 생성 및 데이터베이스 저장
                         //Long accountN = Long.parseLong(accountNum);
                         //System.out.println("정말되는걸까"+expiredAt);
-                        Long userId = user.getId();
-                        Account account = new Account(accountNum, appKey, appSecret, accessToken, expiredAt, userId);
+                        Account account = new Account(accountNum, appKey, appSecret, accessToken, expiredAt, user);
                         accountRepository.save(account);
                     } else {
                         System.err.println("Error: " + balanceResponse.getMsg1());

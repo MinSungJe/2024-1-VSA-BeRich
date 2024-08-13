@@ -114,8 +114,8 @@ public class UserService {
     @Transactional
     public void deleteAccount(Long userId) {
         userRepository.deleteById(userId);//계정삭제
-        refreshTokenRepository.deleteByUserId(userId);//리프레시 토큰도 삭제
-        accountRepository.deleteByUserId(userId);//계좌 삭제
+        //리프레시 토큰도 자동 삭제
+        //계좌삭제 자동
     }
 
     //유저정보 조회

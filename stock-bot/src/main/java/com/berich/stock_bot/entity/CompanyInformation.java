@@ -54,6 +54,6 @@ public class CompanyInformation {
 
     // 회사에 대한 뉴스요약
     @JsonIgnore
-    @OneToOne(mappedBy = "companyInformation")
+    @OneToOne(mappedBy = "companyInformation",cascade = CascadeType.ALL, orphanRemoval = true)
     private CompanyNews companyNews;
 }

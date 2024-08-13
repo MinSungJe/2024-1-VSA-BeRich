@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.berich.stock_bot.dto.BalanceResponse;
@@ -208,6 +209,7 @@ public class AccountService {
                 
     }
 
+    //잔액 조회(한투증권에)
     private Mono<AccountBalanceResponse> getAccountBalance(String accessToken, String accountNum, String appKey, String appSecret) {
     
         return webClient_stock.get()
@@ -250,6 +252,14 @@ public class AccountService {
                 .bodyToMono(AccountBalanceResponse.class); // 응답을 DTO로 처리
     }
                 
-                
+    
+    //계좌 삭제(등록 해제)
+    @Transactional
+    public void deleteAccount(User user) {
+        if (user != null) {
+            user.setAccount(null);//매핑을 지우면 자동삭제됨
+        }
+        //삭제된거 확인
+    }
     
 }

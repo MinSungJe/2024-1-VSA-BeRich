@@ -15,7 +15,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
     // @Query(value="SELECT * FROM ACCOUNT WHERE EXPIREDAT <= :thresholdTime", nativeQuery = true)
     // List<Account> findByExpiredAtBefore(@Param("thresholdTime") LocalDateTime thresholdTime);
 
-    
     //Optional<Account> findByExpiredAte(@Param("st") String st);
     // @Query(value = "SELECT * FROM account WHERE expired_at <= :st ",nativeQuery=true)
     // List<Account> findByExpiredAtBefored(@Param("st") String thresholdTime);

@@ -53,7 +53,7 @@ public class AccountController {
     }
 
     //계좌 삭제
-    @DeleteMapping("api/accout-delete")
+    @DeleteMapping("api/account-delete")
     public ResponseEntity<MessageResponse> deleteAccount(@AuthenticationPrincipal UserDetails userDetail) {
         
         User user = userRepository.findByLoginId(userDetail.getUsername()).orElse(null);

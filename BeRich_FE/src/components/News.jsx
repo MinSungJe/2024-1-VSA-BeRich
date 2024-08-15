@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import { TextStyles } from "../styles/Text.style";
 import { Text } from "@rneui/base";
 import { BoxStyles } from "../styles/Box.style";
@@ -7,7 +7,7 @@ import { getNewsAPI } from "../api/getNewsAPI";
 import { useEffect, useState } from "react";
 
 export default function News({ stock }) {
-    const [news, setNews] = useState({"date": "", "summary": ""})
+    const [news, setNews] = useState({ "date": "", "summary": "" })
     const [stockData, setStockData] = useState(null);
 
     // stock Data 사용가능하도록 변환
@@ -32,8 +32,13 @@ export default function News({ stock }) {
 
     return (
         <View>
-            <Text style={[TextStyles.Main, BoxStyles.Mb10]}>{stockData.companyName}</Text>
-            <Text style={[TextStyles.Detail, TextStyles.FcGray, BoxStyles.Mb5]}>{news.date}</Text>
+            <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.Mb10]}>
+                <Image
+                    source={require('../assets/image/icon-dummy.png')}
+                    style={[{ width: 32, height: 32 }, BoxStyles.MR10]} />
+                <Text style={[TextStyles.Main]}>{stockData.companyName}</Text>
+            </View>
+            <Text style={[TextStyles.Detail, TextStyles.FcDarkGray, BoxStyles.Mb5]}>{news.date}</Text>
             <Text style={[TextStyles.Detail]}>{news.summary}</Text>
         </View>
     )

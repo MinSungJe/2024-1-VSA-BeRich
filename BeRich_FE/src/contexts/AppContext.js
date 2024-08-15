@@ -9,6 +9,7 @@ const AppProvider = ({ children }) => {
       "stockCode": "005930",
       "companyName": "삼성전자"
     }),
+    isTrading: false
   });
 
   return (

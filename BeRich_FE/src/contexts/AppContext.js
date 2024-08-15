@@ -5,13 +5,11 @@ const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
   const [ state, setState ] = useState({
-    isLogin: false,
-    userID: null,
-    userEmail: null,
     selectedStock: JSON.stringify({
       "stockCode": "005930",
       "companyName": "삼성전자"
     }),
+    isTrading: false
   });
 
   return (

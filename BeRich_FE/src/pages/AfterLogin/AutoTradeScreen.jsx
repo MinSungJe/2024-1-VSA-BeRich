@@ -17,6 +17,14 @@ export default function AutoTradeScreen() {
         }))
     }
 
+    const images = {
+        '000150': require(`../../assets/image/company/icon-000150.png`),
+        '005930': require(`../../assets/image/company/icon-005930.png`),
+        '035720': require(`../../assets/image/company/icon-035720.png`),
+        '300720': require(`../../assets/image/company/icon-300720.png`),
+        '352820': require(`../../assets/image/company/icon-352820.png`)
+    }
+
     return (
         <View style={[BoxStyles.P10]}>
             <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
@@ -33,7 +41,7 @@ export default function AutoTradeScreen() {
                 <View style={[BoxStyles.PV10, BoxStyles.BottomGrayLine]}>
                     <View style={[BoxStyles.PH10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                         <Image
-                            source={require('../../assets/image/icon-dummy.png')}
+                            source={images[JSON.parse(state.selectedStock).stockCode] || require('../../assets/image/icon-dummy.png')}
                             style={[{ width: 32, height: 32 }, BoxStyles.MR10]} />
                         <Text style={[TextStyles.Main]}>{JSON.parse(state.selectedStock).companyName}</Text>
                     </View>

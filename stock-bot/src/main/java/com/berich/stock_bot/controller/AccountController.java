@@ -60,5 +60,12 @@ public class AccountController {
         accountService.deleteAccount(user);//유저 전달
         return ResponseEntity.ok(new MessageResponse("계좌가 삭제 되었습니다."));
     }
+    //잔액조회
+    @GetMapping("/api/balance2")
+    public ResponseEntity<AccountBalanceResponse> getBalance2(@AuthenticationPrincipal UserDetails userDetail) {
+        AccountBalanceResponse response = accountService.accountBalance(userDetail.getUsername());//잔액 전체 값 반환
+        //BalanceResponse balance = accountService.returnBalance(response);//필요한 값들만 반환
+        return ResponseEntity.ok(response);
+    }
 
 }

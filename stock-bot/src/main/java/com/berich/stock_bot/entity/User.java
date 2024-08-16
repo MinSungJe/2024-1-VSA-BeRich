@@ -16,6 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -69,6 +70,11 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private RefreshToken refreshToken;
+
+    // 자동매매 정보와의 일대다 관계 설정
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AutoTradeInformation> autoTradeInformations;
 
     @Builder
     public User(String loginId, String email, String password, String firstName, String lastName, LocalDate birthDate, String auth) {

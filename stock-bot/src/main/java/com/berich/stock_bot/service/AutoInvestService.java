@@ -1,14 +1,24 @@
 package com.berich.stock_bot.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.berich.stock_bot.dto_python.AutoInvestRequest;
+import com.berich.stock_bot.dto.StartTradeRequest;
 import com.berich.stock_bot.dto_stock.AutoInvestResponse;
 import com.berich.stock_bot.dto_stock.InvestRequest;
 import com.berich.stock_bot.entity.Account;
+import com.berich.stock_bot.entity.AutoTradeInformation;
+import com.berich.stock_bot.entity.Decision;
+import com.berich.stock_bot.entity.TradeRecord;
+import com.berich.stock_bot.entity.User;
 import com.berich.stock_bot.repository.AccountRepository;
+import com.berich.stock_bot.repository.AutoTradeInformationRepository;
+import com.berich.stock_bot.repository.DecisionRepository;
+import com.berich.stock_bot.repository.TradeRecordRepository;
 import com.berich.stock_bot.repository.UserRepository;
 
 import reactor.core.publisher.Mono;
@@ -18,19 +28,69 @@ public class AutoInvestService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AutoTradeInformationRepository autoTradeInformationRepository;
+
+    @Autowired
+    private DecisionRepository decisionRepository;
+
+    @Autowired
+    private TradeRecordRepository tradeRecordRepository;
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private WebClient webClient_stock;
 
+    //자동매매 기록
     //@Transectional
-    public void startStockBot(AutoInvestRequest request) {
-        //종목, 제한금액, 성향 보내면 얼마나 매매할지랑 이유 답변 -userid랑 같이 보내고 
-        //매매 실행하고 invest 메소드 사용
-        //해당 답변저장 데베에 저장
+    public void startStockBot(StartTradeRequest request, String loginId) {
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+        }
+        //임시 정보!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        String startBalance = "200000";//현금잔고 또는 예수금 조회후 넣기
+        //종목, 제한금액, 성향 보내면
+        AutoTradeInformation autoTradeInformation = new AutoTradeInformation(request, startBalance, user);
+        autoTradeInformationRepository.save(autoTradeInformation);//자동매매 기록
+        //자동매매 실행-이유답변, invest 메소드 사용-해당 답변 및 매매기록 데베에 저장
+        Decision decision = new Decision("buy", 20.0, "실험용으로 20을 사보겠어", autoTradeInformation);
+        decisionRepository.save(decision);
+        LocalDateTime tradeTime = LocalDateTime.now();
+        TradeRecord tradeRecord = new TradeRecord(tradeTime,"10","60000", "65", "5500000", "6100000", decision);
+        tradeRecordRepository.save(tradeRecord);
     }
 
+    //자동매매 정보 불러오기
+    public List<AutoTradeInformation> getAutoTradeInformation(String loginId) {
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+        }
+        
+        return autoTradeInformationRepository.findByUserId(user.getId());
+    }
+
+    //자동매매 상세정보(결정및실제 매매 기록)불러오기
+    public List<Decision> getTradeRecord(String loginId, Long autoTradeInformationId) {
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+        }
+        AutoTradeInformation autoInfo = autoTradeInformationRepository.findById(autoTradeInformationId).orElse(null);
+        if( autoInfo == null){
+            //해당 자동매매 없음
+        }
+        User checkUser = autoInfo.getUser();
+
+        if (user.getId() != checkUser.getId()){
+            //권한 없음
+        }
+        return decisionRepository.findByAutoTradeInformationId(autoTradeInformationId);
+    }
 
     private Mono<AutoInvestResponse> invest(Account account, String stockCode, String buyOrSell, String amount) {
     

@@ -61,6 +61,9 @@ public class AutoTradeInformation {
     @Column(nullable = false)
     private String startBalance;
 
+    @Column(updatable = true)
+    private String totalProfit;
+
     //매매결정기록 매핑
     @JsonIgnore
     @OneToMany(mappedBy = "autoTradeInformation", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -81,6 +84,7 @@ public class AutoTradeInformation {
         this.investmentInsight = request.getInvestmentInsight();
         this.startBalance = startBalance;
         this.user = user;
+        this.totalProfit = "수익 없음";
 
     }
 

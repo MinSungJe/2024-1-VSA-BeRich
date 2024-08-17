@@ -26,7 +26,9 @@ export default function AutoTradeInfoList() {
             <Text style={[TextStyles.Medium]}>거래 내역</Text>
             {
                 tradeInfo.map((a, i) => {
-                    <Text key={i}>{a}</Text>
+                    return (
+                        <Text key={i} style={[TextStyles.Medium]}>{a.id}</Text>
+                    )
                 })
             }
         </View>

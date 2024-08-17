@@ -64,6 +64,10 @@ public class AutoTradeInformation {
     @Column(updatable = true)
     private String totalProfit;
 
+    // 활성화 상태
+    @Column(nullable = false, updatable = true)
+    private boolean isActive;
+
     //매매결정기록 매핑
     @JsonIgnore
     @OneToMany(mappedBy = "autoTradeInformation", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -85,6 +89,7 @@ public class AutoTradeInformation {
         this.startBalance = startBalance;
         this.user = user;
         this.totalProfit = "수익 없음";
+        this.isActive = true;
 
     }
 

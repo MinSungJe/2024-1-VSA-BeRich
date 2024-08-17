@@ -35,3 +35,12 @@ export const parseStockData = (stock) => {
     if (!stock) return ''
     else return JSON.parse(stock)
 }
+
+// date -> YY-MM-DD
+export function dateFormat(date) {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let result = year + '-' + ((month < 10 ? '0' + month : month) + '-' + ((day < 10 ? '0' + day : day)));
+    return result;
+}

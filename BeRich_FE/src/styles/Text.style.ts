@@ -9,6 +9,9 @@ export const TextStyles = StyleSheet.create({
     FcRed: {
         color: Color.Red
     },
+    FcBlue: {
+        color: Color.Blue
+    },
     FcBlack: {
         color: Color.MainColor
     },

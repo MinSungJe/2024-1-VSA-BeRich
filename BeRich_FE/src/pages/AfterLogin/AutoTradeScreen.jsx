@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button, Text } from "@rneui/base";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Image, View } from "react-native";
 import { AppContext } from "../../contexts/AppContext";
 import { BoxStyles } from "../../styles/Box.style";
@@ -11,9 +11,11 @@ import { ButtonStyles } from '../../styles/Button.style';
 import CheckBox from '@react-native-community/checkbox';
 import { DateSpinnerTomorrow } from '../../components/Input';
 import { dateFormat } from '../../resource/ParseData';
+import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
 
 export default function AutoTradeScreen() {
     const { state, setState } = useContext(AppContext)
+    const [benefit, setBenefit] = useState('')
     const [startDay, setStartDay] = useState(new Date())
     const [endDay, setEndDay] = useState(new Date())
     const [tendency, setTendency] = useState('')
@@ -34,6 +36,18 @@ export default function AutoTradeScreen() {
         '300720': require(`../../assets/image/company/icon-300720.png`),
         '352820': require(`../../assets/image/company/icon-352820.png`)
     }
+
+    // stockCode에 맞는 정보 호출
+    useEffect(() => {
+        if (JSON.parse(state.selectedStock).stockCode) {
+            // API 불러오기
+            async function getStockBenefitData(stockCode) {
+                const benefitData = await getStockBenefitAPI(stockCode);
+                setBenefit(benefitData.earningRate)
+            }
+            getStockBenefitData(JSON.parse(state.selectedStock).stockCode);
+        }
+    }, [state]);
 
     return (
         <View style={[BoxStyles.P10]}>
@@ -59,7 +73,11 @@ export default function AutoTradeScreen() {
                 <View style={[BoxStyles.P10, { flexDirection: 'row', alignItems: 'center' }, BoxStyles.BottomGrayLine]}>
                     <MaterialCommunityIcons name="creation" size={32} style={[BoxStyles.MR10]} />
                     <Text style={[TextStyles.Medium, { marginRight: 50 }]}>수익률</Text>
-                    <Text style={[TextStyles.Main, TextStyles.FwBold]}>+35%</Text>
+                    {
+                        (benefit >= 0) ?
+                        <Text style={[TextStyles.Main, TextStyles.FwBold, TextStyles.FcRed]}>+ {benefit}%</Text> :
+                        <Text style={[TextStyles.Main, TextStyles.FwBold, TextStyles.FcBlue]}>- {benefit}%</Text>
+                    }
                 </View>
                 <View style={[BoxStyles.P10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                     <MaterialCommunityIcons name="view-list-outline" size={32} style={[BoxStyles.MR10]} />

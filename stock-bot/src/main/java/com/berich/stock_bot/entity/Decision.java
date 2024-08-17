@@ -1,5 +1,7 @@
 package com.berich.stock_bot.entity;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -31,6 +33,10 @@ public class Decision {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    //시간
+    @Column(nullable = false)
+    private LocalDateTime decisionTime;
+
     //결정
     @Column(nullable =false)
     private String decision;
@@ -53,7 +59,8 @@ public class Decision {
     @OneToOne(mappedBy = "decision", cascade = CascadeType.ALL, orphanRemoval = true)
     private TradeRecord tradeRecord;
 
-    public Decision(String decision, double percentage, String reason, AutoTradeInformation autoTradeInformation){
+    public Decision(LocalDateTime decisionTime, String decision, double percentage, String reason, AutoTradeInformation autoTradeInformation){
+        this.decisionTime = decisionTime;
         this.decision = decision;
         this.percentage = percentage;
         this.reason = reason;

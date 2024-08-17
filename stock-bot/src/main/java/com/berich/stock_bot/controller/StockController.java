@@ -47,15 +47,21 @@ public class StockController {
     public ResponseEntity<List<AutoTradeInformation>> getAutoTradeInfo(@AuthenticationPrincipal UserDetails userDetail) {
         List<AutoTradeInformation> autoTradeInformationList = autoInvestService.getAutoTradeInformation(userDetail.getUsername());
         //기록 없을경우, 매매기록 없다고 보내주기.예외처리
+        if (autoTradeInformationList.isEmpty()){
+            return ResponseEntity.noContent().build(); //204 상태코드
+        }
         return ResponseEntity.ok(autoTradeInformationList);
     }
 
     //자동매매 상세기록 불러오기
     @GetMapping("api/trade-record/{autoTradeId}")
     public ResponseEntity<List<Decision>> getTradeRecord(@PathVariable("autoTradeId") Long autoTradeInformationId, @AuthenticationPrincipal UserDetails userDetail) {
-        List<Decision> DecisionList = autoInvestService.getTradeRecord(userDetail.getUsername(), autoTradeInformationId);
+        List<Decision> decisionList = autoInvestService.getTradeRecord(userDetail.getUsername(), autoTradeInformationId);
         //기록 없을경우, 매매기록 없다고 보내주기.예외처리
-        return ResponseEntity.ok(DecisionList);
+        if (decisionList.isEmpty()){
+            return ResponseEntity.noContent().build(); //204 상태코드
+        }
+        return ResponseEntity.ok(decisionList);
     }
 
     //종목별 수익률

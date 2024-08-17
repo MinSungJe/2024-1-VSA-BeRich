@@ -57,9 +57,11 @@ public class AutoInvestService {
         AutoTradeInformation autoTradeInformation = new AutoTradeInformation(request, startBalance, user);
         autoTradeInformationRepository.save(autoTradeInformation);//자동매매 기록
         //자동매매 실행-이유답변, invest 메소드 사용-해당 답변 및 매매기록 데베에 저장
-        Decision decision = new Decision("buy", 20.0, "실험용으로 20을 사보겠어", autoTradeInformation);
-        decisionRepository.save(decision);
         LocalDateTime tradeTime = LocalDateTime.now();
+
+        Decision decision = new Decision(tradeTime,"buy", 20.0, "실험용으로 20을 사보겠어", autoTradeInformation);
+        decisionRepository.save(decision);
+        
         TradeRecord tradeRecord = new TradeRecord(tradeTime,"10","60000", "65", "5500000", "6100000", decision);
         tradeRecordRepository.save(tradeRecord);
     }
@@ -71,7 +73,8 @@ public class AutoInvestService {
             //에러처리: 유저가 없는 경우
         }
         
-        return autoTradeInformationRepository.findByUserId(user.getId());
+        // 종료일을 기준으로 최신순으로 정렬된 목록을 반환
+        return autoTradeInformationRepository.findByUserIdOrderByEndDayDesc(user.getId());
     }
 
     //자동매매 상세정보(결정및실제 매매 기록)불러오기
@@ -89,7 +92,9 @@ public class AutoInvestService {
         if (user.getId() != checkUser.getId()){
             //권한 없음
         }
-        return decisionRepository.findByAutoTradeInformationId(autoTradeInformationId);
+        
+         // decisionTime을 기준으로 최신순 정렬된 목록을 반환
+        return decisionRepository.findByAutoTradeInformationIdOrderByDecisionTimeDesc(autoTradeInformationId);
     }
 
     private Mono<AutoInvestResponse> invest(Account account, String stockCode, String buyOrSell, String amount) {

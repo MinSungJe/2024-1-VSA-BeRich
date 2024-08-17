@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-native-date-picker'
 import { ButtonStyles } from '../styles/Button.style';
+import { dateFormat } from '../resource/ParseData';
 
 export function LabelInput({ label, placeholder, state, setState }) {
     return (
@@ -73,14 +74,6 @@ export function DateInput({ label, date, setDate }) {
     const [dateLabel, setDateLabel] = useState('')
     const [open, setOpen] = useState(false)
 
-    function dateFormat(date) {
-        let year = date.getFullYear()
-        let month = date.getMonth() + 1
-        let day = date.getDate()
-        let result = year + '-' + ((month < 10 ? '0' + month : month) + '-' + ((day < 10 ? '0' + day : day)))
-        return result
-    }
-
     useEffect(() => {
         setDateLabel(dateFormat(date))
     }, [])
@@ -104,8 +97,50 @@ export function DateInput({ label, date, setDate }) {
                         setOpen(false)
                     }}
                     mode='date'
+                    confirmText='확인'
+                    cancelText='취소'
                 />
             </View>
         </View>
     )
+}
+
+export function DateSpinnerTomorrow({ title, date, setDate }) {
+    const [dateLabel, setDateLabel] = useState('');
+    const [open, setOpen] = useState(false);
+
+
+    // 오늘 날짜에 하루를 더해서 내일 날짜를 계산
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // 시간은 00:00:00으로 설정
+
+    useEffect(() => {
+        setDateLabel(dateFormat(tomorrow));
+    }, []);
+
+    return (
+        <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.P10]}>
+            <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateLabel}</Text>
+            <Button title={'변경'} onPress={() => setOpen(true)} buttonStyle={ButtonStyles.MainButton} titleStyle={[TextStyles.FwBold]} />
+            <DatePicker
+                modal
+                title={title}
+                open={open}
+                date={tomorrow}
+                onConfirm={(date) => {
+                    setOpen(false);
+                    setDate(date);
+                    setDateLabel(dateFormat(date));
+                }}
+                onCancel={() => {
+                    setOpen(false);
+                }}
+                mode='date'
+                minimumDate={tomorrow}  // 내일부터 선택 가능하도록 설정
+                confirmText='확인'
+                cancelText='취소'
+            />
+        </View>
+    );
 }

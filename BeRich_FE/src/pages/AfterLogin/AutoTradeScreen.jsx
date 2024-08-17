@@ -9,10 +9,13 @@ import { StockPicker } from '../../components/StockPicker';
 import { Input } from '@rneui/themed';
 import { ButtonStyles } from '../../styles/Button.style';
 import CheckBox from '@react-native-community/checkbox';
+import { DateSpinnerTomorrow } from '../../components/Input';
+import { dateFormat } from '../../resource/ParseData';
 
 export default function AutoTradeScreen() {
     const { state, setState } = useContext(AppContext)
-    const [period, setPeriod] = useState(7)
+    const [startDay, setStartDay] = useState(new Date())
+    const [endDay, setEndDay] = useState(new Date())
     const [tendency, setTendency] = useState('')
     const [opinion, setOpinion] = useState('')
     const [toggleOpinion, setToggleOpinion] = useState(false)
@@ -69,13 +72,14 @@ export default function AutoTradeScreen() {
                 <View style={[BoxStyles.P10]}>
                     <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                         <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 종목</Text>
-                        <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName}</Text>
+                        <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName} ({JSON.parse(state.selectedStock).stockCode})</Text>
                     </View>
                     <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                         <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 기간</Text>
-                        <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter]}>
-                            <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.MR10]}>{period}일</Text>
-                            <Button buttonStyle={[ButtonStyles.MainButton]}>변경</Button>
+                        <View style={[{ flexDirection: 'row', justifyContent: 'center' }, BoxStyles.AICenter]}>
+                            <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateFormat(startDay)}</Text>
+                            <Text style={[TextStyles.Detail, BoxStyles.MR10]}>~</Text>
+                            <DateSpinnerTomorrow title={'투자 종료 기간 설정'} date={endDay} setDate={setEndDay} />
                         </View>
                     </View>
                     <View>

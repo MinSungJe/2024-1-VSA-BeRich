@@ -12,6 +12,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { DateSpinnerTomorrow } from '../../components/Input';
 import { dateFormat } from '../../resource/ParseData';
 import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
+import AutoTradeInfoList from '../../components/AutoTradeInfoList';
 
 export default function AutoTradeScreen() {
     const { state, setState } = useContext(AppContext)
@@ -64,24 +65,21 @@ export default function AutoTradeScreen() {
             <View style={[BoxStyles.MainBox, BoxStyles.Mb20, BoxStyles.P10]}>
                 <View style={[BoxStyles.PV10, BoxStyles.BottomGrayLine]}>
                     <View style={[BoxStyles.PH10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
-                        <Image
-                            source={images[JSON.parse(state.selectedStock).stockCode] || require('../../assets/image/icon-dummy.png')}
-                            style={[{ width: 32, height: 32 }, BoxStyles.MR10]} />
-                        <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{JSON.parse(state.selectedStock).companyName}</Text>
+                        <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.MR10]}>
+                            <Image
+                                source={images[JSON.parse(state.selectedStock).stockCode] || require('../../assets/image/icon-dummy.png')}
+                                style={[{ width: 32, height: 32 }, BoxStyles.MR10]} />
+                            <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{JSON.parse(state.selectedStock).companyName}</Text>
+                        </View>
+                        {
+                            (benefit >= 0) ?
+                                <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcRed]}>▲ {benefit}%</Text> :
+                                <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlue]}>▼ {benefit}%</Text>
+                        }
                     </View>
                 </View>
-                <View style={[BoxStyles.P10, { flexDirection: 'row', alignItems: 'center' }, BoxStyles.BottomGrayLine]}>
-                    <MaterialCommunityIcons name="creation" size={32} style={[BoxStyles.MR10]} />
-                    <Text style={[TextStyles.Medium, { marginRight: 50 }]}>수익률</Text>
-                    {
-                        (benefit >= 0) ?
-                        <Text style={[TextStyles.Main, TextStyles.FwBold, TextStyles.FcRed]}>+ {benefit}%</Text> :
-                        <Text style={[TextStyles.Main, TextStyles.FwBold, TextStyles.FcBlue]}>- {benefit}%</Text>
-                    }
-                </View>
-                <View style={[BoxStyles.P10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
-                    <MaterialCommunityIcons name="view-list-outline" size={32} style={[BoxStyles.MR10]} />
-                    <Text style={[TextStyles.Medium]}>거래 내역</Text>
+                <View style={[BoxStyles.P10]}>
+                    <AutoTradeInfoList/>
                 </View>
                 <View style={[{ flex: 1 }]}>
                 </View>

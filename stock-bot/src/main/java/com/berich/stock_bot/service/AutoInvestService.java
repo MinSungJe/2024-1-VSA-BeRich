@@ -123,6 +123,17 @@ public class AutoInvestService {
                 .bodyToMono(AutoInvestResponse.class); // 응답을 DTO로 처리
     }
 
+    //종목별 수익률
+    public String getEarningRate(String stockCode, String loginId) {
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+        }
+
+        // 사용자의 자동매매 목록 총 수익률 평균? 이익금액?
+        return "130";
+    }
+
     
 
 }

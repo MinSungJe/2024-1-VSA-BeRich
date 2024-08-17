@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.berich.stock_bot.dto.EarningRateResponse;
 import com.berich.stock_bot.dto.MessageResponse;
 import com.berich.stock_bot.dto.StartTradeRequest;
 import com.berich.stock_bot.entity.AutoTradeInformation;
@@ -34,7 +35,7 @@ public class StockController {
     }
 
 
-    //자동매매 시작 기록
+    //자동매매 시작하기
     @PostMapping("/api/auto-stock")
     public ResponseEntity<MessageResponse> startAutoInvest(@RequestBody StartTradeRequest request, @AuthenticationPrincipal UserDetails userDetail) {
         autoInvestService.startStockBot(request, userDetail.getUsername());
@@ -55,5 +56,12 @@ public class StockController {
         List<Decision> DecisionList = autoInvestService.getTradeRecord(userDetail.getUsername(), autoTradeInformationId);
         //기록 없을경우, 매매기록 없다고 보내주기.예외처리
         return ResponseEntity.ok(DecisionList);
+    }
+
+    //종목별 수익률
+    @GetMapping("api/profit/{stockCode}")
+    public ResponseEntity<EarningRateResponse> getEarningRate(@PathVariable("stockCode") String stockCode, @AuthenticationPrincipal UserDetails userDetail) {
+        String earning = autoInvestService.getEarningRate(stockCode, userDetail.getUsername());
+        return ResponseEntity.ok(new EarningRateResponse(earning));
     }
 }

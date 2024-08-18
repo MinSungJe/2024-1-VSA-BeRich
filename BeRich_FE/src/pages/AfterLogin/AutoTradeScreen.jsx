@@ -10,7 +10,7 @@ import { Input } from '@rneui/themed';
 import { ButtonStyles } from '../../styles/Button.style';
 import CheckBox from '@react-native-community/checkbox';
 import { DateSpinnerTomorrow } from '../../components/Input';
-import { dateFormat } from '../../resource/ParseData';
+import { calculateStartDay, dateFormat } from '../../resource/ParseData';
 import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
 import AutoTradeInfoList from '../../components/AutoTradeInfoList';
 import { startAutoStock } from '../../api/startAutoStock';
@@ -18,7 +18,7 @@ import { startAutoStock } from '../../api/startAutoStock';
 export default function AutoTradeScreen({ navigation }) {
     const { state, setState } = useContext(AppContext);
     const [benefit, setBenefit] = useState('');
-    const [startDay, setStartDay] = useState(new Date());
+    const [startDay, setStartDay] = useState(calculateStartDay);
     const [endDay, setEndDay] = useState(() => {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -175,7 +175,7 @@ function StartTradeComponent({ startDay, endDay, setEndDay, tendency, setTendenc
                     <View style={[{ flexDirection: 'row', justifyContent: 'center' }, BoxStyles.AICenter]}>
                         <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateFormat(startDay)}</Text>
                         <Text style={[TextStyles.Detail, BoxStyles.MR10]}>~</Text>
-                        <DateSpinnerTomorrow title={'투자 종료 기간 설정'} date={endDay} setDate={setEndDay} />
+                        <DateSpinnerTomorrow title={'투자 종료 기간 설정'} date={endDay} setDate={setEndDay} startDay={startDay} />
                     </View>
                 </View>
                 <View>

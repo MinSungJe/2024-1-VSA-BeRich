@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { BoxStyles } from '../styles/Box.style';
 import { TextStyles } from '../styles/Text.style';
 import { Button, Input, Text } from '@rneui/base';
@@ -105,18 +105,34 @@ export function DateInput({ label, date, setDate }) {
     )
 }
 
-export function DateSpinnerTomorrow({ title, date, setDate }) {
+export function DateSpinnerTomorrow({ title, date, setDate, startDay }) {
     const [dateLabel, setDateLabel] = useState('');
     const [open, setOpen] = useState(false);
 
+    // 주말 여부 확인 함수
+    const isWeekend = (date) => {
+        const day = date.getDay();
+        return day === 0 || day === 6; // 0: 일요일, 6: 토요일
+    };
 
-    // 오늘 날짜에 하루를 더해서 내일 날짜를 계산
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0); // 시간은 00:00:00으로 설정
+    // startDay 다음 날로 초기 endDay 설정, 주말이면 다음 월요일로 이동
+    const calculateInitialEndDate = () => {
+        let initialDate = new Date(startDay);
+        initialDate.setDate(initialDate.getDate() + 1);
+        initialDate.setHours(0, 0, 0, 0); // 시간은 00:00:00으로 설정
+
+        // 주말인 경우 다음 월요일로 이동
+        if (isWeekend(initialDate)) {
+            initialDate.setDate(initialDate.getDate() + (initialDate.getDay() === 6 ? 2 : 1)); // 토요일이면 +2, 일요일이면 +1
+        }
+
+        return initialDate;
+    };
+
+    const initialEndDate = calculateInitialEndDate();
 
     useEffect(() => {
-        setDateLabel(dateFormat(tomorrow));
+        setDateLabel(dateFormat(initialEndDate));
     }, []);
 
     return (
@@ -127,17 +143,23 @@ export function DateSpinnerTomorrow({ title, date, setDate }) {
                 modal
                 title={title}
                 open={open}
-                date={tomorrow}
-                onConfirm={(date) => {
+                date={initialEndDate}
+                onConfirm={(selectedDate) => {
+                    // 선택된 날짜가 주말이면 다시 선택하게 함
+                    if (isWeekend(selectedDate)) {
+                        Alert.alert('경고', '주말은 선택할 수 없습니다.');
+                        setOpen(false);
+                        return
+                    }
                     setOpen(false);
-                    setDate(date);
-                    setDateLabel(dateFormat(date));
+                    setDate(selectedDate);
+                    setDateLabel(dateFormat(selectedDate));
                 }}
                 onCancel={() => {
                     setOpen(false);
                 }}
                 mode='date'
-                minimumDate={tomorrow}  // 내일부터 선택 가능하도록 설정
+                minimumDate={initialEndDate} // startDay 다음 날부터 선택 가능
                 confirmText='확인'
                 cancelText='취소'
             />

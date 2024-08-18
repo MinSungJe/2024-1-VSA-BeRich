@@ -3,6 +3,7 @@ import { tokenAPI } from './tokenAPI';
 import { Alert } from 'react-native';
 
 export const startAutoStock = async (stockCode, startDay, endDay, tendency, opinion) => {
+    // console.log(`${API_URL}/api/auto-stock`)
     try {
         const response = await tokenAPI.post(`${API_URL}/api/auto-stock`, {
             stockCode: stockCode,

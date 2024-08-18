@@ -12,19 +12,14 @@ export default function AutoTradeInfoList({ navigation }) {
     const [tradeInfo, setTradeInfo] = useState([])
     const [filteredInfo, setFilteredInfo] = useState([])
 
-    useFocusEffect(
-        React.useCallback(() => {
-            // API 불러오기
-            async function getTradeInfoData() {
-                const tradeInfoData = await getTradeInfoAPI();
-                setTradeInfo(tradeInfoData)
-            }
-            getTradeInfoData();
-        }, [])
-    );
-
     useEffect(() => {
-        setFilteredInfo(tradeInfo.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
+        // API 불러오기
+        async function getTradeInfoData() {
+            const tradeInfoData = await getTradeInfoAPI();
+            setTradeInfo(tradeInfoData)
+            setFilteredInfo(tradeInfoData.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
+        }
+        getTradeInfoData();
     }, [state])
 
     return (

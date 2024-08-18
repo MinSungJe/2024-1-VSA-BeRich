@@ -55,7 +55,7 @@ export default function AutoTradeScreen({ navigation }) {
                 setBenefit(benefitData.earningRate);
             }
             getStockBenefitData(JSON.parse(state.selectedStock).stockCode);
-        } 0
+        }
     }, [state]);
 
     return (
@@ -63,55 +63,7 @@ export default function AutoTradeScreen({ navigation }) {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={[BoxStyles.P10]}>
                     {/* 모달 창 */}
-                    <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            setModalVisible(!modalVisible);
-                        }}
-                    >
-                        <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                            <View style={[{ flex: 1, justifyContent: 'flex-end' }, BoxStyles.P10]}>
-                                <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
-                                    <View style={[BoxStyles.PV10]}>
-                                        <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.Mb10, BoxStyles.BottomGrayLine, { paddingBottom: 10 }]}>투자 정보 확인</Text>
-                                        <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                            <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>종목</Text>
-                                            <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName}</Text>
-                                        </View>
-                                        <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                            <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>
-                                            <Text style={[TextStyles.Detail]}>{dateFormat(startDay)} ~ {dateFormat(endDay)}</Text>
-                                        </View>
-                                        <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                            <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>경향</Text>
-                                            <Text style={[TextStyles.Detail]}>{tendency}</Text>
-                                        </View>
-                                        <View style={[{ flexDirection: 'row' }, BoxStyles.Mb20]}>
-                                            <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>의견</Text>
-                                            <Text style={[TextStyles.Detail]}>{opinion ? opinion : '(내용 없음)'}</Text>
-                                        </View>
-                                        <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.Mb10]}>위 내용으로 자동거래를 시작할까요?</Text>
-                                        <Button
-                                            buttonStyle={[ButtonStyles.MainButton]}
-                                            onPress={() => {
-                                                startAutoStock(JSON.parse(state.selectedStock).stockCode, dateFormat(startDay), dateFormat(endDay), tendency, opinion)
-                                                setModalVisible(false)
-                                            }}>
-                                            확인
-                                        </Button>
-                                        <Button
-                                            buttonStyle={[ButtonStyles.InputButton]}
-                                            titleStyle={[TextStyles.FcBlack]}
-                                            onPress={() => setModalVisible(false)}>
-                                            취소
-                                        </Button>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
+                    <StartTradeModal modalVisible={modalVisible} setModalVisible={setModalVisible} startDay={startDay} endDay={endDay} tendency={tendency} opinion={opinion} />
 
                     {/* 기존 화면 */}
                     <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
@@ -146,46 +98,109 @@ export default function AutoTradeScreen({ navigation }) {
                         <View style={[{ flex: 1 }]}>
                         </View>
                     </View>
-                    <View style={[BoxStyles.MainBox, BoxStyles.Mb20, BoxStyles.P10]}>
-                        <View style={[BoxStyles.P10]}>
-                            <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 종목</Text>
-                                <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName} ({JSON.parse(state.selectedStock).stockCode})</Text>
-                            </View>
-                            <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 기간</Text>
-                                <View style={[{ flexDirection: 'row', justifyContent: 'center' }, BoxStyles.AICenter]}>
-                                    <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateFormat(startDay)}</Text>
-                                    <Text style={[TextStyles.Detail, BoxStyles.MR10]}>~</Text>
-                                    <DateSpinnerTomorrow title={'투자 종료 기간 설정'} date={endDay} setDate={setEndDay} />
-                                </View>
-                            </View>
-                            <View>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold]}>투자 경향</Text>
-                                <Input placeholder={'투자 경향을 마음대로 입력해보세요!'} value={tendency} onChangeText={setTendency} />
-                            </View>
-                            <View style={[BoxStyles.Mb10]}>
-                                <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter]}>
-                                    <Text style={[TextStyles.Detail, TextStyles.FwBold]}>개인 의견(선택사항)</Text>
-                                    <CheckBox
-                                        disabled={false}
-                                        value={toggleOpinion}
-                                        onValueChange={(newValue) => setToggleOpinion(newValue)}
-                                    />
-                                </View>
-                                {toggleOpinion ? <Input placeholder={'추가하려는 의견이 있나요?'} value={opinion} onChangeText={setOpinion} /> : null}
-                            </View>
-                            <Button buttonStyle={[ButtonStyles.MainButton]} onPress={() => {
-                                if (!tendency) {
-                                    Alert.alert('오류', '자신의 투자경향을 입력해주세요!')
-                                    return;
-                                }
-                                setModalVisible(true);  // 모달창 열기
-                            }}>자동거래 시작</Button>
-                        </View>
-                    </View>
+                    <StartTradeComponent startDay={startDay} endDay={endDay} setEndDay={setEndDay} tendency={tendency} setTendency={setTendency} toggleOpinion={toggleOpinion} setToggleOpinion={setToggleOpinion} opinion={opinion} setOpinion={setOpinion} setModalVisible={setModalVisible} />
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
     );
+}
+
+function StartTradeModal({ modalVisible, setModalVisible, startDay, endDay, tendency, opinion }) {
+    const { state, setState } = useContext(AppContext);
+
+    return (
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+                setModalVisible(!modalVisible);
+            }}
+        >
+            <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                <View style={[{ flex: 1, justifyContent: 'flex-end' }, BoxStyles.P10]}>
+                    <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
+                        <View style={[BoxStyles.PV10]}>
+                            <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.Mb10, BoxStyles.BottomGrayLine, { paddingBottom: 10 }]}>투자 정보 확인</Text>
+                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>종목</Text>
+                                <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName}</Text>
+                            </View>
+                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>
+                                <Text style={[TextStyles.Detail]}>{dateFormat(startDay)} ~ {dateFormat(endDay)}</Text>
+                            </View>
+                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>경향</Text>
+                                <Text style={[TextStyles.Detail]}>{tendency}</Text>
+                            </View>
+                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb20]}>
+                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>의견</Text>
+                                <Text style={[TextStyles.Detail]}>{opinion ? opinion : '(내용 없음)'}</Text>
+                            </View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.Mb10]}>위 내용으로 자동거래를 시작할까요?</Text>
+                            <Button
+                                buttonStyle={[ButtonStyles.MainButton]}
+                                onPress={() => {
+                                    startAutoStock(JSON.parse(state.selectedStock).stockCode, dateFormat(startDay), dateFormat(endDay), tendency, opinion)
+                                    setModalVisible(false)
+                                }}>
+                                확인
+                            </Button>
+                            <Button
+                                buttonStyle={[ButtonStyles.InputButton]}
+                                titleStyle={[TextStyles.FcBlack]}
+                                onPress={() => setModalVisible(false)}>
+                                취소
+                            </Button>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+}
+
+function StartTradeComponent({ startDay, endDay, setEndDay, tendency, setTendency, toggleOpinion, setToggleOpinion, opinion, setOpinion, setModalVisible }) {
+    const { state, setState } = useContext(AppContext);
+    return (
+        <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
+            <View style={[BoxStyles.P10]}>
+                <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
+                    <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 종목</Text>
+                    <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName} ({JSON.parse(state.selectedStock).stockCode})</Text>
+                </View>
+                <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
+                    <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 기간</Text>
+                    <View style={[{ flexDirection: 'row', justifyContent: 'center' }, BoxStyles.AICenter]}>
+                        <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateFormat(startDay)}</Text>
+                        <Text style={[TextStyles.Detail, BoxStyles.MR10]}>~</Text>
+                        <DateSpinnerTomorrow title={'투자 종료 기간 설정'} date={endDay} setDate={setEndDay} />
+                    </View>
+                </View>
+                <View>
+                    <Text style={[TextStyles.Detail, TextStyles.FwBold]}>투자 경향</Text>
+                    <Input placeholder={'투자 경향을 마음대로 입력해보세요!'} value={tendency} onChangeText={setTendency} />
+                </View>
+                <View style={[BoxStyles.Mb10]}>
+                    <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter]}>
+                        <Text style={[TextStyles.Detail, TextStyles.FwBold]}>개인 의견(선택사항)</Text>
+                        <CheckBox
+                            disabled={false}
+                            value={toggleOpinion}
+                            onValueChange={(newValue) => setToggleOpinion(newValue)}
+                        />
+                    </View>
+                    {toggleOpinion ? <Input placeholder={'추가하려는 의견이 있나요?'} value={opinion} onChangeText={setOpinion} /> : null}
+                </View>
+                <Button buttonStyle={[ButtonStyles.MainButton]} onPress={() => {
+                    if (!tendency) {
+                        Alert.alert('오류', '자신의 투자경향을 입력해주세요!')
+                        return;
+                    }
+                    setModalVisible(true);  // 모달창 열기
+                }}>자동거래 시작</Button>
+            </View>
+        </View>
+    )
 }

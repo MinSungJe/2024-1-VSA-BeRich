@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.berich.stock_bot.dto.StartTradeRequest;
+import com.berich.stock_bot.enums.AutoTradeStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -65,8 +68,9 @@ public class AutoTradeInformation {
     private String totalProfit;
 
     // 활성화 상태
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = true)
-    private boolean isActive;
+    private AutoTradeStatus status; // 활성화 상태
 
     //매매결정기록 매핑
     @JsonIgnore
@@ -89,7 +93,8 @@ public class AutoTradeInformation {
         this.startBalance = startBalance;
         this.user = user;
         this.totalProfit = "수익 없음";
-        this.isActive = true;
+        // 초기 상태는 ACTIVE
+        this.status = AutoTradeStatus.ACTIVE;
 
     }
 

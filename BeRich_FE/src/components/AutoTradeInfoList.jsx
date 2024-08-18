@@ -7,7 +7,7 @@ import { getTradeInfoAPI } from "../api/getTradeInfoAPI";
 import { AppContext } from "../contexts/AppContext";
 import { Button } from "@rneui/base";
 
-export default function AutoTradeInfoList() {
+export default function AutoTradeInfoList({ navigation }) {
     const { state, setState } = useContext(AppContext);
     const [tradeInfo, setTradeInfo] = useState([])
     const [filteredInfo, setFilteredInfo] = useState([])
@@ -34,7 +34,7 @@ export default function AutoTradeInfoList() {
                     (filteredInfo.length !== 0) ?
                         filteredInfo.map((a, i) => {
                             return (
-                                <AutoTradeElement key={i} data={a} />
+                                <AutoTradeElement key={i} navigation={navigation} data={a} />
                             )
                         }) :
                         <Text style={[TextStyles.FcDarkGray, TextStyles.Detail]}>거래 내역이 없습니다.</Text>
@@ -44,9 +44,10 @@ export default function AutoTradeInfoList() {
     );
 }
 
-function AutoTradeElement({ data }) {
+function AutoTradeElement({ navigation, data }) {
     return (
-        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.MT10, {flexDirection:'row', alignItems: "center", justifyContent:'space-between'}]}>
+        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
+        onPress={()=>{navigation.navigate('TradeRecord', { tradeId: data.id })}}>
             <View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>

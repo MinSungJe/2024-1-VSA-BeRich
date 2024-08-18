@@ -15,7 +15,7 @@ import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
 import AutoTradeInfoList from '../../components/AutoTradeInfoList';
 import { startAutoStock } from '../../api/startAutoStock';
 
-export default function AutoTradeScreen() {
+export default function AutoTradeScreen({ navigation }) {
     const { state, setState } = useContext(AppContext);
     const [benefit, setBenefit] = useState('');
     const [startDay, setStartDay] = useState(new Date());
@@ -141,7 +141,7 @@ export default function AutoTradeScreen() {
                             </View>
                         </View>
                         <View style={[BoxStyles.P10]}>
-                            <AutoTradeInfoList />
+                            <AutoTradeInfoList navigation={navigation} />
                         </View>
                         <View style={[{ flex: 1 }]}>
                         </View>

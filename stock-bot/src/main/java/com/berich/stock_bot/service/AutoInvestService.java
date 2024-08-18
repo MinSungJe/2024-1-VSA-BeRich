@@ -15,6 +15,7 @@ import com.berich.stock_bot.entity.AutoTradeInformation;
 import com.berich.stock_bot.entity.Decision;
 import com.berich.stock_bot.entity.TradeRecord;
 import com.berich.stock_bot.entity.User;
+import com.berich.stock_bot.enums.AutoTradeStatus;
 import com.berich.stock_bot.repository.AccountRepository;
 import com.berich.stock_bot.repository.AutoTradeInformationRepository;
 import com.berich.stock_bot.repository.DecisionRepository;
@@ -66,6 +67,29 @@ public class AutoInvestService {
         tradeRecordRepository.save(tradeRecord);
     }
 
+    public void stopStockBot(String loginId, Long autoTradeInformationId) {
+    
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+        }
+        AutoTradeInformation autoInfo = autoTradeInformationRepository.findById(autoTradeInformationId).orElse(null);
+        if( autoInfo == null){
+            //해당 자동매매 없음
+        }
+        User checkUser = autoInfo.getUser();
+
+        if (user.getId() != checkUser.getId()){
+            //권한 없음
+        }
+        if (autoInfo.getStatus() == AutoTradeStatus.ACTIVE) {
+            autoInfo.setStatus(AutoTradeStatus.ENDED);
+
+        } else {
+             //이미 종료된 자동매매 예외처리
+        }
+        
+    }
     //자동매매 정보 불러오기
     public List<AutoTradeInformation> getAutoTradeInformation(String loginId) {
         User user = userRepository.findByLoginId(loginId).orElse(null);

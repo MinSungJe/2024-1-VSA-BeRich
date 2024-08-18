@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +41,13 @@ public class StockController {
     public ResponseEntity<MessageResponse> startAutoInvest(@RequestBody StartTradeRequest request, @AuthenticationPrincipal UserDetails userDetail) {
         autoInvestService.startStockBot(request, userDetail.getUsername());
         return ResponseEntity.ok(new MessageResponse("자동매매가 시작되었습니다."));
+    }
+
+    //자동매매 중단
+    @PatchMapping("api/{autoTradeId}/stop-bot")
+    public ResponseEntity<MessageResponse> stopAutoInvest(@PathVariable("autoTradeId") Long autoTradeInformationId, @AuthenticationPrincipal UserDetails userDetail) {
+        autoInvestService.stopStockBot(userDetail.getUsername(), autoTradeInformationId);
+        return ResponseEntity.ok(new MessageResponse("자동매매가 중지되었습니다."));
     }
 
     //자동매매 기록(목록) 불러오기

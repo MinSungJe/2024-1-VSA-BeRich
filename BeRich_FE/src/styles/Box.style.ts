@@ -32,6 +32,9 @@ export const BoxStyles = StyleSheet.create({
         flex: 1
     },
 
+    MT10: {
+        marginTop: 10
+    },
     MR10: {
         marginRight: 10
     },

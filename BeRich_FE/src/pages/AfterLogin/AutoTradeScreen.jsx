@@ -14,7 +14,6 @@ import { dateFormat } from '../../resource/ParseData';
 import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
 import AutoTradeInfoList from '../../components/AutoTradeInfoList';
 import { startAutoStock } from '../../api/startAutoStock';
-import { Color } from '../../resource/Color';
 
 export default function AutoTradeScreen() {
     const { state, setState } = useContext(AppContext);

@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import StockScreen from '../pages/AfterLogin/StockScreen';
-import AutoTradeScreen from '../pages/AfterLogin/AutoTradeScreen';
 import { Color } from '../resource/Color';
 import UserScreen from './UserScreen';
+import TradeScreen from './TradeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,10 +25,11 @@ export default function TabScreen() {
         }}
       />
       <Tab.Screen
-        name="AutoTrade"
-        component={AutoTradeScreen}
+        name="Trade"
+        component={TradeScreen}
         options={{
           title: '매수/매도',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons  name="hand-coin" color={color} size={size} />
           ),

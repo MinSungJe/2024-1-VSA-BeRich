@@ -1,6 +1,7 @@
 import { Alert } from "react-native";
 import { handleLogout, handleWithdraw } from "../api/authAPI";
 import { deleteAccountAPI } from "../api/deleteAccountAPI";
+import { patchStopBotAPI } from "../api/patchStopBotAPI";
 
 export const LogoutSelectBox = (navigation) => {
     Alert.alert(
@@ -52,6 +53,26 @@ export const DeleteAccountSelectBox = (setUserInfo, setBalance) => {
                 text: '삭제',
                 onPress: () => {
                     deleteAccountAPI(setUserInfo, setBalance);
+                },
+                style: 'destructive',
+            },
+        ],
+        {
+            cancelable: true,
+        },
+    );
+};
+
+export const StopBotSelectBox = (id) => {
+    Alert.alert(
+        "자동거래 중지",
+        "정말로 자동거래를 그만두시겠습니까?",
+        [
+            { text: '취소', onPress: () => { }, style: 'cancel' },
+            {
+                text: '삭제',
+                onPress: () => {
+                    patchStopBotAPI(id);
                 },
                 style: 'destructive',
             },

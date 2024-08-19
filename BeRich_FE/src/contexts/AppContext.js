@@ -10,7 +10,7 @@ const AppProvider = ({ children }) => {
       "companyName": "삼성전자"
     }),
     isAccount: false,
-    isTrading: false
+    statusData: [{"endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": ""}]
   });
 
   return (

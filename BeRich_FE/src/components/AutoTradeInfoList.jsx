@@ -12,15 +12,36 @@ export default function AutoTradeInfoList({ navigation }) {
     const [tradeInfo, setTradeInfo] = useState([])
     const [filteredInfo, setFilteredInfo] = useState([])
 
+    const setStatus = (data) => {
+        setState((prevContext) => ({
+            ...prevContext,
+            statusData: data,
+        }))
+    }
+
     useEffect(() => {
         // API 불러오기
         async function getTradeInfoData() {
             const tradeInfoData = await getTradeInfoAPI();
             setTradeInfo(tradeInfoData)
+
+            // 필터링
+            let pending_end_data = tradeInfoData.filter((e)=>e.status == 'PENDING_END')
+            let active_data = tradeInfoData.filter((e)=>e.status == 'ACTIVE')
+
+            if (pending_end_data.length != 0) {
+                setStatus(pending_end_data)
+            }
+            else if (active_data.length != 0) {
+                setStatus(active_data)
+            }
+            else {
+                setStatus([{"endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": ""}])
+            }
             setFilteredInfo(tradeInfoData.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
         }
         getTradeInfoData();
-    }, [state])
+    }, [state.selectedStock])
 
     return (
         <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 300 }}>

@@ -12,20 +12,36 @@ export default function AutoTradeInfoList({ navigation }) {
     const [tradeInfo, setTradeInfo] = useState([])
     const [filteredInfo, setFilteredInfo] = useState([])
 
-    useFocusEffect(
-        React.useCallback(() => {
-            // API 불러오기
-            async function getTradeInfoData() {
-                const tradeInfoData = await getTradeInfoAPI();
-                setTradeInfo(tradeInfoData)
-            }
-            getTradeInfoData();
-        }, [])
-    );
+    const setStatus = (data) => {
+        setState((prevContext) => ({
+            ...prevContext,
+            statusData: data,
+        }))
+    }
 
     useEffect(() => {
-        setFilteredInfo(tradeInfo.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
-    }, [state])
+        // API 불러오기
+        async function getTradeInfoData() {
+            const tradeInfoData = await getTradeInfoAPI();
+            setTradeInfo(tradeInfoData)
+
+            // 필터링
+            let pending_end_data = tradeInfoData.filter((e)=>e.status == 'PENDING_END')
+            let active_data = tradeInfoData.filter((e)=>e.status == 'ACTIVE')
+
+            if (pending_end_data.length != 0) {
+                setStatus(pending_end_data)
+            }
+            else if (active_data.length != 0) {
+                setStatus(active_data)
+            }
+            else {
+                setStatus([{"endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": ""}])
+            }
+            setFilteredInfo(tradeInfoData.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
+        }
+        getTradeInfoData();
+    }, [state.selectedStock])
 
     return (
         <ScrollView nestedScrollEnabled={true} style={{ maxHeight: 300 }}>
@@ -46,7 +62,7 @@ export default function AutoTradeInfoList({ navigation }) {
 
 function AutoTradeElement({ navigation, data }) {
     return (
-        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
+        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.BottomGrayLine, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
         onPress={()=>{navigation.navigate('TradeRecord', { tradeId: data.id })}}>
             <View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>

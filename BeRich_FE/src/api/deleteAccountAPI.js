@@ -3,7 +3,7 @@ import { API_URL } from '@env'
 import { tokenAPI } from "./tokenAPI";
 import { getUserInfoAPI } from "./getUserInfoAPI";
 
-export const deleteAccountAPI = async (setUserInfo, setBalance) => {
+export const deleteAccountAPI = async (setUserInfo, setBalance, navigation) => {
     try {
         const response = await tokenAPI.delete(`${API_URL}/api/account-delete`)
         if (response.data) {
@@ -12,6 +12,7 @@ export const deleteAccountAPI = async (setUserInfo, setBalance) => {
             setBalance(' -')
             const userInfoData = await getUserInfoAPI()
             setUserInfo(userInfoData)
+            navigation.replace('UserInfoRefresh')
         }
     } catch (error) {
         if (error.response) {

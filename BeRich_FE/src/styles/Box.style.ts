@@ -53,7 +53,7 @@ export const BoxStyles = StyleSheet.create({
     },
 
     BgBlack: {
-        backgroundColor: Color.MainColor,
+        backgroundColor: Color.Black,
     },
 
     ContainerBox: {
@@ -67,9 +67,9 @@ export const BoxStyles = StyleSheet.create({
         backgroundColor: Color.White,
 
         // 테두리
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: Color.MainColor,
+        // borderWidth: 1,
+        // borderStyle: 'solid',
+        // borderColor: Color.MainColor,
     },
 
     MainBoxTitle: {

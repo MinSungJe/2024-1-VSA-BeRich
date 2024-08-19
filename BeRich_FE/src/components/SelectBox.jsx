@@ -43,7 +43,7 @@ export const WithdrawSelectBox = (navigation) => {
     );
 };
 
-export const DeleteAccountSelectBox = (setUserInfo, setBalance) => {
+export const DeleteAccountSelectBox = (setUserInfo, setBalance, navigation) => {
     Alert.alert(
         "계좌정보 삭제",
         "정말로 계좌정보를 삭제하시겠습니까?",
@@ -52,7 +52,7 @@ export const DeleteAccountSelectBox = (setUserInfo, setBalance) => {
             {
                 text: '삭제',
                 onPress: () => {
-                    deleteAccountAPI(setUserInfo, setBalance);
+                    deleteAccountAPI(setUserInfo, setBalance, navigation);
                 },
                 style: 'destructive',
             },

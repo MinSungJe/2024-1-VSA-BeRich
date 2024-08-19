@@ -11,7 +11,6 @@ const AppProvider = ({ children }) => {
     }),
     isAccount: false,
     statusData: [{"endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": ""}],
-    trigger: false,
   });
 
   return (

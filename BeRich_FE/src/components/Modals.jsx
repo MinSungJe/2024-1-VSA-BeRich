@@ -47,7 +47,7 @@ export function StartTradeModal({ modalVisible, setModalVisible, startDay, endDa
                                 onPress={() => {
                                     startAutoStock(JSON.parse(state.selectedStock).stockCode, dateFormat(startDay), dateFormat(endDay), tendency, opinion)
                                     setModalVisible(false)
-                                    navigation.replace('Refresh')
+                                    navigation.replace('AutoTradeRefresh')
                                 }}>
                                 확인
                             </Button>

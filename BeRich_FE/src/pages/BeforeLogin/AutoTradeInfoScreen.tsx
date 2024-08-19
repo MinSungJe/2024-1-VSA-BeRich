@@ -71,10 +71,10 @@ export default function AutoTradeInfoScreen() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
             <Animated.Image 
-                source={require('../../assets/image/icon-dummy.png')}
+                source={require('../../assets/image/screen/screen_autotrade.png')}
                 style={[
                     BoxStyles.Mb30, 
-                    { width: 150, height: 150, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }
+                    { width: 240, height: 540, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }
                 ]} 
             />
             <Animated.Text 

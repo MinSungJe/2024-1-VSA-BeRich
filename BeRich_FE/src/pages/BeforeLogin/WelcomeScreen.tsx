@@ -62,7 +62,7 @@ export default function WelcomeScreen() {
                     { opacity: fadeAnimText, transform: [{ translateY: translateYAnimText }] }
                 ]}
             >
-                어서오세요, BeRich입니다.
+                어서오세요, 주피티입니다.
             </Animated.Text>
         </View>
     );

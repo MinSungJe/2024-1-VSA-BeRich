@@ -47,7 +47,11 @@ export function StartTradeComponent({ startDay, endDay, setEndDay, tendency, set
                 <Button buttonStyle={[ButtonStyles.MainButton]} onPress={() => {
                     if (!tendency) {
                         Alert.alert('오류', '자신의 투자경향을 입력해주세요!')
-                        return;
+                        return
+                    }
+                    if (!state.isAccount) {
+                        Alert.alert('오류', '계좌를 등록한 뒤 거래를 시작해주세요!')
+                        return
                     }
                     setModalVisible(true);  // 모달창 열기
                 }}>자동거래 시작</Button>

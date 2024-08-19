@@ -30,6 +30,7 @@ export default function AutoTradeScreen({ navigation }) {
     // 모달 상태 추가
     const [modalVisible, setModalVisible] = useState(false);
 
+    // 주식 선택 반영
     const setStock = (stock) => {
         setState((prevContext) => ({
             ...prevContext,
@@ -37,6 +38,7 @@ export default function AutoTradeScreen({ navigation }) {
         }));
     };
 
+    // 거래 상태 반영
     const setStatus = (data) => {
         setState((prevContext) => ({
             ...prevContext,

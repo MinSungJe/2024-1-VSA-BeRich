@@ -7,7 +7,7 @@ export const patchStopBotAPI = async (id, navigation) => {
         const response = await tokenAPI.patch(`${API_URL}/api/${id}/stop-bot`);
         if (response.data) {
             Alert.alert('거래 중지 요청 완료', response.data.message);
-            navigation.replace('Refresh')
+            navigation.replace('AutoTradeRefresh')
         }
     } catch (error) {
         // 요청 실패

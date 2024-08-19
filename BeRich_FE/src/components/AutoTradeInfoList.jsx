@@ -62,7 +62,7 @@ export default function AutoTradeInfoList({ navigation }) {
 
 function AutoTradeElement({ navigation, data }) {
     return (
-        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
+        <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.BottomGrayLine, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
         onPress={()=>{navigation.navigate('TradeRecord', { tradeId: data.id })}}>
             <View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>

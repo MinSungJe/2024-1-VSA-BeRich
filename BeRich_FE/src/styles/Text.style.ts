@@ -13,7 +13,7 @@ export const TextStyles = StyleSheet.create({
         color: Color.Blue
     },
     FcBlack: {
-        color: Color.MainColor
+        color: Color.Black
     },
     FcGray: {
         color: Color.Gray
@@ -28,25 +28,25 @@ export const TextStyles = StyleSheet.create({
 	Title: {
         fontFamily: 'NanumGothicBold',
         fontSize: 40,
-        color: Color.MainColor,
+        color: Color.Black,
     },
 
     Main: {
         fontFamily: 'NanumGothic',
         fontSize: 28,
-        color: Color.MainColor
+        color: Color.Black
     },
 
     Medium: {
         fontFamily: 'NanumGothic',
         fontSize: 22,
-        color: Color.MainColor
+        color: Color.Black
     },
 
     Detail: {
         fontFamily: 'NanumGothic',
         fontSize: 16,
-        color: Color.MainColor
+        color: Color.Black
     },
 
     Marker : {

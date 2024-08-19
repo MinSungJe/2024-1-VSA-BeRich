@@ -69,8 +69,8 @@ export default function SplashScreen({ navigation }) {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
             <Animated.Image source={require('../assets/image/icon-dummy.png')}
                 style={[BoxStyles.Mb30, { width: 150, height: 150, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }]} />
-            <Animated.Text style={[TextStyles.Medium, TextStyles.FcWhite, BoxStyles.Mb20,
-            { opacity: fadeAnimText, transform: [{ translateY: translateYAnimText }] }]}>BeRich, AI와 함께하는 주식생활</Animated.Text>
+            <Animated.Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold, BoxStyles.Mb20,
+            { opacity: fadeAnimText, transform: [{ translateY: translateYAnimText }] }]}>주피티, AI와 함께하는 주식생활</Animated.Text>
         </View>
     );
 }

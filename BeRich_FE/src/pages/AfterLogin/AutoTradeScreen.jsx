@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Text } from "@rneui/base";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, View, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { AppContext } from "../../contexts/AppContext";
 import { BoxStyles } from "../../styles/Box.style";
@@ -11,6 +11,8 @@ import { getStockBenefitAPI } from '../../api/getStockBenefitAPI';
 import AutoTradeInfoList from '../../components/AutoTradeInfoList';
 import { StartTradeComponent, StopTradeComponent } from '../../components/TradeComponents';
 import { StartTradeModal } from '../../components/Modals';
+import { getTradeInfoAPI } from '../../api/getTradeInfoAPI';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function AutoTradeScreen({ navigation }) {
     const { state, setState } = useContext(AppContext);
@@ -35,6 +37,13 @@ export default function AutoTradeScreen({ navigation }) {
         }));
     };
 
+    const setStatus = (data) => {
+        setState((prevContext) => ({
+            ...prevContext,
+            statusData: data,
+        }))
+    }
+
     const images = {
         '000150': require(`../../assets/image/company/icon-000150.png`),
         '005930': require(`../../assets/image/company/icon-005930.png`),
@@ -54,6 +63,27 @@ export default function AutoTradeScreen({ navigation }) {
             getStockBenefitData(JSON.parse(state.selectedStock).stockCode);
         }
     }, [state]);
+
+    useFocusEffect(React.useCallback(() => {
+        // API 불러오기
+        async function getTradeInfoData() {
+            const tradeInfoData = await getTradeInfoAPI();
+            // 필터링
+            let pending_end_data = tradeInfoData.filter((e) => e.status == 'PENDING_END')
+            let active_data = tradeInfoData.filter((e) => e.status == 'ACTIVE')
+
+            if (pending_end_data.length != 0) {
+                setStatus(pending_end_data)
+            }
+            else if (active_data.length != 0) {
+                setStatus(active_data)
+            }
+            else {
+                setStatus([{ "endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": "" }])
+            }
+        }
+        getTradeInfoData();
+    }, []))
 
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? 'padding' : 'height'}>
@@ -97,9 +127,9 @@ export default function AutoTradeScreen({ navigation }) {
                     </View>
                     {
                         state.statusData[0].status == 'ENDED' ?
-                            <StartTradeComponent startDay={startDay} endDay={endDay} setEndDay={setEndDay} tendency={tendency} setTendency={setTendency} toggleOpinion={toggleOpinion} setToggleOpinion={setToggleOpinion} opinion={opinion} setOpinion={setOpinion} setModalVisible={setModalVisible} />
+                            <StartTradeComponent startDay={startDay} endDay={endDay} setEndDay={setEndDay} tendency={tendency} setTendency={setTendency} toggleOpinion={toggleOpinion} setToggleOpinion={setToggleOpinion} opinion={opinion} setOpinion={setOpinion} setModalVisible={setModalVisible} navigation={navigation} />
                             :
-                            <StopTradeComponent />
+                            <StopTradeComponent navigation={navigation}/>
                     }
                 </View>
             </ScrollView>

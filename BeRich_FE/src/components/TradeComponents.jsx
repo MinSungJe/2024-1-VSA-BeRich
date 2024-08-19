@@ -56,7 +56,7 @@ export function StartTradeComponent({ startDay, endDay, setEndDay, tendency, set
     )
 }
 
-export function StopTradeComponent() {
+export function StopTradeComponent({navigation}) {
     const { state, setState } = useContext(AppContext);
     return (
         <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
@@ -84,7 +84,7 @@ export function StopTradeComponent() {
                 {
                     (state.statusData[0].status == 'ACTIVE') ?
                         <Button buttonStyle={[ButtonStyles.MainButton]} onPress={() => {
-                            StopBotSelectBox(state.statusData[0].id)
+                            StopBotSelectBox(state.statusData[0].id, navigation)
                         }}>자동거래 중지</Button> :
                         <Text style={[TextStyles.Detail, TextStyles.FwBold, { textAlign: "center" }]}>거래 중지 요청이 된 상태입니다.</Text>
                 }

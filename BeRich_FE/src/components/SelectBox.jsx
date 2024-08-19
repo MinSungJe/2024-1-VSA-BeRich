@@ -63,7 +63,7 @@ export const DeleteAccountSelectBox = (setUserInfo, setBalance) => {
     );
 };
 
-export const StopBotSelectBox = (id) => {
+export const StopBotSelectBox = (id, navigation) => {
     Alert.alert(
         "자동거래 중지",
         "정말로 자동거래를 그만두시겠습니까?",
@@ -72,7 +72,7 @@ export const StopBotSelectBox = (id) => {
             {
                 text: '삭제',
                 onPress: () => {
-                    patchStopBotAPI(id);
+                    patchStopBotAPI(id, navigation);
                 },
                 style: 'destructive',
             },

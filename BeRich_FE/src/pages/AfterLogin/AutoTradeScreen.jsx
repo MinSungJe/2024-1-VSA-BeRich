@@ -90,7 +90,7 @@ export default function AutoTradeScreen({ navigation }) {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={[BoxStyles.P10]}>
                     {/* 모달 창 */}
-                    <StartTradeModal modalVisible={modalVisible} setModalVisible={setModalVisible} startDay={startDay} endDay={endDay} tendency={tendency} opinion={opinion} />
+                    <StartTradeModal modalVisible={modalVisible} setModalVisible={setModalVisible} startDay={startDay} endDay={endDay} tendency={tendency} opinion={opinion} navigation={navigation} />
 
                     {/* 기존 화면 */}
                     <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>

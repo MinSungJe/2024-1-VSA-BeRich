@@ -8,7 +8,7 @@ import { ButtonStyles } from "../styles/Button.style";
 import { startAutoStock } from "../api/startAutoStock";
 import { dateFormat } from "../resource/ParseData";
 
-export function StartTradeModal({ modalVisible, setModalVisible, startDay, endDay, tendency, opinion }) {
+export function StartTradeModal({ modalVisible, setModalVisible, startDay, endDay, tendency, opinion, navigation }) {
     const { state, setState } = useContext(AppContext);
 
     return (
@@ -47,6 +47,7 @@ export function StartTradeModal({ modalVisible, setModalVisible, startDay, endDa
                                 onPress={() => {
                                     startAutoStock(JSON.parse(state.selectedStock).stockCode, dateFormat(startDay), dateFormat(endDay), tendency, opinion)
                                     setModalVisible(false)
+                                    navigation.replace('Refresh')
                                 }}>
                                 확인
                             </Button>

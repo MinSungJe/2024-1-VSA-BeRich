@@ -6,8 +6,8 @@ export const getBalanceAPI = async () => {
     try {
         const response = await tokenAPI.get(`${API_URL}/api/balance`)
         if (response.data) {
-            console.log('getBalanceAPI.js -')
-            console.log(response.data)
+            // console.log('getBalanceAPI.js -')
+            // console.log(response.data)
             return response.data.dncaTotAmt
         }
     } catch (error) {

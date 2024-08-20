@@ -114,7 +114,7 @@ export function CandleGraph({ stock, graphType }) {
                     }
                 }}
             />
-            <CandleRenderMarker selectedEntry={selectedEntry} graphWidth={graphWidth} dataLength={candleChartData.length} />
+            <CandleRenderMarker graphType={graphType} selectedEntry={selectedEntry} graphWidth={graphWidth} dataLength={candleChartData.length} />
         </View>
     );
 }

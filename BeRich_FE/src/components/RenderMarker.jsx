@@ -19,14 +19,14 @@ export function LineRenderMarker({ selectedEntry }) {
 }
 
 // 캔들그래프용 마커(시작, 마지막, 최고, 최저, 시간)
-export function CandleRenderMarker({ selectedEntry, graphWidth, dataLength }) {
+export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataLength }) {
     if (!selectedEntry) return null;
 
     const { open, close, high, low, data } = selectedEntry;
 
     const ratio = selectedEntry.x / dataLength;
     const markerX = ratio > 0.5
-        ? ((selectedEntry.x - 8) / dataLength) * graphWidth
+        ? (graphType == '5d') ? ((selectedEntry.x - 8) / dataLength) * graphWidth : ((selectedEntry.x - 18) / dataLength) * graphWidth
         : ratio * graphWidth;
 
     return (

@@ -1,11 +1,12 @@
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { getDetailTradeRecordAPI } from "../../api/getDetailTradeRecordAPI";
 import { BoxStyles } from "../../styles/Box.style";
 import { TextStyles } from "../../styles/Text.style";
 
-export default function TradeRecordScreen({route}) {
+export default function TradeRecordScreen({ route }) {
     const [detailInfo, setDetailInfo] = useState([])
     const { tradeId } = route.params;
 
@@ -33,13 +34,58 @@ export default function TradeRecordScreen({route}) {
     )
 }
 
-function TradeRecordElement({data}) {
+function TradeRecordElement({ data }) {
     return (
-        <View>
-            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>{data.decisionTime.substring(0, 10)} {data.decisionTime.substring(11,19)}</Text>
-            <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
-                <Text style={[TextStyles.Detail]}>{data.decision}</Text>
-                <Text style={[TextStyles.Detail]}>{data.reason}</Text>
+        <View style={[BoxStyles.Mb20]}>
+            <View style={[{ flexDirection: 'row', alignItems: 'center', marginBottom: 5 }]}>
+                <Image
+                    source={require('../../assets/image/icon-gpt.png')}
+                    style={[{ width: 32, height: 32 }, BoxStyles.MR10]} />
+                <Text style={[TextStyles.Detail, TextStyles.FwBold]}>{data.decisionTime.substring(0, 10)} {data.decisionTime.substring(11, 19)}</Text>
+            </View>
+            <View style={[BoxStyles.MainBox]}>
+                <View style={[{ flexDirection: 'row', paddingBottom: 10 }, BoxStyles.MainBoxTitle, BoxStyles.BottomGrayLine]}>
+                    {
+                        (data.decision == 'hold') ?
+                            <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>- Hold</Text>
+                            :
+                            (data.decision == 'buy') ?
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶ Buy {data.percentage}%</Text>
+                                :
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶ Sell {data.percentage}%</Text>
+                    }
+                </View>
+                <View style={[BoxStyles.MainBoxContent]}>
+                    <View style={[{ flexDirection: 'row', marginBottom: 10, paddingBottom: 5 }, BoxStyles.BottomGrayLine]}>
+                        <MaterialCommunityIcons name="message" size={20} style={[{ marginRight: 10 }]} />
+                        <Text style={[TextStyles.Detail]}>{data.reason}</Text>
+                    </View>
+                    <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 5 }]}>
+                        <View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>주문 금액</Text>
+                            <Text style={[TextStyles.Detail]}>{data.tradeRecord.orderPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
+                        </View>
+                        <View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>주문 주식</Text>
+                            <Text style={[TextStyles.Detail]}>{data.tradeRecord.orderStock.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
+                        </View>
+                        <View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>남은 주식</Text>
+                            <Text style={[TextStyles.Detail]}>{data.tradeRecord.stockBalance.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
+                        </View>
+                    </View>
+
+                    <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly' }]}>
+                        <View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>계좌 잔액</Text>
+                            <Text style={[TextStyles.Detail]}>{data.tradeRecord.cashBalance.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
+                        </View>
+                        <View>
+                            <Text style={[TextStyles.Detail, TextStyles.FwBold]}>총 잔액</Text>
+                            <Text style={[TextStyles.Detail]}>{data.tradeRecord.totalBalance.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
+                        </View>
+                    </View>
+                </View>
             </View>
         </View>
     )

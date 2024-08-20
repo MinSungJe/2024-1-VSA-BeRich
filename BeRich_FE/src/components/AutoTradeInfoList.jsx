@@ -25,8 +25,8 @@ export default function AutoTradeInfoList({ navigation }) {
             setTradeInfo(tradeInfoData)
 
             // 필터링
-            let pending_end_data = tradeInfoData.filter((e)=>e.status == 'PENDING_END')
-            let active_data = tradeInfoData.filter((e)=>e.status == 'ACTIVE')
+            let pending_end_data = tradeInfoData.filter((e) => e.status == 'PENDING_END')
+            let active_data = tradeInfoData.filter((e) => e.status == 'ACTIVE')
 
             if (pending_end_data.length != 0) {
                 setStatus(pending_end_data)
@@ -35,7 +35,7 @@ export default function AutoTradeInfoList({ navigation }) {
                 setStatus(active_data)
             }
             else {
-                setStatus([{"endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": ""}])
+                setStatus([{ "endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": "" }])
             }
             setFilteredInfo(tradeInfoData.filter((e) => e.stockCode == JSON.parse(state.selectedStock).stockCode))
         }
@@ -62,7 +62,7 @@ export default function AutoTradeInfoList({ navigation }) {
 function AutoTradeElement({ navigation, data }) {
     return (
         <Button buttonStyle={[BoxStyles.P10, BoxStyles.MainBox, BoxStyles.BottomGrayLine, BoxStyles.MT10, { flexDirection: 'row', alignItems: "center", justifyContent: 'space-between' }]}
-        onPress={()=>{navigation.navigate('TradeRecord', { tradeId: data.id })}}>
+            onPress={() => { navigation.navigate('TradeRecord', { tradeId: data.id }) }}>
             <View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>
@@ -74,11 +74,23 @@ function AutoTradeElement({ navigation, data }) {
                 </View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>의견</Text>
-                    <Text style={[TextStyles.Detail]}>{data.investmentInsight}</Text>
+                    <Text style={[TextStyles.Detail]}>{(data.investmentInsight) ? (data.investmentInsight) : '(의견 없음)'}</Text>
                 </View>
                 <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>수익률</Text>
                     <Text style={[TextStyles.Detail]}>{data.totalProfit}</Text>
+                </View>
+                <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                    <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>상태</Text>
+                    {
+                        (data.status == 'ACTIVE') ?
+                            <Text style={[TextStyles.Detail, TextStyles.FcRed, TextStyles.FwBold]}>현재 자동거래 중</Text>
+                            :
+                            (data.status == 'ENDED') ?
+                                <Text style={[TextStyles.Detail]}>자동거래 종료</Text>
+                                :
+                                <Text style={[TextStyles.Detail]}>자동거래 종료대기</Text>
+                    }
                 </View>
             </View>
             <View>

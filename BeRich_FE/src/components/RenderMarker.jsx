@@ -41,8 +41,8 @@ export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataL
                 <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
                 <Text style={TextStyles.Marker}>{`시가: ${open}`}</Text>
                 <Text style={TextStyles.Marker}>{`종가: ${close}`}</Text>
-                <Text style={TextStyles.Marker}>{`저가: ${high}`}</Text>
-                <Text style={TextStyles.Marker}>{`고가: ${low}`}</Text>
+                <Text style={TextStyles.Marker}>{`고가: ${high}`}</Text>
+                <Text style={TextStyles.Marker}>{`저가: ${low}`}</Text>
             </View>
             : null
     );

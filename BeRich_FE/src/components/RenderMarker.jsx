@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { TextStyles } from "../styles/Text.style";
 import { BoxStyles } from "../styles/Box.style";
-import { dateFormatter } from "../resource/ParseData";
+import { dateFormatter, dateTimeFormatter } from "../resource/ParseData";
 
 // 라인그래프용 마커(종가, 시간)
 export function LineRenderMarker({ selectedEntry }) {
@@ -32,6 +32,12 @@ export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataL
     return (
         data ?
             <View style={[BoxStyles.MarkerBox, { position: 'absolute', left: markerX, top: -30 }]}>
+                {
+                    (graphType == '5d') ?
+                        <Text style={TextStyles.Marker}>{`일자: ${dateTimeFormatter(data.timestamp)}`}</Text>
+                        :
+                        <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
+                }
                 <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
                 <Text style={TextStyles.Marker}>{`시가: ${open}`}</Text>
                 <Text style={TextStyles.Marker}>{`종가: ${close}`}</Text>

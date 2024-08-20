@@ -13,6 +13,7 @@ import { StartTradeComponent, StopTradeComponent } from '../../components/TradeC
 import { StartTradeModal } from '../../components/Modals';
 import { getTradeInfoAPI } from '../../api/getTradeInfoAPI';
 import { useFocusEffect } from '@react-navigation/native';
+import { getUserInfoAPI } from '../../api/getUserInfoAPI';
 
 export default function AutoTradeScreen({ navigation }) {
     const { state, setState } = useContext(AppContext);
@@ -43,6 +44,14 @@ export default function AutoTradeScreen({ navigation }) {
         setState((prevContext) => ({
             ...prevContext,
             statusData: data,
+        }))
+    }
+
+    // 계좌 상태 반영
+    const setIsAccount = (isAccount) => {
+        setState((prevContext) => ({
+            ...prevContext,
+            isAccount: isAccount,
         }))
     }
 
@@ -84,6 +93,15 @@ export default function AutoTradeScreen({ navigation }) {
                 setStatus([{ "endDay": "", "id": 0, "investmentInsight": "", "investmentPropensity": "", "startBalance": "", "startDay": "", "status": "ENDED", "stockCode": "", "totalProfit": "" }])
             }
         }
+        async function getBalanceData() {
+            const userInfoData = await getUserInfoAPI()
+            if (userInfoData.accountNum == "등록된 계좌 없음") {
+                setIsAccount(false)
+                return
+            }
+            setIsAccount(true)
+        }
+        getBalanceData();
         getTradeInfoData();
     }, []))
 
@@ -98,7 +116,7 @@ export default function AutoTradeScreen({ navigation }) {
                     <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
                         <View style={BoxStyles.MainBoxTitle}>
                             <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
-                                <MaterialCommunityIcons name="hand-coin" size={16} /> 거래 주식 선택
+                                <MaterialCommunityIcons name="hand-coin" size={16} />  거래 주식 선택
                             </Text>
                         </View>
                         <View style={BoxStyles.MainBoxContent}>

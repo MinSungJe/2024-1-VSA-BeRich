@@ -34,7 +34,7 @@ export default function StockScreen({ navigation }) {
                 <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
                     <View style={BoxStyles.MainBoxTitle}>
                         <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
-                            <MaterialCommunityIcons name="cursor-default" size={16} /> 주식 선택
+                            <MaterialCommunityIcons name="cursor-default" size={16} />  주식 선택
                         </Text>
                     </View>
                     <View style={BoxStyles.MainBoxContent}>
@@ -44,7 +44,7 @@ export default function StockScreen({ navigation }) {
                 <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
                     <View style={[BoxStyles.MainBoxTitle]}>
                         <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
-                            <MaterialCommunityIcons name="chart-line" size={16} /> 주식 그래프
+                            <MaterialCommunityIcons name="chart-line" size={16} />  주식 그래프
                         </Text>
                     </View>
                     <View style={[BoxStyles.MainBoxContent, BoxStyles.Mb20]}>
@@ -63,7 +63,7 @@ export default function StockScreen({ navigation }) {
                 <View style={[BoxStyles.MainBox]}>
                     <View style={BoxStyles.MainBoxTitle}>
                         <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
-                            <MaterialCommunityIcons name="newspaper" size={16} /> AI 뉴스 요약
+                            <MaterialCommunityIcons name="newspaper" size={16} />  AI 뉴스 요약
                         </Text>
                     </View>
                     <View style={BoxStyles.MainBoxContent}>

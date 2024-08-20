@@ -1,3 +1,4 @@
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button, Text } from "@rneui/base";
 import { useContext } from "react";
 import { Alert, View } from "react-native";
@@ -15,8 +16,13 @@ import { StopBotSelectBox } from "./SelectBox";
 export function StartTradeComponent({ startDay, endDay, setEndDay, tendency, setTendency, toggleOpinion, setToggleOpinion, opinion, setOpinion, setModalVisible }) {
     const { state, setState } = useContext(AppContext);
     return (
-        <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
-            <View style={[BoxStyles.P10]}>
+        <View style={[BoxStyles.MainBox]}>
+            <View style={[BoxStyles.MainBoxTitle, {marginBottom: 5}]}>
+                <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
+                    <MaterialCommunityIcons name="play-circle" size={16} />  자동거래 시작
+                </Text>
+            </View>
+            <View style={[BoxStyles.MainBoxContent]}>
                 <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 종목</Text>
                     <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName} ({JSON.parse(state.selectedStock).stockCode})</Text>
@@ -60,11 +66,16 @@ export function StartTradeComponent({ startDay, endDay, setEndDay, tendency, set
     )
 }
 
-export function StopTradeComponent({navigation}) {
+export function StopTradeComponent({ navigation }) {
     const { state, setState } = useContext(AppContext);
     return (
-        <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
-            <View style={[BoxStyles.P10]}>
+        <View style={[BoxStyles.MainBox]}>
+            <View style={[BoxStyles.MainBoxTitle]}>
+                <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
+                    <MaterialCommunityIcons name="stop-circle" size={16} />  자동거래 중지
+                </Text>
+            </View>
+            <View style={[BoxStyles.MainBoxContent]}>
                 <View style={[BoxStyles.Mb10, { flexDirection: 'row' }, BoxStyles.AICenter]}>
                     <Text style={[TextStyles.Detail, TextStyles.FwBold, { marginRight: 20 }]}>투자 종목 코드</Text>
                     <Text style={[TextStyles.Detail]}>{state.statusData[0].stockCode}</Text>

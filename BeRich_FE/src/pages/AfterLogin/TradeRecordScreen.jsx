@@ -44,15 +44,15 @@ function TradeRecordElement({ data }) {
                 <Text style={[TextStyles.Detail, TextStyles.FwBold]}>{data.decisionTime.substring(0, 10)} {data.decisionTime.substring(11, 19)}</Text>
             </View>
             <View style={[BoxStyles.MainBox]}>
-                <View style={[{ flexDirection: 'row', paddingBottom: 10 }, BoxStyles.MainBoxTitle, BoxStyles.BottomGrayLine]}>
+                <View style={[{ flexDirection: 'row', paddingBottom: 10 }, BoxStyles.MainBoxTitle]}>
                     {
                         (data.decision == 'hold') ?
-                            <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>- Hold</Text>
+                            <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>-  Hold</Text>
                             :
                             (data.decision == 'buy') ?
-                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶ Buy {data.percentage}%</Text>
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶  Buy {data.percentage}%</Text>
                                 :
-                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶ Sell {data.percentage}%</Text>
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶  Sell {data.percentage}%</Text>
                     }
                 </View>
                 <View style={[BoxStyles.MainBoxContent]}>

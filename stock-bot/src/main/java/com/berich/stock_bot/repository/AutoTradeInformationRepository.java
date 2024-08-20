@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.berich.stock_bot.entity.AutoTradeInformation;
+import com.berich.stock_bot.enums.AutoTradeStatus;
 
 public interface AutoTradeInformationRepository extends JpaRepository<AutoTradeInformation, Long>{
 
@@ -13,4 +14,5 @@ public interface AutoTradeInformationRepository extends JpaRepository<AutoTradeI
     Optional<AutoTradeInformation> findById(Long id);
     // 종료일 기준으로 최신순 정렬
     List<AutoTradeInformation> findByUserIdOrderByEndDayDesc(Long userId);
+    List<AutoTradeInformation> findByStatus(AutoTradeStatus status);
 }

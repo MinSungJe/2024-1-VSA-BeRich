@@ -118,8 +118,8 @@ public class AccountService {
         if (accountBalance.getOutput2() != null && !accountBalance.getOutput2().isEmpty()) {
             // output2 첫번째리스트에서 반환
             AccountBalanceResponse.Output2Dto account = accountBalance.getOutput2().get(0);
-            //예수금 총액
-            String dncaTotAmt = account.getDncaTotAmt();
+            //예수금 총액(미수거래로, d+2예수금으로 변경)
+            String dncaTotAmt = account.getPrvsRcdlExccAmt();
             //유가평가금액
             String sctsEvluAmt = account.getSctsEvluAmt();
             //총평가금액

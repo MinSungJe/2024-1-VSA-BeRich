@@ -7,6 +7,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.berich.stock_bot.entity.AutoTradeInformation;
+import com.berich.stock_bot.enums.AutoTradeStatus;
+import com.berich.stock_bot.repository.AutoTradeInformationRepository;
 import com.berich.stock_bot.repository.StockInformationDRepository;
 import com.berich.stock_bot.repository.StockInformationHRepository;
 
@@ -24,6 +27,12 @@ public class UpdateDataService {
 
     @Autowired
     private StockInformationDRepository stockInformationDRepository;
+
+    @Autowired
+    private AutoTradeInformationRepository autoTradeInformationRepository;
+
+    @Autowired
+    private AutoInvestService autoInvestService;
 
     private List<String> stockCodes;
 
@@ -64,6 +73,20 @@ public class UpdateDataService {
         //가장 오래된 날짜(3개월 기준)
         Long oldestDay = stockInformationDRepository.findMinTimestamp();
         stockInformationDRepository.deleteByTimestamp(oldestDay);
+
+    }
+
+    //월-금 오전 9시에 종료예정 모두 팔기 ->종료로 변경
+    @Scheduled(cron = "0 0 9 ? * MON-FRI")
+    @Async
+    public void sellEndStock() {
+        //종료예정 목록
+        List<AutoTradeInformation> endList = autoTradeInformationRepository.findByStatus(AutoTradeStatus.PENDING_END);
+        if(!endList.isEmpty()){//있으면
+            for (AutoTradeInformation autoInfo : endList) {
+                autoInvestService.sellAllStock(autoInfo);
+            }
+        }
 
     }
 }

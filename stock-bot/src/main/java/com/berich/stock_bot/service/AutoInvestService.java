@@ -1,7 +1,10 @@
 package com.berich.stock_bot.service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,29 +70,6 @@ public class AutoInvestService {
         tradeRecordRepository.save(tradeRecord);
     }
 
-    public void stopStockBot(String loginId, Long autoTradeInformationId) {
-    
-        User user = userRepository.findByLoginId(loginId).orElse(null);
-        if( user == null) {
-            //에러처리: 유저가 없는 경우
-        }
-        AutoTradeInformation autoInfo = autoTradeInformationRepository.findById(autoTradeInformationId).orElse(null);
-        if( autoInfo == null){
-            //해당 자동매매 없음
-        }
-        User checkUser = autoInfo.getUser();
-
-        if (user.getId() != checkUser.getId()){
-            //권한 없음
-        }
-        if (autoInfo.getStatus() == AutoTradeStatus.ACTIVE) {
-            autoInfo.setStatus(AutoTradeStatus.ENDED);
-
-        } else {
-             //이미 종료된 자동매매 예외처리
-        }
-        
-    }
     //자동매매 정보 불러오기
     public List<AutoTradeInformation> getAutoTradeInformation(String loginId) {
         User user = userRepository.findByLoginId(loginId).orElse(null);
@@ -120,6 +100,75 @@ public class AutoInvestService {
          // decisionTime을 기준으로 최신순 정렬된 목록을 반환
         return decisionRepository.findByAutoTradeInformationIdOrderByDecisionTimeDesc(autoTradeInformationId);
     }
+
+    //자동매매 중단하기
+    public void stopStockBot(String loginId, Long autoTradeInformationId) {
+    
+        User user = userRepository.findByLoginId(loginId).orElse(null);
+        if( user == null) {
+            //에러처리: 유저가 없는 경우
+            throw new NoSuchElementException("User not found for loginId: " + loginId);
+        }
+        AutoTradeInformation autoInfo = autoTradeInformationRepository.findById(autoTradeInformationId).orElse(null);
+        if( autoInfo == null){
+            //해당 자동매매 없음
+            throw new NoSuchElementException("AutoTradeInformation not found for id: " + autoTradeInformationId);
+        }
+        User checkUser = autoInfo.getUser();
+
+        if (user.getId() != checkUser.getId()){
+            //권한 없음
+            throw new SecurityException("User is not authorized to stop this auto trade.");
+        }
+        if (autoInfo.getStatus() == AutoTradeStatus.ACTIVE) {
+            stopAndSell(autoInfo);
+
+        } else {
+             //이미 종료된 자동매매 예외처리
+            throw new IllegalStateException("The auto trade is already ended.");
+        }
+        
+    }
+
+    private void stopAndSell(AutoTradeInformation autoInfo){
+        LocalDateTime now = LocalDateTime.now();//현재시간
+        DayOfWeek dayOfWeek = now.getDayOfWeek();//요일
+
+        // 평일 (월요일~금요일) 오전 9시~오후 3시 사이 확인
+        boolean isWeekday = dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY;
+        boolean isWithinTradingHours =  now.getHour() >= 9 && now.getHour() < 15;
+
+        if (isWeekday && isWithinTradingHours) {//즉시 팔 수 있으면 
+        
+            //종료 함수 즉시 불러오기
+            sellAllStock(autoInfo);
+        } else { //종료예정으로 차후 팔림
+            autoInfo.setStatus(AutoTradeStatus.PENDING_END);
+        }
+    }
+
+    //모든 주식 팔고 종료하기
+    public void sellAllStock(AutoTradeInformation autoInfo){
+        LocalDate now = LocalDate.now();//새로운 종료일
+        // 매매 시 필요 정보
+        Account account = accountRepository.findByUserId(autoInfo.getUser().getId()).orElse(null);
+        if (account == null) {
+            //등록된 계좌 없음 예외
+        }
+        String stockCode = autoInfo.getStockCode();
+        String buyOrSell = "VTTC0801U";//매도
+        String amount = "현재 보유 주식 모두 조회해서";
+        
+        //Mono<AutoInvestResponse> response = invest(account, stockCode, buyOrSell, amount);
+        //결과 저장 및 종료
+        autoInfo.setStatus(AutoTradeStatus.ENDED);//상태변경
+        autoInfo.setEndDay(now);//종료일 변경
+
+        autoTradeInformationRepository.save(autoInfo);
+
+
+    }
+    
 
     private Mono<AutoInvestResponse> invest(Account account, String stockCode, String buyOrSell, String amount) {
     

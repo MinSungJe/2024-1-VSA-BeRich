@@ -46,9 +46,9 @@ export default function WelcomeScreen() {
     }, [fadeAnimImage, translateYAnimImage, fadeAnimText, translateYAnimText]);
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.Black }}>
             <Animated.Image 
-                source={require('../../assets/image/icon-dummy.png')}
+                source={require('../../assets/image/icon-app.png')}
                 style={[
                     BoxStyles.Mb30, 
                     { width: 150, height: 150, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }

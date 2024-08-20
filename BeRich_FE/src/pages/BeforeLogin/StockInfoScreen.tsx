@@ -86,7 +86,7 @@ export default function StockInfoScreen() {
     );
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.Black }}>
             <Animated.Image 
                 source={require('../../assets/image/screen/screen_stock.png')}
                 style={[

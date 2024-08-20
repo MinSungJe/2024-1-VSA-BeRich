@@ -69,7 +69,7 @@ export default function AutoTradeInfoScreen() {
     );
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.Black }}>
             <Animated.Image 
                 source={require('../../assets/image/screen/screen_autotrade.png')}
                 style={[

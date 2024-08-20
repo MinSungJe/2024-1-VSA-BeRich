@@ -144,6 +144,7 @@ public class AutoInvestService {
             sellAllStock(autoInfo);
         } else { //종료예정으로 차후 팔림
             autoInfo.setStatus(AutoTradeStatus.PENDING_END);
+            autoTradeInformationRepository.save(autoInfo);
         }
     }
 

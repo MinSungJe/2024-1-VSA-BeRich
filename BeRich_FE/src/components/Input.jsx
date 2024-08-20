@@ -115,6 +115,15 @@ export function DateSpinnerTomorrow({ title, date, setDate, startDay }) {
         return day === 0 || day === 6; // 0: 일요일, 6: 토요일
     };
 
+    // 특정 날짜 범위 확인 함수
+    const isSpecificDateRange = (date) => {
+        const startDate = new Date(2024, 8, 16); // 2024년 9월 16일
+        const endDate = new Date(2024, 8, 18);   // 2024년 9월 18일
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+        return date >= startDate && date <= endDate;
+    };
+
     // startDay 다음 날로 초기 endDay 설정, 주말이면 다음 월요일로 이동
     const calculateInitialEndDate = () => {
         let initialDate = new Date(startDay);
@@ -149,8 +158,16 @@ export function DateSpinnerTomorrow({ title, date, setDate, startDay }) {
                     if (isWeekend(selectedDate)) {
                         Alert.alert('경고', '주말은 선택할 수 없습니다.');
                         setOpen(false);
-                        return
+                        return;
                     }
+
+                    // 선택된 날짜가 특정 날짜 범위에 해당하면 다시 선택하게 함
+                    if (isSpecificDateRange(selectedDate)) {
+                        Alert.alert('경고', '즐거운 한가위 보내세요 :)');
+                        setOpen(false);
+                        return;
+                    }
+
                     setOpen(false);
                     setDate(selectedDate);
                     setDateLabel(dateFormat(selectedDate));

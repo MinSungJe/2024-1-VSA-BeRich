@@ -47,17 +47,17 @@ function TradeRecordElement({ data }) {
                 <View style={[{ flexDirection: 'row', paddingBottom: 10 }, BoxStyles.MainBoxTitle]}>
                     {
                         (data.decision == 'hold') ?
-                            <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>-  Hold</Text>
+                            <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}><MaterialCommunityIcons name="chat-processing" size={24} style={[{ marginRight: 10 }]} />  Hold</Text>
                             :
                             (data.decision == 'buy') ?
-                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶  Buy {data.percentage}%</Text>
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}><MaterialCommunityIcons name="chat-alert" size={24} style={[{ marginRight: 10 }]} />  Buy {data.percentage}%</Text>
                                 :
-                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}>▶  Sell {data.percentage}%</Text>
+                                <Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold]}><MaterialCommunityIcons name="chat-alert" size={24} style={[{ marginRight: 10 }]} />  Sell {data.percentage}%</Text>
                     }
                 </View>
                 <View style={[BoxStyles.MainBoxContent]}>
                     <View style={[{ flexDirection: 'row', marginBottom: 10, paddingBottom: 5 }, BoxStyles.BottomGrayLine]}>
-                        <MaterialCommunityIcons name="message" size={20} style={[{ marginRight: 10 }]} />
+                        <MaterialCommunityIcons name="emoticon" size={20} style={[{ marginRight: 10 }]} />
                         <Text style={[TextStyles.Detail]}>{data.reason}</Text>
                     </View>
                     <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 5 }]}>

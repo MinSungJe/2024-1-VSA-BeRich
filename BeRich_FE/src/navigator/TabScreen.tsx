@@ -28,7 +28,7 @@ export default function TabScreen() {
         name="Trade"
         component={TradeScreen}
         options={{
-          title: '매수/매도',
+          title: '자동거래',
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons  name="hand-coin" color={color} size={size} />

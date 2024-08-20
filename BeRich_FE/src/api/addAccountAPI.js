@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { tokenAPI } from './tokenAPI';
 
 export const CheckAddAccount = (accountNum, appKey, appSecret) => {

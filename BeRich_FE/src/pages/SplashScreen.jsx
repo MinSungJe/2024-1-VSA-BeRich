@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Color } from '../resource/Color';

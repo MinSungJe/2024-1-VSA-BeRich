@@ -1,4 +1,3 @@
-import { useFocusEffect } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { BoxStyles } from "../styles/Box.style";

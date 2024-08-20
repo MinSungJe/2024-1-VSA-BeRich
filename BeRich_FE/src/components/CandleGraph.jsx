@@ -6,7 +6,6 @@ import { dateFormatter, parseStockData, processCandleData } from '../resource/Pa
 import { CandleRenderMarker } from './RenderMarker';
 import { Color } from '../resource/Color';
 import { getGraphDataAPI } from '../api/getGraphDataAPI';
-import { stock5dData } from '../resource/StockData';
 
 export function CandleGraph({ stock, graphType }) {
     const [selectedEntry, setSelectedEntry] = useState(null);

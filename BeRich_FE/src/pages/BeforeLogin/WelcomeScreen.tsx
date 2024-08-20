@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
-import { Text } from '@rneui/base';
 import { TextStyles } from '../../styles/Text.style';
 import { Color } from '../../resource/Color';
 import { BoxStyles } from '../../styles/Box.style';

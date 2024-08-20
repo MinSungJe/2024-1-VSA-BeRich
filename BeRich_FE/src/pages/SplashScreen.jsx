@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Color } from '../resource/Color';
@@ -66,8 +66,8 @@ export default function SplashScreen({ navigation }) {
     }, [navigation]);
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
-            <Animated.Image source={require('../assets/image/icon-dummy.png')}
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.Black }}>
+            <Animated.Image source={require('../assets/image/icon-app.png')}
                 style={[BoxStyles.Mb30, { width: 150, height: 150, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }]} />
             <Animated.Text style={[TextStyles.Medium, TextStyles.FcWhite, TextStyles.FwBold, BoxStyles.Mb20,
             { opacity: fadeAnimText, transform: [{ translateY: translateYAnimText }] }]}>주피티, AI와 함께하는 주식생활</Animated.Text>

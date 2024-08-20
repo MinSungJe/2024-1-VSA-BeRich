@@ -97,7 +97,7 @@ export default function AutoTradeScreen({ navigation }) {
                     {/* 기존 화면 */}
                     <View style={[BoxStyles.MainBox, BoxStyles.Mb20]}>
                         <View style={BoxStyles.MainBoxTitle}>
-                            <Text style={[TextStyles.Detail, TextStyles.FcWhite]}>
+                            <Text style={[TextStyles.Detail, TextStyles.FcWhite, TextStyles.FwBold]}>
                                 <MaterialCommunityIcons name="hand-coin" size={16} /> 거래 주식 선택
                             </Text>
                         </View>

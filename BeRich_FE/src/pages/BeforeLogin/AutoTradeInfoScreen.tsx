@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { Animated, View } from 'react-native';
-import { Text } from '@rneui/base';
 import { useFocusEffect } from '@react-navigation/native';
 import { TextStyles } from '../../styles/Text.style';
 import { Color } from '../../resource/Color';
@@ -69,7 +68,7 @@ export default function AutoTradeInfoScreen() {
     );
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.MainColor }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Color.Black }}>
             <Animated.Image 
                 source={require('../../assets/image/screen/screen_autotrade.png')}
                 style={[

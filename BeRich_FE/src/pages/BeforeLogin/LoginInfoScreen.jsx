@@ -92,10 +92,10 @@ export default function LoginInfoScreen({ navigation }) {
     );
 
     return (
-        <View style={[BoxStyles.ContainerBox, BoxStyles.JCCenter, { backgroundColor: Color.MainColor }]}>
+        <View style={[BoxStyles.ContainerBox, BoxStyles.JCCenter, { backgroundColor: Color.Black }]}>
             <View style={[BoxStyles.AICenter]}>
                 <Animated.Image
-                    source={require('../../assets/image/icon-dummy.png')}
+                    source={require('../../assets/image/icon-lock.png')}
                     style={[
                         BoxStyles.Mb30,
                         { width: 150, height: 150, opacity: fadeAnimImage, transform: [{ translateY: translateYAnimImage }] }

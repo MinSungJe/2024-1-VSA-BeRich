@@ -1,6 +1,5 @@
 import { API_URL } from '@env';
 import { tokenAPI } from './tokenAPI';
-import { Alert } from 'react-native';
 
 export const getNewsAPI = async (stockCode) => {
     try {

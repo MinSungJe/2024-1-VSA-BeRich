@@ -36,8 +36,8 @@ export function StartTradeComponent({ startDay, endDay, setEndDay, tendency, set
                     </View>
                 </View>
                 <View>
-                    <Text style={[TextStyles.Detail, TextStyles.FwBold]}>투자 경향</Text>
-                    <Input placeholder={'투자 경향을 마음대로 입력해보세요!'} value={tendency} onChangeText={setTendency} />
+                    <Text style={[TextStyles.Detail, TextStyles.FwBold]}>투자 성향</Text>
+                    <Input placeholder={'투자 성향을 마음대로 입력해보세요!'} value={tendency} onChangeText={setTendency} />
                 </View>
                 <View style={[BoxStyles.Mb10]}>
                     <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter]}>

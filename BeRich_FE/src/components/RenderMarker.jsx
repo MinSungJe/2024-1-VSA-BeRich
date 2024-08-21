@@ -21,7 +21,6 @@ export function LineRenderMarker({ selectedEntry }) {
 // 캔들그래프용 마커(시작, 마지막, 최고, 최저, 시간)
 export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataLength }) {
     if (!selectedEntry) return null;
-
     const { open, close, high, low, data } = selectedEntry;
 
     const ratio = selectedEntry.x / dataLength;
@@ -38,11 +37,10 @@ export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataL
                         :
                         <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
                 }
-                <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
-                <Text style={TextStyles.Marker}>{`시가: ${open}`}</Text>
-                <Text style={TextStyles.Marker}>{`종가: ${close}`}</Text>
-                <Text style={TextStyles.Marker}>{`고가: ${high}`}</Text>
-                <Text style={TextStyles.Marker}>{`저가: ${low}`}</Text>
+                <Text style={TextStyles.Marker}>{`시가: ${Math.floor(open).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+                <Text style={TextStyles.Marker}>{`종가: ${Math.floor(close).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+                <Text style={TextStyles.Marker}>{`고가: ${Math.floor(high).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+                <Text style={TextStyles.Marker}>{`저가: ${Math.floor(low).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
             </View>
             : null
     );

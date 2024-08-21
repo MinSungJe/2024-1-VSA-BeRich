@@ -134,7 +134,10 @@ export default function AutoTradeScreen({ navigation }) {
                                 </View>
                                 {
                                     (benefit >= 0) ?
-                                        <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcRed]}>▲ {benefit}%</Text> :
+                                        (benefit == 0) ?
+                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlack]}>- 0%</Text>
+                                            :
+                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcRed]}>▲ {benefit}%</Text> :
                                         <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlue]}>▼ {benefit}%</Text>
                                 }
                             </View>
@@ -149,7 +152,7 @@ export default function AutoTradeScreen({ navigation }) {
                         state.statusData[0].status == 'ENDED' ?
                             <StartTradeComponent startDay={startDay} endDay={endDay} setEndDay={setEndDay} tendency={tendency} setTendency={setTendency} toggleOpinion={toggleOpinion} setToggleOpinion={setToggleOpinion} opinion={opinion} setOpinion={setOpinion} setModalVisible={setModalVisible} navigation={navigation} />
                             :
-                            <StopTradeComponent navigation={navigation}/>
+                            <StopTradeComponent navigation={navigation} />
                     }
                 </View>
             </ScrollView>

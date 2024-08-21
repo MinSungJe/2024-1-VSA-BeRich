@@ -56,8 +56,8 @@ function TradeRecordElement({ data }) {
                     }
                 </View>
                 <View style={[BoxStyles.MainBoxContent]}>
-                    <View style={[{ flexDirection: 'row', marginBottom: 10, paddingBottom: 5 }, BoxStyles.BottomGrayLine]}>
-                        <MaterialCommunityIcons name="emoticon" size={20} style={[{ marginRight: 10 }]} />
+                    <MaterialCommunityIcons name="emoticon" size={20} style={[{ marginBottom: 5 }]} />
+                    <View style={[{ flexDirection: 'row', marginBottom: 10, paddingBottom: 10 }, BoxStyles.BottomGrayLine]}>
                         <Text style={[TextStyles.Detail]}>{data.reason}</Text>
                     </View>
                     <View style={[{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 5 }]}>

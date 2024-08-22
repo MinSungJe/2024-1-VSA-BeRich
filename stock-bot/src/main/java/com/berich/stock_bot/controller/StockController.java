@@ -16,10 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.berich.stock_bot.dto.EarningRateResponse;
 import com.berich.stock_bot.dto.MessageResponse;
 import com.berich.stock_bot.dto.StartTradeRequest;
+import com.berich.stock_bot.dto_stock.AutoInvestResponse;
+import com.berich.stock_bot.dto_stock.PresentPriceResponse;
+import com.berich.stock_bot.dto_stock.PsblOrderResponse;
+import com.berich.stock_bot.entity.Account;
 import com.berich.stock_bot.entity.AutoTradeInformation;
 import com.berich.stock_bot.entity.CompanyInformation;
 import com.berich.stock_bot.entity.Decision;
+import com.berich.stock_bot.entity.User;
+import com.berich.stock_bot.repository.AccountRepository;
+import com.berich.stock_bot.repository.AutoTradeInformationRepository;
 import com.berich.stock_bot.repository.CompanyInformationRepository;
+import com.berich.stock_bot.repository.DecisionRepository;
+import com.berich.stock_bot.repository.UserRepository;
 import com.berich.stock_bot.service.AutoInvestService;
 
 @RestController
@@ -29,6 +38,16 @@ public class StockController {
     private AutoInvestService autoInvestService;
     @Autowired
     private CompanyInformationRepository companyInformationRepository;
+    //테스트용 아래
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private AutoTradeInformationRepository autoTradeInformationRepository;
+    @Autowired
+    private DecisionRepository decisionRepository;
 
     @GetMapping("/api/stock-list")
     public ResponseEntity<List<CompanyInformation>> getStockList(){
@@ -77,5 +96,37 @@ public class StockController {
     public ResponseEntity<EarningRateResponse> getEarningRate(@PathVariable("stockCode") String stockCode, @AuthenticationPrincipal UserDetails userDetail) {
         String earning = autoInvestService.getEarningRate(stockCode, userDetail.getUsername());
         return ResponseEntity.ok(new EarningRateResponse(earning));
+    }
+
+    //test로 확인 매수가능조회
+    @GetMapping("api/test/psblorder/{stockCode}")
+    public ResponseEntity<PsblOrderResponse> returnPsbl(@PathVariable("stockCode") String stockCode, @AuthenticationPrincipal UserDetails userDetail) {
+        User user = userRepository.findByLoginId(userDetail.getUsername()).orElse(null);
+        Account account = accountRepository.findByUserId(user.getId()).orElse(null);
+        return ResponseEntity.ok( autoInvestService.returnPsblOrderSync(account,stockCode));
+    }
+
+    //test로 확인 현재가조회
+    @GetMapping("api/test/presentPrice/{stockCode}")
+    public ResponseEntity<PresentPriceResponse> returnPresentP(@PathVariable("stockCode") String stockCode, @AuthenticationPrincipal UserDetails userDetail) {
+        User user = userRepository.findByLoginId(userDetail.getUsername()).orElse(null);
+        Account account = accountRepository.findByUserId(user.getId()).orElse(null);
+        return ResponseEntity.ok( autoInvestService.returnPresentPrice(account,stockCode));
+    }
+
+    //test로 확인 현재가조회
+    @GetMapping("api/test/invest")
+    public ResponseEntity<AutoInvestResponse> investTest(@AuthenticationPrincipal UserDetails userDetail) {
+        User user = userRepository.findByLoginId(userDetail.getUsername()).orElse(null);
+        //Account account = accountRepository.findByUserId(user.getId()).orElse(null);
+        System.out.println("여기까지는 성공!!!");
+        Long num1 = Long.valueOf(4);
+        Long num2 =Long.valueOf(22);
+        System.out.println("여기까지는 성공");
+        AutoTradeInformation autoTradeInfo = autoTradeInformationRepository.findById(num1).orElse(null);
+        System.out.println("여기까지는 성공");
+        Decision decision = decisionRepository.findById(num2).orElse(null);
+        System.out.println("여기까지 성공");
+        return ResponseEntity.ok( autoInvestService.returnInvestResult(autoTradeInfo,decision,"10"));
     }
 }

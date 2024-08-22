@@ -1,12 +1,12 @@
 package com.berich.stock_bot.dto_stock;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class AutoInvestResponse {
 
     @JsonProperty("rt_cd")
@@ -19,7 +19,8 @@ public class AutoInvestResponse {
     private String msg;        // 응답메세지
 
     @JsonProperty("output")
-    private List<Output> output; // 응답상세
+    private Output output;     // 응답상세 (단일 객체)
+
 
     // Inner class for Output
     @Getter

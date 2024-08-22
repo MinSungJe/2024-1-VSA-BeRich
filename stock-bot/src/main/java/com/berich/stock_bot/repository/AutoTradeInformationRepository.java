@@ -1,5 +1,6 @@
 package com.berich.stock_bot.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,7 @@ public interface AutoTradeInformationRepository extends JpaRepository<AutoTradeI
     // 종료일 기준으로 최신순 정렬
     List<AutoTradeInformation> findByUserIdOrderByEndDayDesc(Long userId);
     List<AutoTradeInformation> findByStatus(AutoTradeStatus status);
+    List<AutoTradeInformation> findByEndDay(LocalDate today);
+    // 사용자 ID와 주식 코드로 목록을 조회하고, 종료일 기준으로 내림차순 정렬
+    List<AutoTradeInformation> findByUserIdAndStockCodeOrderByEndDayDesc(Long userId, String stockCode);
 }

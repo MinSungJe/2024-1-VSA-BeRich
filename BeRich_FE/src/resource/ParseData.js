@@ -35,3 +35,37 @@ export const parseStockData = (stock) => {
     if (!stock) return ''
     else return JSON.parse(stock)
 }
+
+// date -> YY-MM-DD
+export function dateFormat(date) {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let result = year + '-' + ((month < 10 ? '0' + month : month) + '-' + ((day < 10 ? '0' + day : day)));
+    return result;
+}
+
+// 가장 빠른 startDay 계산
+export const calculateStartDay = () => {
+    let today = new Date();
+    const currentDay = today.getDay(); // 0: 일요일, 6: 토요일
+    const currentHour = today.getHours();
+    const currentMinutes = today.getMinutes();
+    const currentTime = currentHour * 60 + currentMinutes; // 시간을 분 단위로 계산
+
+    // 평일 오후 2시 30분 이후인 경우 내일로 설정
+    if (currentDay >= 1 && currentDay <= 5 && currentTime >= 14 * 60 + 30) {
+        today.setDate(today.getDate() + 1);
+    }
+
+    // 토요일인 경우 월요일로 설정
+    if (today.getDay() === 6) {
+        today.setDate(today.getDate() + 2);
+    }
+    // 일요일인 경우 월요일로 설정
+    if (today.getDay() === 0) {
+        today.setDate(today.getDate() + 1);
+    }
+
+    return today;
+};

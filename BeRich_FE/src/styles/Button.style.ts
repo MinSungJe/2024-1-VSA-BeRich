@@ -14,5 +14,10 @@ export const ButtonStyles = StyleSheet.create({
 
     BcWhite: {
         backgroundColor: Color.White
+    },
+    
+    BottomGrayLine: {
+        borderBottomColor: Color.Gray,
+        borderBottomWidth: 1
     }
 })

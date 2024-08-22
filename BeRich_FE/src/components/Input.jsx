@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { BoxStyles } from '../styles/Box.style';
 import { TextStyles } from '../styles/Text.style';
 import { Button, Input, Text } from '@rneui/base';
@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-native-date-picker'
 import { ButtonStyles } from '../styles/Button.style';
+import { dateFormat } from '../resource/ParseData';
 
 export function LabelInput({ label, placeholder, state, setState }) {
     return (
@@ -73,14 +74,6 @@ export function DateInput({ label, date, setDate }) {
     const [dateLabel, setDateLabel] = useState('')
     const [open, setOpen] = useState(false)
 
-    function dateFormat(date) {
-        let year = date.getFullYear()
-        let month = date.getMonth() + 1
-        let day = date.getDate()
-        let result = year + '-' + ((month < 10 ? '0' + month : month) + '-' + ((day < 10 ? '0' + day : day)))
-        return result
-    }
-
     useEffect(() => {
         setDateLabel(dateFormat(date))
     }, [])
@@ -104,8 +97,89 @@ export function DateInput({ label, date, setDate }) {
                         setOpen(false)
                     }}
                     mode='date'
+                    confirmText='확인'
+                    cancelText='취소'
                 />
             </View>
         </View>
     )
+}
+
+export function DateSpinnerTomorrow({ title, date, setDate, startDay }) {
+    const [dateLabel, setDateLabel] = useState('');
+    const [open, setOpen] = useState(false);
+
+    // 주말 여부 확인 함수
+    const isWeekend = (date) => {
+        const day = date.getDay();
+        return day === 0 || day === 6; // 0: 일요일, 6: 토요일
+    };
+
+    // 특정 날짜 범위 확인 함수
+    const isSpecificDateRange = (date) => {
+        const startDate = new Date(2024, 8, 16); // 2024년 9월 16일
+        const endDate = new Date(2024, 8, 18);   // 2024년 9월 18일
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+        return date >= startDate && date <= endDate;
+    };
+
+    // startDay 다음 날로 초기 endDay 설정, 주말이면 다음 월요일로 이동
+    const calculateInitialEndDate = () => {
+        let initialDate = new Date(startDay);
+        initialDate.setDate(initialDate.getDate() + 1);
+        initialDate.setHours(0, 0, 0, 0); // 시간은 00:00:00으로 설정
+
+        // 주말인 경우 다음 월요일로 이동
+        if (isWeekend(initialDate)) {
+            initialDate.setDate(initialDate.getDate() + (initialDate.getDay() === 6 ? 2 : 1)); // 토요일이면 +2, 일요일이면 +1
+        }
+
+        return initialDate;
+    };
+
+    const initialEndDate = calculateInitialEndDate();
+
+    useEffect(() => {
+        setDateLabel(dateFormat(initialEndDate));
+    }, []);
+
+    return (
+        <View style={[{ flexDirection: 'row' }, BoxStyles.AICenter, BoxStyles.P10]}>
+            <Text style={[TextStyles.Detail, BoxStyles.MR10]}>{dateLabel}</Text>
+            <Button title={'변경'} onPress={() => setOpen(true)} buttonStyle={ButtonStyles.MainButton} titleStyle={[TextStyles.FwBold]} />
+            <DatePicker
+                modal
+                title={title}
+                open={open}
+                date={initialEndDate}
+                onConfirm={(selectedDate) => {
+                    // 선택된 날짜가 주말이면 다시 선택하게 함
+                    if (isWeekend(selectedDate)) {
+                        Alert.alert('경고', '주말은 선택할 수 없습니다.');
+                        setOpen(false);
+                        return;
+                    }
+
+                    // 선택된 날짜가 특정 날짜 범위에 해당하면 다시 선택하게 함
+                    if (isSpecificDateRange(selectedDate)) {
+                        Alert.alert('경고', '즐거운 한가위 보내세요 :)');
+                        setOpen(false);
+                        return;
+                    }
+
+                    setOpen(false);
+                    setDate(selectedDate);
+                    setDateLabel(dateFormat(selectedDate));
+                }}
+                onCancel={() => {
+                    setOpen(false);
+                }}
+                mode='date'
+                minimumDate={initialEndDate} // startDay 다음 날부터 선택 가능
+                confirmText='확인'
+                cancelText='취소'
+            />
+        </View>
+    );
 }

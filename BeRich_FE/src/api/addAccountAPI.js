@@ -1,7 +1,5 @@
-import axios from 'axios';
 import { Alert } from 'react-native';
 import { API_URL } from '@env'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { tokenAPI } from './tokenAPI';
 
 export const CheckAddAccount = (accountNum, appKey, appSecret) => {
@@ -31,8 +29,10 @@ export const addAccountAPI = async (accountNum, appKey, appSecret, navigation) =
         if (response.data) {
             // 변경 성공 시 처리
             Alert.alert('계좌 정보 변경 완료', '계좌 정보가 정상적으로 변경되었습니다.');
-            // 이동         
-            navigation.goBack()
+            setTimeout(() => {
+                // 이동         
+                navigation.goBack()
+            }, 500)
         } else {
             Alert.alert('계좌 정보 변경 실패', response.data.message || '잘못된 정보입니다.');
         }

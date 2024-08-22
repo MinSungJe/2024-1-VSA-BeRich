@@ -229,6 +229,7 @@ public class AutoInvestService {
             System.out.println("팔거야!");
             //종료 함수 즉시 불러오기
             sellAllStock(autoInfo);
+
         } 
         else { //종료예정으로 차후 팔림
             if(output1List == null || output1List.isEmpty()){//소유주식 없음
@@ -254,7 +255,9 @@ public class AutoInvestService {
                 }
             }
             
-        }
+
+        } 
+
     }
 
     //모든 주식 팔고 종료하기

@@ -32,6 +32,9 @@ export const BoxStyles = StyleSheet.create({
         flex: 1
     },
 
+    MT10: {
+        marginTop: 10
+    },
     MR10: {
         marginRight: 10
     },
@@ -50,7 +53,7 @@ export const BoxStyles = StyleSheet.create({
     },
 
     BgBlack: {
-        backgroundColor: Color.MainColor,
+        backgroundColor: Color.Black,
     },
 
     ContainerBox: {
@@ -64,9 +67,9 @@ export const BoxStyles = StyleSheet.create({
         backgroundColor: Color.White,
 
         // 테두리
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: Color.MainColor,
+        // borderWidth: 1,
+        // borderStyle: 'solid',
+        // borderColor: Color.MainColor,
     },
 
     MainBoxTitle: {

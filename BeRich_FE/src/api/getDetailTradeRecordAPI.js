@@ -7,9 +7,9 @@ export const getDetailTradeRecordAPI = async (tradeID) => {
         const response = await tokenAPI.get(`${API_URL}/api/trade-record/${tradeID}`);
         if (response.data) {
             const data = response.data
-            // console.log(data)
             return data
         }
+        return []
     } catch (error) {
         // 요청 실패
         console.error(error);

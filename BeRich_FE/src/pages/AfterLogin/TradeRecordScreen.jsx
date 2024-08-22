@@ -24,11 +24,14 @@ export default function TradeRecordScreen({ route }) {
     return (
         <ScrollView style={[BoxStyles.P10]}>
             {
+                (detailInfo.length != 0) ?
                 detailInfo.map((a, i) => {
                     return (
                         <TradeRecordElement key={i} data={a} />
                     )
                 })
+                :
+                <Text style={[TextStyles.Detail, TextStyles.FcDarkGray, {textAlign: 'center'}]}>거래 내역이 없습니다.</Text>
             }
         </ScrollView>
     )

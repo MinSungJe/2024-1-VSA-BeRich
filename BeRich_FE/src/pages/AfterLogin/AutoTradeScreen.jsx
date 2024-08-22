@@ -133,12 +133,13 @@ export default function AutoTradeScreen({ navigation }) {
                                     <Text style={[TextStyles.Medium, TextStyles.FwBold]}>{JSON.parse(state.selectedStock).companyName}</Text>
                                 </View>
                                 {
-                                    (benefit >= 0) ?
-                                        (benefit == 0) ?
-                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlack]}>- 0%</Text>
+                                    (isNaN(Number(benefit))) ?
+                                        <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlack]}>▶ {benefit}</Text>
+                                        :
+                                        (Number(benefit) >= 0) ?
+                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcRed]}>▲ {benefit}%</Text>
                                             :
-                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcRed]}>▲ {benefit}%</Text> :
-                                        <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlue]}>▼ {benefit}%</Text>
+                                            <Text style={[TextStyles.Medium, TextStyles.FwBold, TextStyles.FcBlue]}>▼ {benefit}%</Text>
                                 }
                             </View>
                         </View>

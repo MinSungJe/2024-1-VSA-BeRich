@@ -23,7 +23,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "autoTradeInformation") 
 @Entity
 public class Decision {
 
@@ -52,7 +52,7 @@ public class Decision {
      // 개별 자동매매와의 관계 설정
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "auto_trade_information_id", nullable = false)//
+    @JoinColumn(name = "auto_trade_information_id")//
     private AutoTradeInformation autoTradeInformation;
 
     // 매매결정기록 매핑, 이유랑 내용 같이 반환하기
@@ -65,5 +65,9 @@ public class Decision {
         this.percentage = percentage;
         this.reason = reason;
         this.autoTradeInformation = autoTradeInformation;
+    }
+
+    public String getDecision() {
+        return decision;
     }
 }

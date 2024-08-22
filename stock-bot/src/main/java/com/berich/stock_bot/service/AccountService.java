@@ -2,6 +2,7 @@ package com.berich.stock_bot.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -96,12 +97,13 @@ public class AccountService {
         User user = userRepository.findByLoginId(loginId).orElse(null);
         if(user==null){
             //예외처리하기
-            
+            throw new NoSuchElementException("User not found for loginId: " + loginId);
         }
         Long userId = user.getId();
         Account account = accountRepository.findByUserId(userId).orElse(null);
         if(account ==null) {
             //예외처리:계좌 없음
+            throw new NoSuchElementException("No account");
         }
         
         return getAccountBalance(account.getAccountAccessToken(),account.getAccountNum(), account.getAppKey(), account.getAppSecret())

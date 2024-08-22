@@ -30,7 +30,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "decisions") 
 @Entity
 public class AutoTradeInformation {
 

@@ -4,7 +4,9 @@ import { View } from "react-native";
 
 export default function AutoTradeRefreshScreen({navigation}) {
     useFocusEffect(React.useCallback(()=>{
-        navigation.replace('AutoTrade')
+        setTimeout(() => {
+            navigation.replace('AutoTrade')
+        }, 1000);
     }, []))
 
     return(

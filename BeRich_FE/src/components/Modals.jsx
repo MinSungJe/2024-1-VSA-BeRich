@@ -25,23 +25,32 @@ export function StartTradeModal({ modalVisible, setModalVisible, startDay, endDa
                     <View style={[BoxStyles.MainBox, BoxStyles.P10]}>
                         <View style={[BoxStyles.PV10]}>
                             <Text style={[TextStyles.Medium, TextStyles.FwBold, BoxStyles.Mb10, BoxStyles.BottomGrayLine, { paddingBottom: 10 }]}>투자 정보 확인</Text>
-                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>종목</Text>
-                                <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName}</Text>
-                            </View>
-                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>
-                                <Text style={[TextStyles.Detail]}>{dateFormat(startDay)} ~ {dateFormat(endDay)}</Text>
-                            </View>
-                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>경향</Text>
-                                <Text style={[TextStyles.Detail]}>{tendency}</Text>
-                            </View>
-                            <View style={[{ flexDirection: 'row' }, BoxStyles.Mb20]}>
-                                <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>의견</Text>
-                                <Text style={[TextStyles.Detail]}>{opinion ? opinion : '(내용 없음)'}</Text>
+                            <View style={[BoxStyles.BottomGrayLine, BoxStyles.Mb10]}>
+                                <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                    <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>종목</Text>
+                                    <Text style={[TextStyles.Detail]}>{JSON.parse(state.selectedStock).companyName}</Text>
+                                </View>
+                                <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                    <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>기간</Text>
+                                    <Text style={[TextStyles.Detail]}>{dateFormat(startDay)} ~ {dateFormat(endDay)}</Text>
+                                </View>
+                                <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                    <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>경향</Text>
+                                    <Text style={[TextStyles.Detail]}>{tendency}</Text>
+                                </View>
+                                <View style={[{ flexDirection: 'row' }, BoxStyles.Mb10]}>
+                                    <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.MR10]}>의견</Text>
+                                    <Text style={[TextStyles.Detail]}>{opinion ? opinion : '(내용 없음)'}</Text>
+                                </View>
                             </View>
                             <Text style={[TextStyles.Detail, TextStyles.FwBold, BoxStyles.Mb10]}>위 내용으로 자동거래를 시작할까요?</Text>
+                            <View style={[{ flexDirection: 'row' }]}>
+                                <Text style={[TextStyles.Detail, TextStyles.FcRed, TextStyles.FwBold, BoxStyles.Mb10]}>※ </Text>
+                                <View>
+                                    <Text style={[TextStyles.Detail, TextStyles.FcRed, TextStyles.FwBold, BoxStyles.Mb10]}>최종적인 투자 결정과 그에 따른 책임은 전적으로</Text>
+                                    <Text style={[TextStyles.Detail, TextStyles.FcRed, TextStyles.FwBold, BoxStyles.Mb10]}>사용자에게 있습니다.</Text>
+                                </View>
+                            </View>
                             <Button
                                 buttonStyle={[ButtonStyles.MainButton]}
                                 onPress={() => {

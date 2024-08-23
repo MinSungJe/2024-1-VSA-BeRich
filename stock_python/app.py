@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from dotenv import load_dotenv
-import re
 from flask import Flask, jsonify,request
 import yfinance as yf
 import pandas as pd
@@ -20,7 +19,6 @@ from threading import Thread
 import pandas_ta as ta
 import sqlite3
 import base64
-import json
 
 
 load_dotenv()
@@ -313,37 +311,6 @@ def load_finance_data(code):
     except Exception as e:
         return f"An error occurred: {e}"
     
-def get_stock_data(code):
-    """
-    주어진 주식 코드에 대한 데이터프레임을 반환하는 함수입니다.
-    주식 코드에 대한 데이터를 SQLite 데이터베이스에서 조회합니다.
-
-    :param code: 주식 코드
-    :return: 데이터프레임 (pandas DataFrame)
-    """
-    try:
-        # SQLite 데이터베이스에 연결
-        conn = sqlite3.connect(db_path)
-        
-        # 데이터프레임 조회
-        query = "SELECT * FROM stock_data WHERE Stock_Code = ?"
-        df = pd.read_sql_query(query, conn, params=(code,))
-        # 데이터의 샘플만 선택 (예: 최근 30일)
-        df = df.tail(20) 
-        conn.close()
-
-        # 데이터프레임이 비어 있는 경우 처리
-        if df.empty:
-            print(f"No data found for the provided stock code: {code}")
-            return None
-        
-        
-        
-        return df
-
-    except Exception as e:
-        print(f"An error occurred while fetching stock data: {e}")
-        return None    
     
 # 개형 캡처
 async def capture_screenshot(code, file_path):
@@ -411,7 +378,7 @@ async def schedule_screenshots():
         now = datetime.datetime.now()
         print("시작")
         # 특정 시간에만 캡처 (테스트용)
-        if now.hour == 15 and now.minute == 16:
+        if now.hour == 19 and now.minute == 59:
             
             for keyword, code in keyword_to_code.items():
                 # 캡처 파일을 저장할 폴더 경로
@@ -428,7 +395,7 @@ async def schedule_screenshots():
                 print("저장완료")
                 
         # 특정 시간에만 캡처 (테스트용)
-        if now.hour == 14 and now.minute == 00:
+        if now.hour == 19 and now.minute == 58:
             for keyword, code in keyword_to_code.items():
                 save_folder = 'screenshots'
                 # 폴더가 존재하지 않으면 생성
@@ -439,7 +406,6 @@ async def schedule_screenshots():
                 await capture_screenshot(code, file_path)
                 print("캡처완료2")
                 load_finance_data(code)
-                
         #진짜
         if now.weekday() < 5:  # 월~금
             if now.hour in [9, 12, 15]:
@@ -463,223 +429,23 @@ def run_scheduled_tasks():
         print("스케줄된 작업이 중단되었습니다.")
     finally:
         loop.close()  # 이벤트 루프 종료
+    
 
-def extract_json_from_advice(advice):
-    """
-    주어진 응답 문자열에서 JSON 형식의 부분만 추출합니다.
-    
-    :param advice: GPT 응답 문자열
-    :return: 추출된 JSON 객체 또는 None
-    """
-    # JSON 객체를 추출하기 위한 정규 표현식
-    json_pattern = re.compile(r'\{.*?\}', re.DOTALL)
-    
-    # 정규 표현식으로 JSON 객체 추출
-    match = json_pattern.search(advice)
-    
-    if match:
-        json_str = match.group(0)
-        try:
-            # JSON 문자열을 Python 객체로 변환
-            parsed_json = json.loads(json_str)
-            return parsed_json
-        except json.JSONDecodeError as e:
-            print(f"JSON decoding error: {e}")
-            return None
-    else:
-        print("No JSON object found in the response.")
-        return None
-    
-# gpt의 결정! 
-def analyze_data_with_gpt4(news_data, data_json, last_decisions, current_status, personal_data, code):
-    try:
-        # 스크린샷 파일 경로 설정
-        screenshot_folder = 'screenshots'
-        screenshot_path = os.path.join(screenshot_folder, f'screenshot_{code}.png')
-        
-        # 스크린샷 파일을 Base64로 인코딩
-        if os.path.exists(screenshot_path):
-            with open(screenshot_path, "rb") as image_file:
-                image_base64 = base64.b64encode(image_file.read()).decode("utf-8")
-            
-            # 이미지 페이로드 생성
-            image_payload = {
-                "role": "user",
-                "content": "",
-                "attachments": [
-                    {
-                        "type": "image/png",
-                        "data": image_base64
-                    }
-                ]
-            }
-        else:
-            print(f"Screenshot not found: {screenshot_path}")
-            image_payload = None
-
-        data_json = data_json.to_json(orient='records')
-        # 메시지 목록 생성
-        messages = [
-            {"role": "system", "content": instructions},
-            {"role": "user", "content": news_data},
-            {"role": "user", "content": data_json},  # 데이터가 구조적일 경우 JSON으로 변환
-            {"role": "user", "content": json.dumps(last_decisions)},  # 마찬가지로 JSON으로 변환
-            {"role": "user", "content": json.dumps(current_status)},
-            {"role": "user", "content": json.dumps(personal_data)}
-        ]
-        
-        # 이미지가 있으면 메시지에 추가
-        if image_payload:
-            messages.append(image_payload)
-        print("지피티 호출")
-        # GPT-4 API 호출
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=messages
-        )
-        #print(response)
-        #print("요기다!") 
-        advice = response.choices[0].message.content
-        #print("여긴가?!")
-        #print(advice)
-        # JSON 객체만 추출
-        parsed_json = extract_json_from_advice(advice)
-        
-        if not parsed_json:
-            raise ValueError("Extracted JSON is invalid or not found.")
-
-        
-        # reason 부분 번역
-        if 'reason' in parsed_json:
-            reason = parsed_json['reason']
-            translated_reason = translate(reason)
-            parsed_json['reason'] = translated_reason
-        
-        return parsed_json
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-    
-def translateToEng(tendency):
-    
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Translate the input sentence into English. Don't forget to print in English!"},
-            {"role": "user", "content": tendency}
-        ]
-    )
-    translation = response.choices[0].message.content
-    return translation    
-    
-def translate(tendency):
-    
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Translate the input sentence into Korean. Don't forget to print in Korean!"},
-            {"role": "user", "content": tendency}
-        ]
-    )
-    translation = response.choices[0].message.content
-    return translation  
-    
+# 결정 요청 처리 엔드포인트
 @app.route('/api/gpt-decision', methods=['POST'])
 def handle_decision_request():
-    try:
-        #print("마사까")
-        data = request.json
-        #print("설마")
-        # 요청 데이터에서 필요한 정보 추출
-        stock_code = data.get('stockCode')
-        start_day = data.get('startDay')  # 자동매매 시작일
-        now = data.get('now')  # 현재 날짜 및 시간
-        end_day = data.get('endDay')  # 자동매매 종료일
-        investment_propensity = data.get('investmentPropensity')  # 투자 성향
-        investment_insight = data.get('investmentInsight')  # 주관적 예측
-        news_data = data.get('companyNews')
-        stock_data = get_stock_data(stock_code)
-        last_decisions = data.get('decisions', [])  # 최대 3개로 제한
-        # 정렬: decisiontime이 최신인 것부터 정렬 (가정: decisiontime은 ISO 형식의 문자열)
-        last_decisions_sorted = sorted(last_decisions, key=lambda x: x.get('decisionTime', ''), reverse=True)
-        # 최근 3개만 가져오기
-        last_decisions_recent = last_decisions_sorted[:3]
-        #print("결정 받아오는 건 된다.")
-        available_buy_amount = data.get('availableBuyAmount')  # From request
-        current_price = data.get('currentPrice')  # From request
-        
-        if not stock_code:
-            return jsonify({"error": "Stock code is required"}), 400
+    data = request.json
+    print(f"Received decision request: {data}")
+    
+    # 실제 결정 로직을 처리하고 응답을 생성합니다.
+    response = {
+        "decision": "buy",
+        "percentage": 50,
+        "reason": "Based on the current trend"
+    }
+    
+    return jsonify(response)
 
-
-        # 가장 최근의 stockBalance 가져오기
-        stock_balance = data.get('lastStockBalance')
-            
-        for decision in last_decisions:
-            if 'reason' in decision:
-                # 원래 reason
-                original_reason = decision['reason']
-                
-                # reason 번역
-                translated_reason = translateToEng(original_reason)
-                
-                # reason 업데이트
-                decision['reason'] = translated_reason
-                #print("이유번역")
-                #print(translated_reason)
-            
-        # 현재 상태를 current_status에 묶어서 전달
-        current_status = {
-            'start_day': start_day,
-            'now': now,
-            'end_day': end_day,
-            'available_buy_amount': available_buy_amount,
-            'current_price': current_price,
-            'stock_balance': stock_balance
-        }
-        tendency = translateToEng(investment_propensity)
-        insight = translateToEng(investment_insight)
-        # 개인 주관 데이터를 personal_data에 묶어서 전달
-        personal_data = {
-            'investment_propensity': tendency,
-            'investment_insight': insight
-        }
-        #print("뭐지")
-    except Exception as e:
-        return jsonify({"error!!": str(e)}), 500
-    
-    # 예외가 발생하지 않은 경우 실행되는 부분
-    max_retries = 5
-    retry_delay_seconds = 5
-    decision = None
-    
-    for attempt in range(max_retries):
-        try:
-            #print("일단여기까지")
-            # GPT-4와의 상호작용을 통해 결정을 얻으려고 시도
-            #print(last_decisions)
-            advice = analyze_data_with_gpt4(
-                news_data=news_data,
-                data_json=stock_data,
-                last_decisions=last_decisions_recent,
-                current_status=current_status,
-                personal_data=personal_data,
-                code=stock_code
-            )
-            if advice is None:
-                raise ValueError("Received advice is None.")
-            print(advice)
-            decision = advice
-            return decision
-        except (ValueError, json.JSONDecodeError) as e:
-            print(f"JSON parsing failed: {e}. Retrying in {retry_delay_seconds} seconds...")
-            time.sleep(retry_delay_seconds)
-            print(f"Attempt {attempt + 2} of {max_retries}")
-    
-    if not decision:
-        print("Failed to make a decision after maximum retries.")
-        return jsonify({"error": "Failed to make a decision after maximum retries."}), 500
     
 if __name__ == '__main__':
     # 스케줄러를 별도의 스레드에서 실행
@@ -696,6 +462,6 @@ if __name__ == '__main__':
 
         # Flask 앱 실행
         
-        app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+        app.run(debug=True, use_reloader=False)
     except KeyboardInterrupt:  # Flask 서버의 KeyboardInterrupt 예외 처리
         print("Flask 서버가 중단되었습니다.")

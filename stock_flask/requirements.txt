@@ -1,0 +1,12 @@
+Flask
+requests
+beautifulsoup4
+yfinance
+openai == 1.42.0
+pandas
+pandas-ta
+playwright
+Pillow
+schedule
+python-dotenv
+numpy==1.26

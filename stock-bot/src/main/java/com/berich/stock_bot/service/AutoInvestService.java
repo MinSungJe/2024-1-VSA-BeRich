@@ -74,6 +74,10 @@ public class AutoInvestService {
             //에러처리: 유저가 없는 경우
             throw new NoSuchElementException("User not found for loginId: " + loginId);
         }
+        Account haveAccount = accountRepository.findByUserId(user.getId()).orElse(null);
+        if (haveAccount == null){
+            throw new NoSuchElementException("account not found");
+        }
         //자동매매 정보
         AccountBalanceResponse response = accountService.accountBalance(loginId);
         AccountBalanceResponse.Output2Dto account = response.getOutput2().get(0);
@@ -99,11 +103,42 @@ public class AutoInvestService {
             throw new NoSuchElementException("Company not found");
         }
         String summary = company.getCompanyNews().getSummary();//뉴스 요약본
+        //주식 잔고조회
+        AccountBalanceResponse balance = accountService.accountBalance(user.getLoginId());
+        // 다음 요청 전에 1초 대기
+        // 다음 요청 전에 1초 대기
+            
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // 예외 처리
+            Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+        }
+        //System.out.println("주식잔고조회!");
+        List<AccountBalanceResponse.Output1Dto> output1List = balance.getOutput1();
+        //System.out.println("이곳이냐!");
+        String stockBalance = "";
+        if(output1List == null || output1List.isEmpty()){//소유주식 없음
+                System.out.println("주식이 없다!");
+                stockBalance = "0";
+        }else{
+                // 첫 번째 항목에서 보유 수량 가져오기
+            System.out.println("주식있다!");
+            stockBalance = output1List.get(0).getHldgQty();
+            System.out.println("주식잔고조회!"+stockBalance);
+        }
         //현재가 조회
         String currentPrice = returnPresentPrice(account, autoTradeInfo.getStockCode()).getOutput().getStckPrpr();
+        // 다음 요청 전에 1초 대기
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // 예외 처리
+            Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+        }
         //매수가능금액 조회
         String psblOrderAmount = returnPsblOrderSync(account, autoTradeInfo.getStockCode()).getOutput().getOrdPsblCash();
-        AutoInvestRequest body = new AutoInvestRequest(autoTradeInfo, summary, currentPrice, psblOrderAmount);
+        AutoInvestRequest body = new AutoInvestRequest(autoTradeInfo, summary, currentPrice, psblOrderAmount, stockBalance);
         return body;
     }
     //파이썬에 결정요청
@@ -217,11 +252,17 @@ public class AutoInvestService {
         // 평일 (월요일~금요일) 오전 9시~오후 3시 사이 확인
         boolean isWeekday = dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY;
         boolean isWithinTradingHours = (now.getHour() > 9 || (now.getHour() == 9 && now.getMinute() >= 0)) &&
-                                (now.getHour() < 15 || (now.getHour() == 15 && now.getMinute() < 30));
-        System.out.println("가능날짜"+isWeekday+isWithinTradingHours);
+                                (now.getHour() < 15 || (now.getHour() == 15 && now.getMinute() < 25));
+        //System.out.println("가능날짜"+isWeekday+isWithinTradingHours);
         //잔액 조회
         AccountBalanceResponse balance = accountService.accountBalance(autoInfo.getUser().getLoginId());
-        
+        // 다음 요청 전에 1초 대기
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // 예외 처리
+            Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+        }
         // Output1Dto 목록 가져오기
         List<AccountBalanceResponse.Output1Dto> output1List = balance.getOutput1();
         String stockBalance ="0";
@@ -271,28 +312,34 @@ public class AutoInvestService {
             throw new NoSuchElementException("Account not found");
         }
         String stockCode = autoInfo.getStockCode();
-        // String buyOrSell = "VTTC0801U";//매도
-        // //잔액 조회
-        // AccountBalanceResponse balance = accountService.accountBalance(autoInfo.getUser().getLoginId());
-        // //System.out.println("여기까지 성공!");
-        // // Output1Dto 목록 가져오기
-        // List<AccountBalanceResponse.Output1Dto> output1List = balance.getOutput1();
-        // String stockBalance ="10";
-        // // 보유 수량 가져오기
-        // if (output1List == null || output1List.isEmpty()) {
-        //     stockBalance ="0";
-        // }
-
-        // // 하나의 항목만 있어야 한다고 가정
-        // if (output1List.size() != 1) {
-        //     throw new IllegalStateException("Expected exactly one Output1Dto item, but found: " + output1List.size());
-        // }
+        String buyOrSell = "VTTC0801U";//매도
+        //잔액 조회
+        AccountBalanceResponse balance = accountService.accountBalance(autoInfo.getUser().getLoginId());
+        // 다음 요청 전에 1초 대기
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // 예외 처리
+            Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+        }
+        //System.out.println("여기까지 성공!");
+        // Output1Dto 목록 가져오기
+        List<AccountBalanceResponse.Output1Dto> output1List = balance.getOutput1();
+        String stockBalance ="0";
+        // 보유 수량 가져오기
+        if (output1List == null || output1List.isEmpty()) {
+            stockBalance ="0";
+        }else if (output1List.size() != 1) {// 하나의 항목만 있어야 한다고 가정
+            throw new IllegalStateException("Expected exactly one Output1Dto item, but found: " + output1List.size());
+        } else if (output1List.size()==1){
+            // 첫 번째 항목에서 보유 수량 가져오기
+            stockBalance = output1List.get(0).getHldgQty();
+        }
 
         
         
-        // // 첫 번째 항목에서 보유 수량 가져오기
-        // stockBalance = output1List.get(0).getHldgQty();
-        String stockBalance ="10";
+        
+        //String stockBalance ="10";
         if (!stockBalance.equals("0")){//보유주식 있으면
             //응답저장
             //System.out.println("여기까지는느느느느느 성공!");
@@ -301,13 +348,34 @@ public class AutoInvestService {
             AutoInvestResponse response = returnInvestResult(autoInfo, decision, stockBalance);
             //System.out.println("응답출력"+response);
             //새로잔액 조회
+            // 다음 요청 전에 1초 대기
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // 예외 처리
+                Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+            }
             AccountBalanceResponse balance2 = accountService.accountBalance(autoInfo.getUser().getLoginId());
+            List<AccountBalanceResponse.Output1Dto> output1List2 = balance2.getOutput1();
+            String stockBalance2 ="0";
+            // 보유 수량 가져오기
+            if (output1List2 == null || output1List2.isEmpty()) {
+                stockBalance2 ="0";
+            }
             BalanceResponse balanceSmall = accountService.returnBalance(balance2);
-            TradeRecord tradeRecord = new TradeRecord(LocalDateTime.now(), stockBalance , returnPresentPrice(account, stockCode).getOutput().getStckPrpr(), stockBalance, balanceSmall.getDncaTotAmt(), balanceSmall.getTotEvluAmt(), decision);
+            // 다음 요청 전에 1초 대기
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // 예외 처리
+                Thread.currentThread().interrupt(); // 현재 스레드의 인터럽트 상태를 유지
+            }
+            TradeRecord tradeRecord = new TradeRecord(LocalDateTime.now(), stockBalance , returnPresentPrice(account, stockCode).getOutput().getStckPrpr(), stockBalance2, balanceSmall.getDncaTotAmt(), balanceSmall.getTotEvluAmt(), decision);
             tradeRecordRepository.save(tradeRecord);            
             double total = Double.parseDouble(balanceSmall.getTotEvluAmt());
             double start = Double.parseDouble(autoInfo.getStartBalance());
             double profit = ((total - start) / start) * 100;
+            profit = Math.round(profit * 10.0) / 10.0;
             String totalProfit = String.valueOf(profit);
             autoInfo.setTotalProfit(totalProfit);
             autoTradeInformationRepository.save(autoInfo);
@@ -333,7 +401,7 @@ public class AutoInvestService {
     private Mono<AutoInvestResponse> invest(Account account, String stockCode, String buyOrSell, String amount) {
     
         InvestRequest body = new InvestRequest(account.getAccountNum(), "01", stockCode, "01", amount ,"0" );
-        System.out.println("자 이게 출력이야"+body+buyOrSell+"양"+amount);
+        //System.out.println("자 이게 출력이야"+body+buyOrSell+"양"+amount);
         return webClient_stock.post()
                 .uri("/uapi/domestic-stock/v1/trading/order-cash") // 엔드포인트 설정
                 .header("authorization", "Bearer " + account.getAccountAccessToken())
@@ -364,7 +432,7 @@ public class AutoInvestService {
      // 매매요청 응답값
     public AutoInvestResponse returnInvestResult(AutoTradeInformation autoTradeInfo, Decision decision, String amount) {
         try {
-            System.out.println("도대체 문제가 뭐야"+autoTradeInfo+decision);
+            //System.out.println("도대체 문제가 뭐야"+autoTradeInfo+decision);
             Account account = accountRepository.findByUserId(autoTradeInfo.getUser().getId()).orElse(null);
             if (account == null) {
                 //등록된 계좌 없음 

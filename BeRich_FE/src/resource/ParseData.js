@@ -27,7 +27,7 @@ export const dateFormatter = (timestamp) => {
 // 캔들그래프 x축 레이블에 사용할 시간 포맷 함수(MM-DD-hh)
 export const dateTimeFormatter = (timestamp) => {
     const date = new Date(timestamp);
-    return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")}-${(date.getHours()).toString().padStart(2, "0")}`; // MM-DD-hh 포맷
+    return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${(date.getDate()).toString().padStart(2, "0")} ${(date.getHours()).toString().padStart(2, "0")}시`; // MM-DD-hh 포맷
 };
 
 // Stock data의 값을 변환
@@ -69,3 +69,15 @@ export const calculateStartDay = () => {
 
     return today;
 };
+
+// UTC+9 적용
+export const convertUTCtoKST = (utcDateString) => {
+    // UTC로 받은 시간 정보를 Date 객체로 변환
+    const date = new Date(utcDateString);
+  
+    // KST로 변환하여 시간 정보를 가져옴
+    const kstDate = new Date(date.getTime() + 9 * 60 * 60);
+  
+    // 변환된 시간을 문자열로 출력 (한국 표준시 기준)
+    return kstDate.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+  };

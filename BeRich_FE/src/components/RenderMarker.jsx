@@ -33,7 +33,7 @@ export function CandleRenderMarker({ graphType, selectedEntry, graphWidth, dataL
             <View style={[BoxStyles.MarkerBox, { position: 'absolute', left: markerX, top: -30 }]}>
                 {
                     (graphType == '5d') ?
-                        <Text style={TextStyles.Marker}>{`일자: ${dateTimeFormatter(data.timestamp)}`}</Text>
+                        <Text style={TextStyles.Marker}>{`일자: ${dateTimeFormatter(data.timestamp + 9 * 60 * 60 * 1000)}`}</Text>
                         :
                         <Text style={TextStyles.Marker}>{`일자: ${dateFormatter(data.timestamp)}`}</Text>
                 }

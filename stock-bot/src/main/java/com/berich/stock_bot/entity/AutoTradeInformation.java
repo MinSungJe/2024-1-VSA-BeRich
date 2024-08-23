@@ -13,7 +13,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +29,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "decisions") 
+@ToString(exclude = "decisions")
 @Entity
 public class AutoTradeInformation {
 
@@ -79,7 +78,7 @@ public class AutoTradeInformation {
 
     //사용자 매핑
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY) // 지연로딩
+    @ManyToOne // 지연로딩
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 사용자와의 다대일 관계
     

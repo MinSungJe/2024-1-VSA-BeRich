@@ -1,6 +1,7 @@
 package com.berich.stock_bot.service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -16,8 +17,11 @@ import com.berich.stock_bot.dto_stock.AccountAccessTokenResponse;
 import com.berich.stock_bot.dto_stock.AccountBalanceResponse;
 import com.berich.stock_bot.dto_stock.AccountRequest;
 import com.berich.stock_bot.entity.Account;
+import com.berich.stock_bot.entity.AutoTradeInformation;
 import com.berich.stock_bot.entity.User;
+import com.berich.stock_bot.enums.AutoTradeStatus;
 import com.berich.stock_bot.repository.AccountRepository;
+import com.berich.stock_bot.repository.AutoTradeInformationRepository;
 import com.berich.stock_bot.repository.UserRepository;
 
 import reactor.core.publisher.Flux;
@@ -35,12 +39,16 @@ public class AccountService {
     @Autowired
     private WebClient webClient_stock;
 
+    @Autowired
+    private AutoTradeInformationRepository autoTradeInformationRepository;
+
 
     //계좌 등록
     public void enrollAccount(String loginId, AccountRequest accountInfo) {
         User user = userRepository.findByLoginId(loginId).orElse(null);
         if(user==null){
             //예외처리하기
+            throw new NoSuchElementException("User not found for loginId: " + loginId);
         }
         //액세스 토큰 발급
         String appKey = accountInfo.getAppKey();
@@ -82,6 +90,7 @@ public class AccountService {
                         accountRepository.save(account);
                     } else {
                         System.err.println("Error: " + balanceResponse.getMsg1());
+                        throw new NoSuchElementException("Account not found");
                     }
                 },
                 error -> {
@@ -258,9 +267,20 @@ public class AccountService {
     //계좌 삭제(등록 해제)
     @Transactional
     public void deleteAccount(User user) {
-        if (user != null) {
+        if (user == null) {
+            throw new NoSuchElementException("User not found for loginId");
+        }
+        // 상태 리스트 정의
+        List<AutoTradeStatus> statuses = Arrays.asList(AutoTradeStatus.ACTIVE, AutoTradeStatus.PENDING_END);
+        
+        // 특정 사용자 ID로 상태가 ACTIVE 또는 PENDING_END인 목록을 찾기
+        List<AutoTradeInformation> trades = autoTradeInformationRepository.findByUserIdAndStatusIn(user.getId(), statuses);
+        
+        // 목록이 비어 있으면삭제
+        if(trades.isEmpty() || trades==null){
             user.setAccount(null);//매핑을 지우면 자동삭제됨
         }
+        
         //삭제된거 확인
     }
     

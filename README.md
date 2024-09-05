@@ -69,8 +69,26 @@
     </tr>
 </table>
 
-## 💸 주피티: GPT-4o를 활용한 주식 자동매매 모바일 애플리케이션
-![title](https://github.com/user-attachments/assets/6068e7c8-d29d-4018-8e6a-de3cf10a33d2)
+## 💸 주피티: GPT를 활용한 주식 자동매매 모바일 애플리케이션
+<img align="right" width="250" src="https://github.com/user-attachments/assets/8e34201c-19ba-4ed6-9399-660dd0321c38"/>
+
+📊 <br/>
+_“요즘 이 기업, 투자하기에 어떤 거 같아?”_ <br/>
+선택한 기업에 대한 **주가 그래프**와 **AI 기반 뉴스 요약 서비스**를 제공해요.
+
+<br/>
+
+💵 <br/>
+_“투자를 해보고 싶은데, 알아야 할 게 너무 많아보여서 시작하기 무서워.”_ <br/>
+**투자 개인 성향**과 **자신만의 의견**을 자유롭게 적어주기만 하면 투자 준비 끝!
+
+<br/>
+
+🤖 <br/>
+_“주식은 잘 모르겠는데.. 이 종목에 투자를 해도 괜찮을까?”_ <br/>
+**AI**가 실시간으로 데이터를 분석하고 최적의 투자 결정을 내려줘요.
+
+<br/>
 
 ## 💡 제공 서비스
 ![service1](https://github.com/user-attachments/assets/765313dd-eea0-4fc7-808a-2c0a628c2c26)
@@ -138,6 +156,6 @@
 <details>
 <summary><b>🎯 Database ERD</b></summary>
 
-![ERD](https://github.com/user-attachments/assets/bb65fd8d-cd67-459a-a19a-282de31ae9d9)
+![ERD](https://github.com/user-attachments/assets/3ddf72db-f43e-4acf-84aa-ed8f15f7d6dc)
     
 </details>

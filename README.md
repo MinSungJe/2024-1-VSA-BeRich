@@ -1,5 +1,4 @@
 # ✨ 2024년 SW개발자양성과정 산학연계프로젝트1
-### 2024년 산학연계프로젝트1 6조 <b>BeRich</b> 입니다.
 <p align='center'>
     <img src="https://capsule-render.vercel.app/api?type=waving&height=200&color=494cb4&text=🏆%202024%20산학연계프로젝트1%20우수상&desc=T6%20BeRich&descAlignY=24&descSize=25&fontColor=f2f2f2&fontSize=45"/>
 </p>
@@ -128,5 +127,17 @@
     |chore|빌드 업무 수정, 패키지 매니저 수정(npm, .gitignore 등)
     |remove|파일 삭제|
     |rename|파일 이름 변경|
+    
+</details>
+<details>
+<summary><b>🎯 UseCase Diagram</b></summary>
+
+![usecase](https://github.com/user-attachments/assets/d8d2b913-a40d-4f46-96f6-33e093ce1c35)
+    
+</details>
+<details>
+<summary><b>🎯 Database ERD</b></summary>
+
+![ERD](https://github.com/user-attachments/assets/bb65fd8d-cd67-459a-a19a-282de31ae9d9)
     
 </details>
